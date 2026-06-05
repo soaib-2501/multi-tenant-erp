@@ -2,11 +2,55 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import MainLayout from "../../components/erp/teacher/MainLayout";
 import { generatePresentationOutline } from '../../services/api';
+const MATHEMATICS_CHAPTERS = {
+  '9': [
+    '1 - NUMBER SYSTEMS',
+    "10 - HERON'S FORMULA",
+    '11 - SURFACE AREAS AND VOLUMES',
+    '12 - STATISTICS',
+    'lal - PROOFS IN MATHEMATICS',
+    '1 a2 - INTRODUCTION TO MATHEMATICAL MODELLING',
+    '2 - POLYNOMIALS',
+    '3 - COORDINATE GEOMETRY',
+    '4 - LINEAR EQUATIONS IN TWO VARIABLES',
+    "5 -INTRODUCTION TO EUCLID'S GEOMETRY",
+    '6 - LINES AND ANGLES',
+    '7 - TRIANGLES',
+    '8 - QUADRILATERALS',
+    '9 - CIRCLES'
+  ],
+  '10': [
+    '10 - CIRCLES',
+    '11 - AREAS RELATED TO CIRCLES',
+    '1 - REAL NUMBERS',
+    '12 - SURFACE AREAS AND VOLUMES',
+    '13 - STATISTICS',
+    '14 - PROBABILITY',
+    '2 - POLYNOMIALS',
+    '3 - PAIR OF LINEAR EQUATIONS IN TWO VARIABLES',
+    ' 4 - QUADRATIC EQUATIONS',
+    '5 - ARITHMETIC PROGRESSIONS',
+    '6 - TRIANGLES',
+    '7 - COORDINATE GEOMETRY',
+    '8 - INTRODUCTION TO TRIGONOMETRY',
+    '9 - SOME APPLICATIONS OF TRIGONOMETRY'
+  ]
+};
 
 const AIToolWorkspacePresentationOutline = () => {
   const [subject, setSubject] = useState('Mathematics');
   const [className, setClassName] = useState('10');
-  const [chapterName, setChapterName] = useState('');
+  const [chapterName, setChapterName] = useState('10 - CIRCLES');
+
+  const handleClassChange = (newClass) => {
+    setClassName(newClass);
+    const list = MATHEMATICS_CHAPTERS[newClass] || [];
+    if (list.length > 0) {
+      setChapterName(list[0]);
+    } else {
+      setChapterName('');
+    }
+  };
 
   const [topic, setTopic] = useState('');
   const [numSlides, setNumSlides] = useState(7);
@@ -122,28 +166,37 @@ const AIToolWorkspacePresentationOutline = () => {
                 <div className="grid grid-cols-2 gap-4">
                   <div className="flex flex-col gap-1.5">
                     <label className="text-xs font-bold text-on-surface-variant px-1 uppercase tracking-wider font-display">Subject</label>
-                    <input
-                      type="text"
+                    <select
                       value={subject}
                       onChange={(e)=>setSubject(e.target.value)}
-                      placeholder="e.g., Biology"
-                      className="bg-surface-container-low border-none rounded-md py-3 px-4 text-sm focus:ring-2 focus:ring-primary/40 outline-none font-body"
-                    />
+                      className="bg-surface-container-low border-none rounded-md py-3 px-4 text-sm focus:ring-2 focus:ring-primary/40 outline-none font-body w-full"
+                    >
+                      <option value="Mathematics">Mathematics</option>
+                    </select>
                   </div>
                   <div className="flex flex-col gap-1.5">
                     <label className="text-xs font-bold text-on-surface-variant px-1 uppercase tracking-wider font-display">Class</label>
-                    <input
-                      type="text"
+                    <select
                       value={className}
-                      onChange={(e)=>setClassName(e.target.value)}
-                      placeholder="e.g., 9"
-                      className="bg-surface-container-low border-none rounded-md py-3 px-4 text-sm focus:ring-2 focus:ring-primary/40 outline-none font-body"
-                    />
+                      onChange={(e)=>handleClassChange(e.target.value)}
+                      className="bg-surface-container-low border-none rounded-md py-3 px-4 text-sm focus:ring-2 focus:ring-primary/40 outline-none font-body w-full"
+                    >
+                      <option value="9">9</option>
+                      <option value="10">10</option>
+                    </select>
                   </div>
                 </div>
                 <div className="flex flex-col gap-1.5">
                   <label className="text-xs font-bold text-on-surface-variant px-1 uppercase tracking-wider font-display">Chapter Name</label>
-                  <input value={chapterName} onChange={(e)=>setChapterName(e.target.value)} className="bg-surface-container-low border-none rounded-md py-3 px-4 text-sm focus:ring-2 focus:ring-primary/40 outline-none font-body" placeholder="e.g., 5 - Cell Division" type="text" />
+                  <select
+                    value={chapterName}
+                    onChange={(e)=>setChapterName(e.target.value)}
+                    className="bg-surface-container-low border-none rounded-md py-3 px-4 text-sm focus:ring-2 focus:ring-primary/40 outline-none font-body w-full"
+                  >
+                    {(MATHEMATICS_CHAPTERS[className] || []).map(ch => (
+                      <option key={ch} value={ch}>{ch}</option>
+                    ))}
+                  </select>
                 </div>
                 
                 <div className="grid grid-cols-2 gap-4 mb-4">
