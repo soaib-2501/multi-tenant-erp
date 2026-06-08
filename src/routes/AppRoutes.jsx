@@ -98,6 +98,167 @@ import NotificationsHub from "../pages/parent/NotificationsHub";
 import AllInsightsRecommendations from "../pages/parent/AllInsightsRecommendations";
 import ParentPortalSettings from "../pages/parent/ParentPortalSettings";
 
+
+function AppRoutes(){
+
+return(
+
+<BrowserRouter>
+
+<Routes>
+
+{/* COMMON */}
+<Route path="/" element={<Landing/>} />
+<Route path="/login" element={<Login/>} />
+
+
+
+{/* ================= GLOBAL ADMIN ================= */}
+
+<Route path="/global-admin" element={<GlobalDashboard/>} />
+
+<Route path="/global-admin/notifications" element={<GlobalNotifications/>}/>
+<Route path="/global-admin/settings" element={<GlobalSettings/>}/>
+
+<Route path="/global-admin/schools" element={<Schools/>}/>
+<Route path="/global-admin/add-school" element={<AddSchool/>}/>
+
+<Route path="/global-admin/domains" element={<Domains/>}/>
+<Route path="/global-admin/add-domain" element={<AddDomain/>}/>
+
+<Route path="/global-admin/subscriptions" element={<Subscriptions/>}/>
+<Route path="/global-admin/create-plan" element={<CreatePlan/>}/>
+
+<Route path="/global-admin/ai-config" element={<AIConfiguration />} />
+<Route path="/global-admin/payment" element={<PaymentInfrastructure />} />
+<Route path="/global-admin/email" element={<EmailConfiguration />} />
+<Route path="/global-admin/security" element={<SecurityAccess />} />
+
+
+
+{/* ================= SCHOOL ADMIN ================= */}
+
+<Route path="/school-admin" element={<SchoolDashboard/>} />
+
+<Route path="/school-admin/notifications" element={<SchoolNotifications/>}/>
+<Route path="/school-admin/settings" element={<SchoolSettings/>}/>
+
+<Route path="/school-admin/create-class" element={<CreateClass />} />
+
+<Route path="/school-admin/academic-years" element={<AcademicYears />} />
+<Route path="/school-admin/create-academic-year" element={<CreateAcademicYear />} />
+
+<Route path="/school-admin/roles" element={<RolesPermissions />} />
+<Route path="/school-admin/create-role" element={<CreateRole />} />
+
+<Route path="/school-admin/students" element={<Students/>} />
+<Route path="/school-admin/add-student" element={<AddStudent/>} />
+
+<Route path="/school-admin/teachers" element={<Teachers/>} />
+<Route path="/school-admin/teachers/create" element={<AddTeacher/>} />
+
+<Route path="/school-admin/parents" element={<Parents/>} />
+<Route path="/school-admin/parents/create" element={<AddParent/>} />
+
+<Route path="/school-admin/mapping" element={<ParentStudentMapping/>} />
+<Route path="/school-admin/mapping/create" element={<AddMapping/>} />
+
+<Route path="/school-admin/teacher-assignment" element={<TeacherAssignment/>} />
+<Route path="/school-admin/teacher-assignment/create" element={<AssignTeacher/>} />
+
+
+
+
+
+{/* ================= STUDENT ================= */}
+<Route path="/student" element={<StudentDashboard />} />
+<Route path="/student/notifications" element={<Notifications />} />
+
+<Route path="/student/assignments" element={<Assignments />} />
+<Route path="/student/attendance" element={<Attendance />} />
+<Route path="/student/fees" element={<FeesPayments />} />
+<Route path="/student/help" element={<HelpDesk />} />
+
+<Route path="/student/materials" element={<LearningMaterialsHub />} />
+<Route path="/student/materials/view" element={<LearningMaterialDetailView />} />
+
+<Route path="/student/quiz" element={<PracticeQuizHub />} />
+<Route path="/student/quiz/active" element={<ActiveQuiz />} />
+<Route path="/student/quiz/result" element={<QuizResult />} />
+
+<Route path="/student/profile" element={<Profile />} />
+<Route path="/student/subjects" element={<Subjects />} />
+<Route path="/student/settings" element={<Settings />} />
+<Route path="/student/recommendations" element={<Recommendations />} />
+<Route path="/student/ai-tutor" element={<AiTutor />} />
+<Route path="/student/grades" element={<GradesCard />} />
+
+{/* ================= TEACHER ================= */}
+
+<Route path="/teacher" element={<Navigate to="/teacher/dashboard" />} />
+
+<Route path="/teacher/dashboard" element={<Dashboard />} />
+
+<Route path="/teacher/classes" element={<MyClassesHub />} />
+<Route path="/teacher/classes/:id/performance" element={<ClassPerformanceManagement />} />
+
+<Route path="/teacher/assignments" element={<AssignmentListPage />} />
+<Route path="/teacher/assignments/create" element={<CreateAssignmentPage />} />
+<Route path="/teacher/assignments/:id" element={<AssignmentDetailPage />} />
+
+<Route path="/teacher/attendance" element={<AttendanceOverview />} />
+<Route path="/teacher/attendance/mark" element={<MarkAttendance />} />
+
+<Route path="/teacher/exams" element={<ExamsListPage />} />
+<Route path="/teacher/exams/create" element={<CreateExamPage />} />
+
+<Route path="/teacher/grades" element={<GradesAssessmentOverview />} />
+<Route path="/teacher/grades/enter" element={<EnterStudentGrades />} />
+
+<Route path="/teacher/ai-tools" element={<ContentAIToolsDashboard />} />
+<Route path="/teacher/ai-tools/lesson-plan" element={<AIToolWorkspaceLessonPlan />} />
+
+<Route path="/teacher/analytics" element={<StudentAnalyticsOverview />} />
+<Route path="/teacher/analytics/student/:id" element={<DetailedStudentAnalytics />} />
+
+<Route path="/teacher/profile" element={<TeacherProfileManagement />} />
+<Route path="/teacher/settings" element={<TeacherSystemSettings />} />
+
+<Route path="/teacher/notifications" element={<TeacherNotificationsHub />} />
+
+<Route 
+path="/teacher/analytics/student/:id" 
+element={<DetailedStudentAnalytics />} 
+/>
+        
+
+
+
+{/* ================= PARENT ================= */}
+<Route path="/parent" element={<ParentDashboard />} />
+
+<Route path="/parent/child-overview" element={<ChildOverview />} />
+
+<Route path="/parent/attendance" element={<AttendanceTracker />} />
+
+<Route path="/parent/assignments" element={<AssignmentsOverview />} />
+
+<Route path="/parent/grades" element={<GradesAssessmentHub />} />
+
+<Route path="/parent/ai-insights" element={<AllInsightsRecommendations />} />
+
+<Route path="/parent/notifications" element={<NotificationsHub />} />
+
+<Route path="/parent/settings" element={<ParentPortalSettings />} />
+
+
+
+</Routes>
+
+</BrowserRouter>
+
+);
+=======
 /* Redirect logged-in users to their dashboard when visiting "/" */
 function RootRedirect() {
   const token = localStorage.getItem('access_token');
