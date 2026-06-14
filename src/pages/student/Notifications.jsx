@@ -1,95 +1,135 @@
 import React, { useState, useEffect, useCallback } from "react";
-import SchoolLayout from "../../components/erp/school/SchoolLayout";
-import { schoolAdminApi } from "../../services/schoolAdminApi";
+import MainLayout from "../../layouts/MainLayout";
+import { useStudent } from "../../context/StudentProvider";
 
-// Static premium system logs event data architecture
-const adminMockNotifications = [
+// Student mock notifications data
+const studentMockNotifications = [
   {
     id: 1,
-    title: "System Core Backup Snapshot",
-    message: "Automated incremental snapshot processing across secure distributed server clusters verified successfully.",
-    category: "system",
+    title: "Assignment Submitted Successfully",
+    message: "Your Mathematics assignment has been submitted and is pending review.",
+    category: "academic",
     timeLabel: "2 hours ago",
     is_read: false,
-    severity: "success",
-    details: {
-      host: "aws-us-east-cluster-4",
-      dbSize: "41.2 GB",
-      duration: "142ms",
-      hash: "SHA-256: 9e107d9d372bb"
-    }
+    type: "success"
   },
   {
     id: 2,
-    title: "Macro Academic Session Imbalance",
-    message: "Cycle management audit flags missing timetable structures for incoming high-school cohorts.",
-    category: "academic",
-    timeLabel: "4 hours ago",
+    title: "New Announcement from Teacher",
+    message: "Physics practical exam schedule has been updated. Please check the timetable.",
+    category: "announcement",
+    timeLabel: "5 hours ago",
     is_read: false,
-    severity: "warning",
-    details: {
-      affectedScope: "Grade 10 & 11 Sections",
-      conflictType: "Unassigned Subject Core",
-      impactLevel: "High Priority"
-    }
+    type: "info"
   },
   {
     id: 3,
-    title: "Intrusive API Handshake Blocked",
-    message: "Security firewall automatically blacklisted client gateway trying to bypass authentication loops.",
-    category: "security",
-    timeLabel: "Yesterday",
-    is_read: false,
-    severity: "critical",
-    details: {
-      originIp: "198.51.100.42",
-      requestType: "POST /api/v1/profiles/students/",
-      locationTrace: "Frankfurt, DE"
-    }
+    title: "Attendance Alert",
+    message: "Your attendance is below 75% in Mathematics. Please ensure regular attendance.",
+    category: "attendance",
+    timeLabel: "1 day ago",
+    is_read: true,
+    type: "warning"
   },
   {
     id: 4,
-    title: "Machine Learning Schedule Strategy",
-    message: "Neural optimization engine generated an alternative room allocation matrix to scale facility metrics.",
-    category: "system",
-    timeLabel: "Yesterday",
+    title: "Result Published",
+    message: "Mid-term examination results for Science have been published. Check now!",
+    category: "academic",
+    timeLabel: "2 days ago",
     is_read: true,
-    severity: "info",
-    details: {
-      efficiencyGain: "+14.8% space utilization",
-      targetCampus: "Main Alpha Block",
-      resourceId: "ML-ALLOC-PROP-26"
-    }
+    type: "success"
+  },
+  {
+    id: 5,
+    title: "Fee Reminder",
+    message: "The deadline for fee submission is approaching. Please pay by 25th March.",
+    category: "finance",
+    timeLabel: "3 days ago",
+    is_read: true,
+    type: "warning"
   }
 ];
 
+// Skeleton Component
+function Skeleton({ className = "" }) {
+  return <div className={`animate-pulse bg-gray-200 rounded-md ${className}`} />;
+}
+
+function NotificationsSkeleton() {
+  return (
+    <MainLayout title="Notifications">
+      <div className="p-6 max-w-4xl mx-auto">
+        <div className="mb-6">
+          <Skeleton className="w-48 h-8 mb-2" />
+          <Skeleton className="w-64 h-4" />
+        </div>
+        
+        <div className="mb-6 flex justify-between items-center">
+          <Skeleton className="w-32 h-10 rounded-lg" />
+          <Skeleton className="w-36 h-10 rounded-lg" />
+        </div>
+
+        <div className="space-y-3">
+          {[1, 2, 3, 4].map((i) => (
+            <div key={i} className="bg-white rounded-xl p-4 border">
+              <div className="flex gap-3">
+                <Skeleton className="w-10 h-10 rounded-full" />
+                <div className="flex-1">
+                  <div className="flex justify-between items-start mb-2">
+                    <Skeleton className="w-48 h-5" />
+                    <Skeleton className="w-20 h-3" />
+                  </div>
+                  <Skeleton className="w-full h-4 mb-2" />
+                  <Skeleton className="w-3/4 h-4" />
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </MainLayout>
+  );
+}
+
 export default function Notifications() {
+  const { loading: studentLoading } = useStudent();
   const [notifications, setNotifications] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null); // Consumed cleanly below!
   const [activeTab, setActiveTab] = useState("all");
-  const [searchQuery, setSearchQuery] = useState("");
   const [expandedId, setExpandedId] = useState(null);
 
   const loadNotifications = useCallback(async () => {
     setLoading(true);
-    setError(null);
     try {
-      const response = await schoolAdminApi.getNotifications();
-      
-      // Extract data safely whether it's a raw array or a paginated DRF object
-      const realData = response?.results || response;
-
-      if (Array.isArray(realData) && realData.length > 0) {
-        setNotifications(realData);
-      } else {
-        // If the database has 0 notifications, populate our beautiful mock layout!
-        setNotifications(adminMockNotifications);
+      // Try to fetch from API if available
+      const token = localStorage.getItem('access_token');
+      if (token) {
+        try {
+          const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:8000'}/api/v1/student/notifications/`, {
+            headers: {
+              'Authorization': `Bearer ${token}`,
+              'Content-Type': 'application/json'
+            }
+          });
+          if (response.ok) {
+            const data = await response.json();
+            const realData = data?.results || data;
+            if (Array.isArray(realData) && realData.length > 0) {
+              setNotifications(realData);
+              setLoading(false);
+              return;
+            }
+          }
+        } catch (err) {
+          console.log("Using mock notifications data");
+        }
       }
+      // Fallback to mock data
+      setNotifications(studentMockNotifications);
     } catch (err) {
-      console.warn("Backend unpopulated, deploying premium interface layer:", err);
-      setError("Synchronizer notice: Operating under local fallback cluster layout.");
-      setNotifications(adminMockNotifications);
+      console.error("Error loading notifications:", err);
+      setNotifications(studentMockNotifications);
     } finally {
       setLoading(false);
     }
@@ -120,58 +160,56 @@ export default function Notifications() {
 
   const filteredNotifications = notifications.filter(n => {
     const matchesTab = activeTab === "all" || n.category === activeTab;
-    const matchesSearch = n.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
-                          n.message.toLowerCase().includes(searchQuery.toLowerCase());
-    return matchesTab && matchesSearch;
+    return matchesTab;
   });
 
   const unreadCount = filteredNotifications.filter(n => !n.is_read).length;
 
-  const getSeverityStyle = (severity) => {
-    switch (severity) {
-      case "critical":
-        return { bg: "bg-rose-50 border-rose-100", text: "text-rose-600", icon: "gshield", accent: "border-l-rose-500" };
+  const getTypeStyle = (type) => {
+    switch (type) {
       case "warning":
-        return { bg: "bg-amber-50 border-amber-100", text: "text-amber-600", icon: "warning", accent: "border-l-amber-500" };
+        return { bg: "bg-amber-50", text: "text-amber-600", icon: "warning", border: "border-l-amber-400" };
       case "success":
-        return { bg: "bg-emerald-50 border-emerald-100", text: "text-emerald-600", icon: "check_circle", accent: "border-l-emerald-500" };
+        return { bg: "bg-emerald-50", text: "text-emerald-600", icon: "check_circle", border: "border-l-emerald-400" };
+      case "info":
+        return { bg: "bg-blue-50", text: "text-blue-600", icon: "info", border: "border-l-blue-400" };
       default:
-        return { bg: "bg-indigo-50 border-indigo-100", text: "text-indigo-600", icon: "auto_awesome", accent: "border-l-indigo-500" };
+        return { bg: "bg-purple-50", text: "text-purple-600", icon: "notifications", border: "border-l-purple-400" };
     }
   };
 
-  return (
-    <SchoolLayout title="System Alerts & Diagnostics">
-      <div className="px-8 pb-16 max-w-5xl mx-auto w-full">
+  const getCategoryIcon = (category) => {
+    switch (category) {
+      case "academic": return "school";
+      case "announcement": return "campaign";
+      case "attendance": return "event_available";
+      case "finance": return "payments";
+      default: return "notifications";
+    }
+  };
 
-        {/* Header Controls */}
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8 mt-4">
-          <div>
-            <h2 className="text-2xl font-black tracking-tight text-slate-900">Administrative Operations Logs</h2>
-            <p className="text-xs font-medium text-slate-400 mt-1">
-              Analyze automated cloud metrics, security infrastructure blocks, and cognitive scheduler logs.
-            </p>
-          </div>
-          <button 
-            onClick={handleMarkAllAsRead}
-            className="px-4 py-2 bg-white text-xs font-bold text-blue-600 border border-slate-200/60 rounded-lg shadow-sm hover:bg-blue-50/50 hover:border-blue-200 transition-all flex items-center gap-1.5"
-          >
-            <span className="material-symbols-outlined text-sm">done_all</span>
-            Mark all as read
-          </button>
+  if (studentLoading || loading) return <NotificationsSkeleton />;
+
+  return (
+    <MainLayout title="Notifications">
+      <div className="p-4 md:p-6 max-w-4xl mx-auto">
+        {/* Header */}
+        <div className="mb-6">
+          <h2 className="text-2xl font-bold text-slate-800">Notifications</h2>
+          <p className="text-sm text-slate-500 mt-1">Stay updated with your academic journey</p>
         </div>
 
-        {/* Dynamic Filters Bar */}
-        <div className="grid grid-cols-1 md:grid-cols-3 items-center gap-4 mb-6 bg-white p-3 rounded-xl border border-slate-100 shadow-sm">
-          <div className="md:col-span-2 flex bg-slate-50 p-1 rounded-lg gap-1 w-full">
-            {["all", "system", "academic", "security"].map((tab) => (
+        {/* Action Bar */}
+        <div className="flex flex-wrap justify-between items-center gap-3 mb-6">
+          <div className="flex gap-2 bg-slate-100 p-1 rounded-lg">
+            {["all", "academic", "announcement", "attendance", "finance"].map((tab) => (
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab)}
-                className={`flex-1 sm:flex-none px-4 py-2 rounded-md text-xs font-bold capitalize transition-all ${
+                className={`px-3 py-1.5 rounded-md text-xs font-medium capitalize transition-all ${
                   activeTab === tab 
                     ? "bg-white text-blue-600 shadow-sm" 
-                    : "text-slate-500 hover:text-slate-900"
+                    : "text-slate-600 hover:text-slate-900"
                 }`}
               >
                 {tab}
@@ -179,149 +217,108 @@ export default function Notifications() {
             ))}
           </div>
 
-          <div className="relative w-full">
-            <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm">
-              search
-            </span>
-            <input
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search traces or hashes..."
-              className="w-full bg-slate-50 pl-9 pr-4 py-2 rounded-lg text-xs font-semibold border border-transparent focus:border-blue-400 focus:bg-white outline-none transition-all"
-            />
-          </div>
-        </div>
-
-        {/* CLEAN SOLUTION: The state variable error is now explicitly consumed here */}
-        {error && (
-          <div className="mb-6 p-4 bg-indigo-50/60 border border-indigo-100 text-indigo-700 rounded-xl text-xs font-bold flex items-center gap-2 animate-fadeIn shadow-2xs">
-            <span className="material-symbols-outlined text-base">cloud_sync</span>
-            {error}
-          </div>
-        )}
-
-        {/* Unread Active Badge Counter Header */}
-        <div className="flex items-center gap-2 mb-4">
-          <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400">Log Buffer Feed</h4>
           {unreadCount > 0 && (
-            <span className="bg-blue-600 px-2 py-0.5 rounded-full text-[10px] font-black text-white uppercase tracking-tight animate-pulse">
-              {unreadCount} Unhandled
-            </span>
+            <button 
+              onClick={handleMarkAllAsRead}
+              className="px-3 py-1.5 text-xs font-medium text-blue-600 hover:text-blue-700 flex items-center gap-1"
+            >
+              <span className="material-symbols-outlined text-sm">done_all</span>
+              Mark all as read
+            </button>
           )}
         </div>
 
-        {/* Main Notifications Stream Grid */}
-        <div className="flex flex-col gap-3.5">
-          {loading ? (
-            <div className="bg-white rounded-xl border border-slate-100 py-16 text-center text-slate-400 flex flex-col items-center justify-center gap-3 shadow-sm">
-              <span className="material-symbols-outlined animate-spin text-blue-600 text-3xl">progress_activity</span>
-              <p className="text-xs font-bold tracking-tight">Accessing core security bus state matrix...</p>
-            </div>
-          ) : filteredNotifications.length === 0 ? (
-            <div className="bg-white rounded-xl border border-slate-100 py-16 text-center text-slate-400 flex flex-col items-center justify-center gap-2 shadow-sm">
-              <span className="material-symbols-outlined text-4xl text-slate-200">notifications_off</span>
-              <p className="text-xs font-bold tracking-tight">Log clean. No system events match parameter boundaries.</p>
+        {/* Unread Count */}
+        {unreadCount > 0 && (
+          <div className="mb-4 flex items-center gap-2">
+            <span className="text-xs font-medium text-slate-500">Unread</span>
+            <span className="bg-blue-500 text-white px-2 py-0.5 rounded-full text-xs font-bold">
+              {unreadCount}
+            </span>
+          </div>
+        )}
+
+        {/* Notifications List */}
+        <div className="space-y-3">
+          {filteredNotifications.length === 0 ? (
+            <div className="bg-white rounded-xl py-12 text-center border">
+              <span className="material-symbols-outlined text-5xl text-slate-300 mb-2">notifications_off</span>
+              <p className="text-sm text-slate-500">No notifications found</p>
             </div>
           ) : (
             filteredNotifications.map((n) => {
-              const theme = getSeverityStyle(n.severity);
+              const typeStyle = getTypeStyle(n.type);
               const isExpanded = expandedId === n.id;
 
               return (
                 <div
                   key={n.id}
                   onClick={() => toggleExpand(n.id)}
-                  className={`group bg-white rounded-xl border-l-4 border border-y-slate-100 border-r-slate-100 transition-all duration-300 cursor-pointer select-none relative ${theme.accent} ${
-                    !n.is_read 
-                      ? "shadow-[0_4px_20px_rgba(11,28,48,0.02)] hover:shadow-[0_10px_30px_rgba(11,28,48,0.06)] hover:-translate-y-0.5" 
-                      : "opacity-60 hover:opacity-100"
+                  className={`bg-white rounded-xl border border-l-4 transition-all cursor-pointer ${typeStyle.border} ${
+                    !n.is_read ? "shadow-sm" : "opacity-70"
                   }`}
                 >
-                  <div className="p-5 flex gap-4 items-start">
-                    
-                    <div className={`w-11 h-11 rounded-xl flex items-center justify-center shrink-0 border transition-transform group-hover:scale-105 duration-300 ${theme.bg}`}>
-                      <span className="material-symbols-outlined text-lg">{theme.icon}</span>
+                  <div className="p-4 flex gap-3 items-start">
+                    {/* Icon */}
+                    <div className={`w-10 h-10 rounded-full flex items-center justify-center shrink-0 ${typeStyle.bg}`}>
+                      <span className="material-symbols-outlined text-base">{getCategoryIcon(n.category)}</span>
                     </div>
 
+                    {/* Content */}
                     <div className="flex-1 min-w-0">
-                      <div className="flex justify-between items-baseline gap-4 mb-0.5">
-                        <h3 className={`text-sm font-bold tracking-tight truncate ${!n.is_read ? "text-slate-900" : "text-slate-600"}`}>
+                      <div className="flex flex-wrap justify-between items-start gap-2 mb-1">
+                        <h3 className={`text-sm font-semibold ${!n.is_read ? "text-slate-900" : "text-slate-600"}`}>
                           {n.title}
                         </h3>
-                        <span className="text-[10px] font-mono font-bold text-slate-400 shrink-0">{n.timeLabel}</span>
+                        <span className="text-[10px] text-slate-400 shrink-0">{n.timeLabel}</span>
                       </div>
-                      <p className="text-xs font-medium text-slate-400 leading-relaxed max-w-3xl">
-                        {n.message}
-                      </p>
+                      <p className="text-xs text-slate-500 leading-relaxed">{n.message}</p>
                     </div>
 
-                    <div className="flex items-center gap-1.5 self-center ml-2 shrink-0">
+                    {/* Actions */}
+                    <div className="flex items-center gap-1 shrink-0">
                       {!n.is_read && (
                         <button
                           onClick={(e) => handleMarkAsRead(n.id, e)}
-                          className="w-7 h-7 rounded-full bg-slate-50 border border-slate-100 text-slate-400 hover:text-emerald-600 hover:bg-emerald-50 hover:border-emerald-200 flex items-center justify-center transition-all opacity-0 group-hover:opacity-100"
-                          title="Resolve Entry"
+                          className="w-7 h-7 rounded-full bg-slate-50 border text-slate-400 hover:text-emerald-600 hover:bg-emerald-50 flex items-center justify-center transition-all"
+                          title="Mark as read"
                         >
-                          <span className="material-symbols-outlined text-base">check</span>
+                          <span className="material-symbols-outlined text-sm">done</span>
                         </button>
                       )}
                       <button
                         onClick={(e) => handleDeleteNotification(n.id, e)}
-                        className="w-7 h-7 rounded-full bg-slate-50 border border-slate-100 text-slate-400 hover:text-rose-600 hover:bg-rose-50 hover:border-rose-200 flex items-center justify-center transition-all opacity-0 group-hover:opacity-100"
-                        title="Purge Entry"
+                        className="w-7 h-7 rounded-full bg-slate-50 border text-slate-400 hover:text-red-600 hover:bg-red-50 flex items-center justify-center transition-all"
+                        title="Delete"
                       >
-                        <span className="material-symbols-outlined text-base">delete</span>
+                        <span className="material-symbols-outlined text-sm">delete</span>
                       </button>
-                      <span className={`material-symbols-outlined text-slate-300 transition-transform duration-300 ${isExpanded ? "rotate-180" : ""}`}>
-                        keyboard_arrow_down
+                      <span className={`material-symbols-outlined text-slate-300 text-sm transition-transform ${isExpanded ? "rotate-180" : ""}`}>
+                        expand_more
                       </span>
                     </div>
-
                   </div>
 
-                  {/* Sliding Dropdown Drawer for Technical Diagnostics */}
-                  <div className={`overflow-hidden transition-all duration-300 ease-in-out bg-slate-50/50 border-t border-slate-50 px-5 rounded-b-xl ${
-                    isExpanded ? "max-h-48 py-4 opacity-100" : "max-h-0 py-0 opacity-0 pointer-events-none"
+                  {/* Expanded Details */}
+                  <div className={`overflow-hidden transition-all duration-300 border-t bg-slate-50/30 rounded-b-xl ${
+                    isExpanded ? "max-h-32 py-3 px-4" : "max-h-0 py-0 px-4"
                   }`}>
-                    <div className="flex flex-col gap-3">
-                      <div className="flex items-center justify-between text-[11px] uppercase tracking-wider font-bold text-slate-400 border-b border-slate-100 pb-1.5">
-                        <span>Cluster Environment Trace Analysis</span>
-                        <span className="font-mono text-slate-500">Log reference ID: #{n.id}2026X</span>
-                      </div>
-                      
-                      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-xs font-semibold">
-                        {n.details && Object.entries(n.details).map(([key, value]) => (
-                          <div key={key} className="bg-white p-2.5 rounded-lg border border-slate-100 shadow-2xs">
-                            <span className="block text-[10px] text-slate-400 capitalize mb-0.5">{key.replace(/([A-Z])/g, ' $1')}</span>
-                            <span className="font-mono text-slate-700 font-bold truncate block">{value}</span>
-                          </div>
-                        ))}
-                      </div>
-
-                      {n.category === "system" && !n.is_read && (
-                        <div className="mt-1 flex items-center gap-2">
-                          <button 
-                            onClick={(e) => e.stopPropagation()}
-                            className="px-3 py-1.5 bg-blue-600 text-white font-bold text-[10px] tracking-tight uppercase rounded-md shadow-xs hover:bg-blue-700 transition"
-                          >
-                            Synchronize Node Architecture
-                          </button>
-                        </div>
-                      )}
+                    <div className="flex items-center justify-between text-xs">
+                      <span className="text-slate-500">Notification ID: #{n.id}</span>
+                      <span className="text-slate-400 text-[10px]">Category: {n.category}</span>
                     </div>
                   </div>
-
                 </div>
               );
             })
           )}
         </div>
 
-        <footer className="mt-16 py-6 text-center text-slate-400 text-[11px] font-bold tracking-tight border-t border-slate-100/60">
-          Academic Architect v4.2.0 • ScholarFlow Pro Ecosystem
+        {/* Footer */}
+        <footer className="mt-8 pt-4 text-center text-xs text-slate-400 border-t">
+          ScholarFlow Student Portal
         </footer>
-
       </div>
-    </SchoolLayout>
+    </MainLayout>
   );
 }

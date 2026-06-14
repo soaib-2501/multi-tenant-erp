@@ -11,78 +11,69 @@ function Skeleton({ className = "" }) {
 function SettingsSkeleton() {
   return (
     <MainLayout title="Account Settings">
-      <div className="max-w-4xl mx-auto">
-        <div className="grid gap-8">
-          {/* Preferences Section Skeleton */}
-          <section className="bg-white p-8 rounded-lg shadow-sm">
-            <div className="flex items-center gap-3 mb-8">
-              <Skeleton className="w-6 h-6 rounded-full" />
-              <Skeleton className="w-40 h-7" />
-            </div>
-            <div className="grid md:grid-cols-2 gap-12">
-              <div className="space-y-3">
-                <Skeleton className="w-36 h-4 mb-2" />
-                <Skeleton className="w-full h-12 rounded-md" />
-                <Skeleton className="w-64 h-3" />
-              </div>
-
-              <div className="space-y-4">
-                <Skeleton className="w-24 h-4 mb-2" />
-                <div className="flex items-center justify-between p-4 bg-gray-50 rounded-md">
-                  <div className="flex items-center gap-3">
-                    <Skeleton className="w-5 h-5 rounded-full" />
-                    <Skeleton className="w-24 h-5" />
-                  </div>
-                  <Skeleton className="w-11 h-6 rounded-full" />
-                </div>
-              </div>
-            </div>
-          </section>
-
-          {/* Communication Section Skeleton */}
-          <section className="bg-white p-8 rounded-lg shadow-sm">
-            <div className="flex items-center gap-3 mb-8">
-              <Skeleton className="w-6 h-6 rounded-full" />
-              <Skeleton className="w-40 h-7" />
-            </div>
-            <div className="space-y-6">
-              {[1, 2].map((i) => (
-                <div key={i} className="flex items-start justify-between p-4 rounded-xl">
-                  <div className="flex gap-4 flex-1">
-                    <Skeleton className="w-5 h-5 rounded-full mt-1" />
-                    <div className="flex-1">
-                      <Skeleton className="w-32 h-5 mb-2" />
-                      <Skeleton className="w-64 h-3" />
-                    </div>
-                  </div>
-                  <Skeleton className="w-11 h-6 rounded-full" />
-                </div>
-              ))}
-            </div>
-          </section>
-
-          {/* Bottom Cards Skeleton */}
-          <div className="grid md:grid-cols-3 gap-6">
-            <div className="md:col-span-2 bg-gradient-to-r from-blue-600 to-blue-400 p-8 rounded-lg">
-              <Skeleton className="w-48 h-7 mb-2 bg-white/20" />
-              <Skeleton className="w-80 h-4 mb-6 bg-white/20" />
-              <Skeleton className="w-36 h-10 rounded-md bg-white/20" />
-            </div>
-            <div className="bg-gray-100 p-8 rounded-lg">
-              <div className="flex items-center gap-2 mb-2">
-                <Skeleton className="w-5 h-5 rounded-full" />
-                <Skeleton className="w-16 h-4" />
-              </div>
-              <Skeleton className="w-full h-3" />
-              <Skeleton className="w-3/4 h-3 mt-2" />
-            </div>
+      <div className="h-full w-full p-4 md:p-6">
+        <div className="flex justify-between items-center mb-5">
+          <div>
+            <Skeleton className="w-48 h-7 mb-1" />
+            <Skeleton className="w-64 h-4" />
           </div>
+          <Skeleton className="w-32 h-9 rounded-md" />
         </div>
 
-        {/* Action Buttons Skeleton */}
-        <div className="mt-12 flex justify-end gap-4">
-          <Skeleton className="w-32 h-11 rounded-md" />
-          <Skeleton className="w-36 h-11 rounded-md" />
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+          <div className="space-y-4">
+            <div className="bg-white rounded-xl p-4">
+              <Skeleton className="w-24 h-5 mb-3" />
+              <Skeleton className="w-32 h-3 mb-2" />
+              <Skeleton className="w-full h-10 rounded-md" />
+              <Skeleton className="w-48 h-3 mt-2" />
+              <div className="mt-3">
+                <Skeleton className="w-24 h-3 mb-2" />
+                <div className="flex justify-between items-center">
+                  <Skeleton className="w-24 h-5" />
+                  <Skeleton className="w-10 h-5 rounded-full" />
+                </div>
+              </div>
+            </div>
+            <div className="bg-white rounded-xl p-4">
+              <Skeleton className="w-32 h-5 mb-3" />
+              <div className="space-y-3">
+                <div className="flex justify-between items-center">
+                  <div>
+                    <Skeleton className="w-32 h-4 mb-1" />
+                    <Skeleton className="w-48 h-3" />
+                  </div>
+                  <Skeleton className="w-10 h-5 rounded-full" />
+                </div>
+                <div className="flex justify-between items-center">
+                  <div>
+                    <Skeleton className="w-32 h-4 mb-1" />
+                    <Skeleton className="w-48 h-3" />
+                  </div>
+                  <Skeleton className="w-10 h-5 rounded-full" />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="space-y-4">
+            <div className="bg-gradient-to-r from-blue-600 to-blue-400 rounded-xl p-4">
+              <Skeleton className="w-40 h-6 mb-2 bg-white/20" />
+              <Skeleton className="w-64 h-3 mb-4 bg-white/20" />
+              <Skeleton className="w-28 h-8 rounded-md bg-white/20" />
+            </div>
+            <div className="bg-gray-50 rounded-xl p-4">
+              <Skeleton className="w-16 h-4 mb-2" />
+              <Skeleton className="w-full h-3" />
+            </div>
+            <div className="bg-gray-50 rounded-xl p-3">
+              <Skeleton className="w-24 h-3 mb-1" />
+              <Skeleton className="w-48 h-3" />
+            </div>
+            <div className="flex justify-end gap-3 pt-2">
+              <Skeleton className="w-20 h-9 rounded-md" />
+              <Skeleton className="w-28 h-9 rounded-md" />
+            </div>
+          </div>
         </div>
       </div>
     </MainLayout>
@@ -117,7 +108,6 @@ export default function Settings() {
     fetchSettings();
   }, []);
 
-  // Show skeleton while loading
   if (loading) return <SettingsSkeleton />;
 
   const handleChange = (field, value) => {
@@ -138,177 +128,245 @@ export default function Settings() {
   };
 
   const handleCancel = () => {
-    // Reset to previous settings or navigate back
     window.history.back();
   };
 
   return (
     <MainLayout title="Account Settings">
-      <div className="max-w-4xl mx-auto">
-        <div className="grid gap-8">
-          {/* Preferences Section */}
-          <section className="bg-surface-container-lowest p-8 rounded-lg ambient-shadow">
-            <div className="flex items-center gap-3 mb-8">
-              <span className="material-symbols-outlined text-primary">tune</span>
-              <h3 className="text-xl font-bold text-on-surface">Preferences</h3>
-            </div>
-            <div className="grid md:grid-cols-2 gap-12">
-              <div className="space-y-3">
-                <label className="block text-sm font-bold text-on-surface-variant uppercase tracking-widest">
-                  Interface Language
-                </label>
-                <div className="relative">
-                  <select
-                    value={settings.language}
-                    onChange={(e) => handleChange('language', e.target.value)}
-                    className="w-full appearance-none bg-surface-container-low border-none rounded-md py-4 px-5 text-on-surface font-semibold focus:ring-2 focus:ring-primary/30 transition-all outline-none"
-                  >
-                    <option>English (United States)</option>
-                    <option>Spanish (Español)</option>
-                    <option>French (Français)</option>
-                    <option>German (Deutsch)</option>
-                  </select>
-                  <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none">
-                    <span className="material-symbols-outlined text-on-surface-variant">expand_more</span>
+      <div className="h-full w-full p-4 md:p-6">
+        {/* Header - Only subtitle now, no duplicate title */}
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-5">
+          <div>
+            <p className="text-sm text-on-surface-variant">Manage your preferences and communication settings</p>
+          </div>
+          <button
+            onClick={handleSave}
+            disabled={isSaving}
+            className="px-5 py-2.5 bg-primary text-white text-sm font-semibold rounded-xl shadow-md hover:opacity-90 transition-all disabled:opacity-50"
+          >
+            {isSaving ? 'Saving...' : 'Save Settings'}
+          </button>
+        </div>
+
+        {/* Two Column Layout */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+          
+          {/* Left Column */}
+          <div className="space-y-5 pr-3">
+            {/* Preferences Section */}
+            <div className="bg-surface-container-lowest rounded-2xl p-5 shadow-sm border border-outline-variant/10">
+              <div className="flex items-center gap-2.5 mb-5">
+                <div className="w-8 h-8 rounded-xl bg-primary/10 flex items-center justify-center">
+                  <span className="material-symbols-outlined text-primary text-lg">tune</span>
+                </div>
+                <h3 className="text-lg font-bold text-on-surface">Preferences</h3>
+              </div>
+              
+              <div className="space-y-5">
+                {/* Language Selector */}
+                <div>
+                  <label className="block text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-2">
+                    Interface Language
+                  </label>
+                  <div className="relative">
+                    <select
+                      value={settings.language}
+                      onChange={(e) => handleChange('language', e.target.value)}
+                      className="w-full appearance-none bg-surface-container-low border-none rounded-xl py-3 px-4 text-sm text-on-surface font-medium focus:ring-2 focus:ring-primary/30 outline-none cursor-pointer"
+                    >
+                      <option>English (United States)</option>
+                      <option>Spanish (Español)</option>
+                      <option>French (Français)</option>
+                      <option>German (Deutsch)</option>
+                    </select>
+                    <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none">
+                      <span className="material-symbols-outlined text-base text-on-surface-variant">expand_more</span>
+                    </div>
+                  </div>
+                  <p className="text-[11px] text-on-surface-variant/70 mt-1.5">
+                    Changes language of navigation and labels
+                  </p>
+                </div>
+
+                {/* Dark Mode Toggle */}
+                <div>
+                  <label className="block text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-2">
+                    Appearance
+                  </label>
+                  <div className="flex items-center justify-between p-3.5 bg-surface-container-low rounded-xl">
+                    <div className="flex items-center gap-2.5">
+                      <div className="w-8 h-8 rounded-lg bg-gray-100 flex items-center justify-center">
+                        <span className="material-symbols-outlined text-sm text-on-surface-variant">
+                          {darkMode ? 'dark_mode' : 'light_mode'}
+                        </span>
+                      </div>
+                      <span className="text-sm font-semibold text-on-surface">Dark Mode</span>
+                    </div>
+                    <button
+                      onClick={toggleDarkMode}
+                      className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none ${
+                        darkMode ? 'bg-primary' : 'bg-gray-300'
+                      }`}
+                    >
+                      <span
+                        className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform duration-300 ${
+                          darkMode ? 'translate-x-6' : 'translate-x-1'
+                        }`}
+                      />
+                    </button>
                   </div>
                 </div>
-                <p className="text-xs text-on-surface-variant px-1">
-                  This will change the language of all navigation and labels.
-                </p>
               </div>
+            </div>
 
-              <div className="space-y-4">
-                <label className="block text-sm font-bold text-on-surface-variant uppercase tracking-widest">
-                  Appearance
-                </label>
-                <div className="flex items-center justify-between p-4 bg-surface-container-low rounded-md">
-                  <div className="flex items-center gap-3">
-                    <span className="material-symbols-outlined text-on-surface-variant">
-                      {darkMode ? 'dark_mode' : 'light_mode'}
-                    </span>
-                    <span className="font-semibold text-on-surface">Dark Mode</span>
+            {/* Communication Section */}
+            <div className="bg-surface-container-lowest rounded-2xl p-5 shadow-sm border border-outline-variant/10">
+              <div className="flex items-center gap-2.5 mb-5">
+                <div className="w-8 h-8 rounded-xl bg-primary/10 flex items-center justify-center">
+                  <span className="material-symbols-outlined text-primary text-lg">notifications_active</span>
+                </div>
+                <h3 className="text-lg font-bold text-on-surface">Communication</h3>
+              </div>
+              
+              <div className="space-y-3">
+                {/* Push Notifications */}
+                <div className="flex items-center justify-between p-3.5 bg-surface-container-low/30 rounded-xl hover:bg-surface-container-low transition-all group cursor-pointer">
+                  <div className="flex gap-3">
+                    <div className="w-8 h-8 rounded-lg bg-primary/5 flex items-center justify-center group-hover:bg-primary/10 transition-all">
+                      <span className="material-symbols-outlined text-primary text-sm">campaign</span>
+                    </div>
+                    <div>
+                      <h4 className="text-sm font-semibold text-on-surface">Push Notifications</h4>
+                      <p className="text-xs text-on-surface-variant">Quiz results and class announcements</p>
+                    </div>
                   </div>
-                  {/* toggleDarkMode — global context update */}
                   <button
-                    onClick={toggleDarkMode}
-                    className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none ${
-                      darkMode ? 'bg-primary' : 'bg-surface-container-highest'
+                    onClick={() => handleChange('pushNotifications', !settings.pushNotifications)}
+                    className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors shrink-0 ${
+                      settings.pushNotifications ? 'bg-primary' : 'bg-gray-300'
                     }`}
                   >
                     <span
                       className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform duration-300 ${
-                        darkMode ? 'translate-x-6' : 'translate-x-1'
+                        settings.pushNotifications ? 'translate-x-6' : 'translate-x-1'
+                      }`}
+                    />
+                  </button>
+                </div>
+
+                {/* Email Alerts */}
+                <div className="flex items-center justify-between p-3.5 bg-surface-container-low/30 rounded-xl hover:bg-surface-container-low transition-all group cursor-pointer">
+                  <div className="flex gap-3">
+                    <div className="w-8 h-8 rounded-lg bg-primary/5 flex items-center justify-center group-hover:bg-primary/10 transition-all">
+                      <span className="material-symbols-outlined text-primary text-sm">mail</span>
+                    </div>
+                    <div>
+                      <h4 className="text-sm font-semibold text-on-surface">Email Alerts</h4>
+                      <p className="text-xs text-on-surface-variant">Weekly summaries and parent updates</p>
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => handleChange('emailAlerts', !settings.emailAlerts)}
+                    className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors shrink-0 ${
+                      settings.emailAlerts ? 'bg-primary' : 'bg-gray-300'
+                    }`}
+                  >
+                    <span
+                      className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform duration-300 ${
+                        settings.emailAlerts ? 'translate-x-6' : 'translate-x-1'
                       }`}
                     />
                   </button>
                 </div>
               </div>
             </div>
-          </section>
+          </div>
 
-          {/* Communication Section */}
-          <section className="bg-surface-container-lowest p-8 rounded-lg ambient-shadow">
-            <div className="flex items-center gap-3 mb-8">
-              <span className="material-symbols-outlined text-primary">notifications_active</span>
-              <h3 className="text-xl font-bold text-on-surface">Communication</h3>
-            </div>
-            <div className="space-y-6">
-              <div className="flex items-start justify-between p-4 hover:bg-surface-container-low rounded-xl transition-all">
-                <div className="flex gap-4">
-                  <div className="mt-1">
-                    <span className="material-symbols-outlined text-primary">campaign</span>
-                  </div>
-                  <div>
-                    <h4 className="font-bold text-on-surface">Push Notifications</h4>
-                    <p className="text-sm text-on-surface-variant">
-                      Get instant alerts for quiz results and class announcements.
-                    </p>
-                  </div>
-                </div>
-                <button
-                  onClick={() => handleChange('pushNotifications', !settings.pushNotifications)}
-                  className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none ${
-                    settings.pushNotifications ? 'bg-primary' : 'bg-surface-container-highest'
-                  }`}
-                >
-                  <span
-                    className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform duration-300 ${
-                      settings.pushNotifications ? 'translate-x-6' : 'translate-x-1'
-                    }`}
-                  />
-                </button>
+          {/* Right Column */}
+          <div className="space-y-5 pl-3">
+            {/* Help & Support Card */}
+            <div className="bg-gradient-to-br from-primary to-primary-container rounded-2xl p-5 text-white shadow-lg">
+              <div className="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center mb-3">
+                <span className="material-symbols-outlined text-2xl">support_agent</span>
               </div>
-
-              <div className="flex items-start justify-between p-4 hover:bg-surface-container-low rounded-xl transition-all">
-                <div className="flex gap-4">
-                  <div className="mt-1">
-                    <span className="material-symbols-outlined text-primary">mail</span>
-                  </div>
-                  <div>
-                    <h4 className="font-bold text-on-surface">Email Alerts</h4>
-                    <p className="text-sm text-on-surface-variant">
-                      Receive weekly performance summaries and parent updates.
-                    </p>
-                  </div>
-                </div>
-                <button
-                  onClick={() => handleChange('emailAlerts', !settings.emailAlerts)}
-                  className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none ${
-                    settings.emailAlerts ? 'bg-primary' : 'bg-surface-container-highest'
-                  }`}
-                >
-                  <span
-                    className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform duration-300 ${
-                      settings.emailAlerts ? 'translate-x-6' : 'translate-x-1'
-                    }`}
-                  />
-                </button>
-              </div>
-            </div>
-          </section>
-
-          {/* Help & Support Cards */}
-          <div className="grid md:grid-cols-3 gap-6">
-            <div className="md:col-span-2 primary-gradient p-8 rounded-lg text-white">
-              <h4 className="text-xl font-bold mb-2">Need Academic Help?</h4>
-              <p className="text-white/80 mb-6">
-                Our support team is available 24/7 to assist with platform technicalities or learning roadblocks.
+              <h4 className="text-lg font-bold mb-1">Need Academic Help?</h4>
+              <p className="text-sm text-white/80 mb-4">
+                24/7 support for platform issues and learning roadblocks
               </p>
-              <button className="bg-white text-primary px-6 py-2 rounded-md font-bold text-sm shadow-sm hover:scale-105 transition-transform">
+              <button className="bg-white text-primary px-5 py-2 rounded-xl text-sm font-semibold shadow-md hover:scale-105 transition-transform">
                 Contact Support
               </button>
             </div>
-            <div className="bg-surface-container-high p-8 rounded-lg border border-outline-variant/20">
-              <div className="flex items-center gap-2 text-primary font-bold mb-2">
-                <span className="material-symbols-outlined">verified_user</span>
-                <span className="text-sm">Security</span>
+
+            {/* Security Card */}
+            <div className="bg-surface-container-lowest rounded-2xl p-5 shadow-sm border border-outline-variant/10">
+              <div className="flex items-center gap-2.5 mb-3">
+                <div className="w-8 h-8 rounded-xl bg-emerald-50 flex items-center justify-center">
+                  <span className="material-symbols-outlined text-emerald-600 text-lg">verified_user</span>
+                </div>
+                <span className="text-base font-bold text-on-surface">Security</span>
               </div>
-              <p className="text-xs text-on-surface-variant leading-relaxed">
+              <p className="text-sm text-on-surface-variant leading-relaxed pl-11">
                 Your data is encrypted using institutional-grade protocols. Scholar ID verified.
+              </p>
+            </div>
+
+            {/* Session Info */}
+            <div className="bg-surface-container-low/30 rounded-2xl p-5">
+              <div className="flex items-center gap-2.5 mb-2">
+                <div className="w-8 h-8 rounded-xl bg-gray-100 flex items-center justify-center">
+                  <span className="material-symbols-outlined text-gray-600 text-lg">computer</span>
+                </div>
+                <span className="text-sm font-semibold text-on-surface">Active Session</span>
+              </div>
+              <p className="text-xs text-on-surface-variant pl-11">
+                Last active: Today • Chrome on Windows
+              </p>
+            </div>
+
+            {/* Action Buttons */}
+            <div className="flex justify-end gap-3 pt-3">
+              <button 
+                onClick={handleCancel}
+                className="px-6 py-2.5 bg-gray-200 hover:bg-gray-300 text-gray-700 text-sm font-semibold rounded-xl transition-all"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleSave}
+                disabled={isSaving}
+                className={`px-6 py-2.5 bg-primary text-white text-sm font-semibold rounded-xl shadow-md hover:opacity-90 transition-all disabled:opacity-50`}
+              >
+                {isSaving ? 'Saving...' : 'Save Changes'}
+              </button>
+            </div>
+
+            {/* Footer Note */}
+            <div className="text-center pt-4 pb-2">
+              <p className="text-[10px] text-on-surface-variant/50">
+                ScholarFlow Student Portal v4.2
               </p>
             </div>
           </div>
         </div>
-
-        {/* Action Buttons */}
-        <div className="mt-12 flex justify-end gap-4">
-          <button 
-            onClick={handleCancel}
-            className="px-8 py-3 text-primary font-bold text-sm hover:bg-surface-container rounded-md transition-all"
-          >
-            Cancel Changes
-          </button>
-          <button
-            onClick={handleSave}
-            disabled={isSaving}
-            className={`px-10 py-3 primary-gradient text-white font-bold text-sm rounded-md shadow-lg transition-transform ${
-              isSaving ? 'opacity-70 cursor-not-allowed' : 'hover:scale-105'
-            }`}
-          >
-            {isSaving ? 'Saving...' : 'Save Settings'}
-          </button>
-        </div>
       </div>
+
+      <style jsx>{`
+        .custom-scrollbar::-webkit-scrollbar {
+          width: 5px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+          background: #e2e8f0;
+          border-radius: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+          background: #94a3b8;
+          border-radius: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+          background: #64748b;
+        }
+      `}</style>
     </MainLayout>
   );
 }

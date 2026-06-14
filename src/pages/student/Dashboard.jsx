@@ -8,7 +8,6 @@ import {
 } from "../../utils/calculations";
 import { useStudent } from "../../context/StudentProvider";
 
-// ── Skeleton pulse component ──────────────────────────────────────────────────
 function Skeleton({ className = "" }) {
   return <div className={`animate-pulse bg-gray-200 rounded-md ${className}`} />;
 }
@@ -17,50 +16,32 @@ function DashboardSkeleton() {
   return (
     <MainLayout title="Dashboard">
       <div className="px-8 py-8 space-y-8">
-
-        {/* Hero Banner Skeleton */}
         <div className="rounded-xl bg-gray-200 animate-pulse h-36" />
-
-        {/* 3 Stat Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {[1, 2, 3].map(i => (
-            <div key={i} className="bg-white p-6 rounded-xl border border-gray-100 shadow-sm space-y-4">
+            <div key={i} className="bg-white p-4 rounded-xl border border-gray-100 shadow-sm space-y-3">
               <div className="flex justify-between">
-                <Skeleton className="w-11 h-11 rounded-md" />
+                <Skeleton className="w-9 h-9 rounded-md" />
                 <Skeleton className="w-20 h-5 rounded-full" />
               </div>
-              <Skeleton className="w-32 h-3 mt-4" />
-              <Skeleton className="w-24 h-9" />
+              <Skeleton className="w-28 h-3 mt-2" />
+              <Skeleton className="w-20 h-7" />
             </div>
           ))}
         </div>
-
-        {/* Row 2 */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div className="md:col-span-2 grid grid-cols-2 gap-6">
-
-            {/* Calendar skeleton */}
             <div className="bg-white rounded-xl p-4 border border-gray-100 shadow-sm space-y-3">
               <div className="flex justify-between">
                 <Skeleton className="w-24 h-4" />
                 <Skeleton className="w-12 h-4" />
               </div>
               <div className="grid grid-cols-7 gap-1">
-                {Array.from({ length: 7 }).map((_, i) => (
-                  <Skeleton key={i} className="h-3 rounded" />
-                ))}
-                {Array.from({ length: 35 }).map((_, i) => (
+                {Array.from({ length: 42 }).map((_, i) => (
                   <Skeleton key={i} className="aspect-square rounded" />
                 ))}
               </div>
-              <div className="flex gap-3 pt-2">
-                <Skeleton className="w-16 h-3" />
-                <Skeleton className="w-16 h-3" />
-                <Skeleton className="w-16 h-3" />
-              </div>
             </div>
-
-            {/* Subjects skeleton */}
             <div className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
               <div className="px-4 pt-4 pb-2 border-b border-gray-100 flex justify-between">
                 <Skeleton className="w-24 h-4" />
@@ -80,8 +61,6 @@ function DashboardSkeleton() {
               </div>
             </div>
           </div>
-
-          {/* Right col */}
           <div className="flex flex-col gap-4">
             <div className="bg-gray-50 rounded-xl p-5 space-y-3">
               <Skeleton className="w-28 h-3" />
@@ -103,15 +82,8 @@ function DashboardSkeleton() {
                 </div>
               ))}
             </div>
-            <div className="bg-gray-100 rounded-lg p-5 space-y-3">
-              <Skeleton className="w-24 h-3" />
-              <Skeleton className="w-32 h-7" />
-              <Skeleton className="w-full h-1.5 rounded-full" />
-              <Skeleton className="w-48 h-2.5" />
-            </div>
           </div>
         </div>
-
       </div>
     </MainLayout>
   );
@@ -193,7 +165,6 @@ export default function Dashboard() {
       .slice(0, 4);
   }, [studentData, academic]);
 
-  // ── Show skeleton while loading ──
   if (loading || !studentData || !student) {
     return <DashboardSkeleton />;
   }
@@ -239,7 +210,7 @@ export default function Dashboard() {
 
   return (
     <MainLayout title="Dashboard">
-      <div className="px-8 py-8 space-y-8">
+      <div className="px-8 py-8 space-y-6">
 
         {/* ── HERO BANNER ── */}
         <section className="relative overflow-hidden rounded-xl bg-gradient-to-br from-primary to-primary-container p-8 text-white">
@@ -261,57 +232,63 @@ export default function Dashboard() {
           </div>
         </section>
 
-        {/* ── ROW 1: 3 STAT CARDS ── */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="bg-surface-container-lowest p-6 rounded-xl custom-shadow flex flex-col justify-between group transition-all hover:scale-[1.02] border border-outline-variant/10">
-            <div className="flex justify-between items-start">
-              <span className="p-3 rounded-md bg-blue-50 text-blue-700">
-                <span className="material-symbols-outlined">calendar_today</span>
+        {/* ── ROW 1: 3 STAT CARDS (compact) ── */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+
+          {/* Attendance */}
+          <div className="bg-surface-container-lowest px-4 py-3 rounded-xl custom-shadow flex items-center justify-between border border-outline-variant/10 hover:scale-[1.01] transition-all">
+            <div className="flex items-center gap-3">
+              <span className="p-2 rounded-md bg-blue-50 text-blue-700 flex-shrink-0">
+                <span className="material-symbols-outlined text-xl">calendar_today</span>
               </span>
-              <span className={`text-xs font-bold px-2 py-1 rounded ${attendanceStatus.className}`}>
-                {attendanceStatus.label}
-              </span>
+              <div>
+                <p className="text-xs font-medium text-on-surface-variant">Attendance Rate</p>
+                <p className="text-xl font-bold font-headline text-on-surface leading-tight">
+                  {attendanceRate}<span className="text-sm font-semibold">%</span>
+                </p>
+              </div>
             </div>
-            <div className="mt-4">
-              <p className="text-sm font-medium text-on-surface-variant mb-1">Attendance Rate</p>
-              <h3 className="text-4xl font-extrabold font-headline text-on-surface">
-                {attendanceRate}<span className="text-2xl font-semibold">%</span>
-              </h3>
-            </div>
+            <span className={`text-[10px] font-bold px-2 py-1 rounded-full ${attendanceStatus.className}`}>
+              {attendanceStatus.label}
+            </span>
           </div>
 
-          <div className="bg-surface-container-lowest p-6 rounded-xl custom-shadow flex flex-col justify-between group transition-all hover:scale-[1.02] border border-outline-variant/10">
-            <div className="flex justify-between items-start">
-              <span className="p-3 rounded-md bg-secondary-fixed text-secondary">
-                <span className="material-symbols-outlined">grade</span>
+          {/* GPA */}
+          <div className="bg-surface-container-lowest px-4 py-3 rounded-xl custom-shadow flex items-center justify-between border border-outline-variant/10 hover:scale-[1.01] transition-all">
+            <div className="flex items-center gap-3">
+              <span className="p-2 rounded-md bg-secondary-fixed text-secondary flex-shrink-0">
+                <span className="material-symbols-outlined text-xl">grade</span>
               </span>
-              <span className="text-xs font-bold text-secondary bg-secondary-fixed px-2 py-1 rounded">
-                EXCELLENT
-              </span>
+              <div>
+                <p className="text-xs font-medium text-on-surface-variant">Current GPA</p>
+                <p className="text-xl font-bold font-headline text-on-surface leading-tight">
+                  {gpa}<span className="text-sm font-semibold">/4.0</span>
+                </p>
+              </div>
             </div>
-            <div className="mt-4">
-              <p className="text-sm font-medium text-on-surface-variant mb-1">Current GPA</p>
-              <h3 className="text-4xl font-extrabold font-headline text-on-surface">
-                {gpa}<span className="text-2xl font-semibold">/4.0</span>
-              </h3>
-            </div>
+            <span className="text-[10px] font-bold text-secondary bg-secondary-fixed px-2 py-1 rounded-full">
+              EXCELLENT
+            </span>
           </div>
 
-          <div className="bg-surface-container-lowest p-6 rounded-xl custom-shadow flex flex-col justify-between group transition-all hover:scale-[1.02] border border-outline-variant/10">
-            <div className="flex justify-between items-start">
-              <span className="p-3 rounded-md bg-green-50 text-green-700">
-                <span className="material-symbols-outlined">verified</span>
+          {/* Fees */}
+          <div className="bg-surface-container-lowest px-4 py-3 rounded-xl custom-shadow flex items-center justify-between border border-outline-variant/10 hover:scale-[1.01] transition-all">
+            <div className="flex items-center gap-3">
+              <span className="p-2 rounded-md bg-green-50 text-green-700 flex-shrink-0">
+                <span className="material-symbols-outlined text-xl">verified</span>
               </span>
-              <div className="h-2 w-2 bg-green-500 rounded-full animate-pulse" />
+              <div>
+                <p className="text-xs font-medium text-on-surface-variant">Fees Status</p>
+                <p className="text-xl font-bold font-headline text-on-surface leading-tight">Paid</p>
+                <p className="text-[10px] text-on-surface-variant">Next due: Oct 15, 2024</p>
+              </div>
             </div>
-            <div className="mt-4">
-              <p className="text-sm font-medium text-on-surface-variant mb-1">Fees Status</p>
-              <h3 className="text-4xl font-extrabold font-headline text-on-surface">Paid</h3>
-              <p className="text-xs text-on-surface-variant mt-1">Next due: Oct 15, 2024</p>
-            </div>
+            <div className="h-2 w-2 bg-green-500 rounded-full animate-pulse" />
           </div>
+
         </div>
 
+        {/* ── ROW 2: Calendar + Subjects + Right col ── */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-start">
           <div className="md:col-span-2 grid grid-cols-2 gap-6 items-stretch">
 
