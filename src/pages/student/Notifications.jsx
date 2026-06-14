@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import MainLayout from "../../layouts/MainLayout";
 import { useStudent } from "../../context/StudentProvider";
 
-// Student mock notifications data
+// Mock notifications data
 const studentMockNotifications = [
   {
     id: 1,
@@ -11,7 +11,8 @@ const studentMockNotifications = [
     category: "academic",
     timeLabel: "2 hours ago",
     is_read: false,
-    type: "success"
+    type: "success",
+    details: { subject: "Mathematics", status: "Pending Review", submitted: "Today 10:30 AM" }
   },
   {
     id: 2,
@@ -20,7 +21,8 @@ const studentMockNotifications = [
     category: "announcement",
     timeLabel: "5 hours ago",
     is_read: false,
-    type: "info"
+    type: "info",
+    details: { subject: "Physics", teacher: "Dr. Sharma", updatedOn: "Today" }
   },
   {
     id: 3,
@@ -29,7 +31,8 @@ const studentMockNotifications = [
     category: "attendance",
     timeLabel: "1 day ago",
     is_read: true,
-    type: "warning"
+    type: "warning",
+    details: { subject: "Mathematics", currentAttendance: "68%", required: "75%" }
   },
   {
     id: 4,
@@ -38,7 +41,8 @@ const studentMockNotifications = [
     category: "academic",
     timeLabel: "2 days ago",
     is_read: true,
-    type: "success"
+    type: "success",
+    details: { exam: "Mid-term", subject: "Science", publishedOn: "2 days ago" }
   },
   {
     id: 5,
@@ -47,7 +51,8 @@ const studentMockNotifications = [
     category: "finance",
     timeLabel: "3 days ago",
     is_read: true,
-    type: "warning"
+    type: "warning",
+    details: { deadline: "25th March", amount: "Pending", paymentMode: "Online/Offline" }
   }
 ];
 
@@ -59,14 +64,14 @@ function Skeleton({ className = "" }) {
 function NotificationsSkeleton() {
   return (
     <MainLayout title="Notifications">
-      <div className="p-6 max-w-4xl mx-auto">
+      <div className="p-4 md:p-6 max-w-4xl mx-auto">
         <div className="mb-6">
           <Skeleton className="w-48 h-8 mb-2" />
           <Skeleton className="w-64 h-4" />
         </div>
-        
+
         <div className="mb-6 flex justify-between items-center">
-          <Skeleton className="w-32 h-10 rounded-lg" />
+          <Skeleton className="w-64 h-10 rounded-lg" />
           <Skeleton className="w-36 h-10 rounded-lg" />
         </div>
 
@@ -74,7 +79,7 @@ function NotificationsSkeleton() {
           {[1, 2, 3, 4].map((i) => (
             <div key={i} className="bg-white rounded-xl p-4 border">
               <div className="flex gap-3">
-                <Skeleton className="w-10 h-10 rounded-full" />
+                <Skeleton className="w-10 h-10 rounded-full shrink-0" />
                 <div className="flex-1">
                   <div className="flex justify-between items-start mb-2">
                     <Skeleton className="w-48 h-5" />
@@ -97,21 +102,19 @@ export default function Notifications() {
   const [notifications, setNotifications] = useState([]);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("all");
+  const [searchQuery, setSearchQuery] = useState("");
   const [expandedId, setExpandedId] = useState(null);
 
   const loadNotifications = useCallback(async () => {
     setLoading(true);
     try {
-      // Try to fetch from API if available
       const token = localStorage.getItem('access_token');
       if (token) {
         try {
-          const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:8000'}/api/v1/student/notifications/`, {
-            headers: {
-              'Authorization': `Bearer ${token}`,
-              'Content-Type': 'application/json'
-            }
-          });
+          const response = await fetch(
+            `${import.meta.env.VITE_API_URL || 'http://localhost:8000'}/api/v1/student/notifications/`,
+            { headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' } }
+          );
           if (response.ok) {
             const data = await response.json();
             const realData = data?.results || data;
@@ -121,23 +124,19 @@ export default function Notifications() {
               return;
             }
           }
-        } catch (err) {
+        } catch {
           console.log("Using mock notifications data");
         }
       }
-      // Fallback to mock data
       setNotifications(studentMockNotifications);
-    } catch (err) {
-      console.error("Error loading notifications:", err);
+    } catch {
       setNotifications(studentMockNotifications);
     } finally {
       setLoading(false);
     }
   }, []);
 
-  useEffect(() => {
-    loadNotifications();
-  }, [loadNotifications]);
+  useEffect(() => { loadNotifications(); }, [loadNotifications]);
 
   const handleMarkAsRead = (id, e) => {
     e.stopPropagation();
@@ -160,10 +159,13 @@ export default function Notifications() {
 
   const filteredNotifications = notifications.filter(n => {
     const matchesTab = activeTab === "all" || n.category === activeTab;
-    return matchesTab;
+    const matchesSearch = searchQuery === "" ||
+      n.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      n.message.toLowerCase().includes(searchQuery.toLowerCase());
+    return matchesTab && matchesSearch;
   });
 
-  const unreadCount = filteredNotifications.filter(n => !n.is_read).length;
+  const unreadCount = notifications.filter(n => !n.is_read).length;
 
   const getTypeStyle = (type) => {
     switch (type) {
@@ -180,11 +182,11 @@ export default function Notifications() {
 
   const getCategoryIcon = (category) => {
     switch (category) {
-      case "academic": return "school";
+      case "academic":    return "school";
       case "announcement": return "campaign";
-      case "attendance": return "event_available";
-      case "finance": return "payments";
-      default: return "notifications";
+      case "attendance":  return "event_available";
+      case "finance":     return "payments";
+      default:            return "notifications";
     }
   };
 
@@ -193,34 +195,17 @@ export default function Notifications() {
   return (
     <MainLayout title="Notifications">
       <div className="p-4 md:p-6 max-w-4xl mx-auto">
+
         {/* Header */}
-        <div className="mb-6">
-          <h2 className="text-2xl font-bold text-slate-800">Notifications</h2>
-          <p className="text-sm text-slate-500 mt-1">Stay updated with your academic journey</p>
-        </div>
-
-        {/* Action Bar */}
-        <div className="flex flex-wrap justify-between items-center gap-3 mb-6">
-          <div className="flex gap-2 bg-slate-100 p-1 rounded-lg">
-            {["all", "academic", "announcement", "attendance", "finance"].map((tab) => (
-              <button
-                key={tab}
-                onClick={() => setActiveTab(tab)}
-                className={`px-3 py-1.5 rounded-md text-xs font-medium capitalize transition-all ${
-                  activeTab === tab 
-                    ? "bg-white text-blue-600 shadow-sm" 
-                    : "text-slate-600 hover:text-slate-900"
-                }`}
-              >
-                {tab}
-              </button>
-            ))}
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-6">
+          <div>
+            <h2 className="text-2xl font-bold text-on-surface">Notifications</h2>
+            <p className="text-sm text-on-surface-variant mt-1">Stay updated with your academic journey</p>
           </div>
-
           {unreadCount > 0 && (
-            <button 
+            <button
               onClick={handleMarkAllAsRead}
-              className="px-3 py-1.5 text-xs font-medium text-blue-600 hover:text-blue-700 flex items-center gap-1"
+              className="flex items-center gap-1.5 px-4 py-2 bg-surface-container-lowest border border-outline-variant/20 text-primary text-xs font-semibold rounded-lg shadow-sm hover:bg-surface-container-low transition-all"
             >
               <span className="material-symbols-outlined text-sm">done_all</span>
               Mark all as read
@@ -228,22 +213,53 @@ export default function Notifications() {
           )}
         </div>
 
-        {/* Unread Count */}
-        {unreadCount > 0 && (
-          <div className="mb-4 flex items-center gap-2">
-            <span className="text-xs font-medium text-slate-500">Unread</span>
-            <span className="bg-blue-500 text-white px-2 py-0.5 rounded-full text-xs font-bold">
-              {unreadCount}
-            </span>
+        {/* Filter Bar */}
+        <div className="flex flex-col sm:flex-row gap-3 mb-5 bg-surface-container-lowest p-2 rounded-xl border border-outline-variant/10 shadow-sm">
+          {/* Tabs */}
+          <div className="flex bg-surface-container-low p-1 rounded-lg gap-1 flex-wrap">
+            {["all", "academic", "announcement", "attendance", "finance"].map((tab) => (
+              <button
+                key={tab}
+                onClick={() => setActiveTab(tab)}
+                className={`px-3 py-1.5 rounded-md text-xs font-medium capitalize transition-all ${
+                  activeTab === tab
+                    ? "bg-white text-primary shadow-sm"
+                    : "text-on-surface-variant hover:text-on-surface"
+                }`}
+              >
+                {tab}
+              </button>
+            ))}
           </div>
-        )}
+
+          {/* Search */}
+          <div className="relative flex-1 min-w-[160px]">
+            <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-sm">search</span>
+            <input
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Search notifications..."
+              className="w-full bg-surface-container-low pl-9 pr-4 py-2 rounded-lg text-xs font-medium border border-transparent focus:border-primary/30 focus:bg-white outline-none transition-all"
+            />
+          </div>
+        </div>
+
+        {/* Unread badge */}
+        <div className="flex items-center gap-2 mb-4">
+          <span className="text-xs font-bold uppercase tracking-wider text-on-surface-variant">Recent Activity</span>
+          {unreadCount > 0 && (
+            <span className="bg-primary text-white px-2 py-0.5 rounded-full text-[10px] font-bold">
+              {unreadCount} New
+            </span>
+          )}
+        </div>
 
         {/* Notifications List */}
         <div className="space-y-3">
           {filteredNotifications.length === 0 ? (
-            <div className="bg-white rounded-xl py-12 text-center border">
-              <span className="material-symbols-outlined text-5xl text-slate-300 mb-2">notifications_off</span>
-              <p className="text-sm text-slate-500">No notifications found</p>
+            <div className="bg-surface-container-lowest rounded-xl py-14 text-center border border-outline-variant/10 flex flex-col items-center gap-2">
+              <span className="material-symbols-outlined text-5xl text-outline/30">notifications_off</span>
+              <p className="text-sm text-on-surface-variant font-medium">No notifications found</p>
             </div>
           ) : (
             filteredNotifications.map((n) => {
@@ -254,25 +270,28 @@ export default function Notifications() {
                 <div
                   key={n.id}
                   onClick={() => toggleExpand(n.id)}
-                  className={`bg-white rounded-xl border border-l-4 transition-all cursor-pointer ${typeStyle.border} ${
-                    !n.is_read ? "shadow-sm" : "opacity-70"
+                  className={`group bg-surface-container-lowest rounded-xl border border-l-4 transition-all cursor-pointer hover:shadow-md ${typeStyle.border} ${
+                    !n.is_read ? "shadow-sm" : "opacity-75"
                   }`}
                 >
                   <div className="p-4 flex gap-3 items-start">
                     {/* Icon */}
                     <div className={`w-10 h-10 rounded-full flex items-center justify-center shrink-0 ${typeStyle.bg}`}>
-                      <span className="material-symbols-outlined text-base">{getCategoryIcon(n.category)}</span>
+                      <span className={`material-symbols-outlined text-base ${typeStyle.text}`}>
+                        {getCategoryIcon(n.category)}
+                      </span>
                     </div>
 
                     {/* Content */}
                     <div className="flex-1 min-w-0">
                       <div className="flex flex-wrap justify-between items-start gap-2 mb-1">
-                        <h3 className={`text-sm font-semibold ${!n.is_read ? "text-slate-900" : "text-slate-600"}`}>
+                        <h3 className={`text-sm font-semibold ${!n.is_read ? "text-on-surface" : "text-on-surface-variant"}`}>
                           {n.title}
+                          {!n.is_read && <span className="ml-2 inline-block w-2 h-2 rounded-full bg-primary align-middle" />}
                         </h3>
-                        <span className="text-[10px] text-slate-400 shrink-0">{n.timeLabel}</span>
+                        <span className="text-[10px] text-on-surface-variant/60 shrink-0">{n.timeLabel}</span>
                       </div>
-                      <p className="text-xs text-slate-500 leading-relaxed">{n.message}</p>
+                      <p className="text-xs text-on-surface-variant leading-relaxed">{n.message}</p>
                     </div>
 
                     {/* Actions */}
@@ -280,7 +299,7 @@ export default function Notifications() {
                       {!n.is_read && (
                         <button
                           onClick={(e) => handleMarkAsRead(n.id, e)}
-                          className="w-7 h-7 rounded-full bg-slate-50 border text-slate-400 hover:text-emerald-600 hover:bg-emerald-50 flex items-center justify-center transition-all"
+                          className="w-7 h-7 rounded-full bg-surface-container-low border border-outline-variant/10 text-on-surface-variant hover:text-emerald-600 hover:bg-emerald-50 flex items-center justify-center transition-all opacity-0 group-hover:opacity-100"
                           title="Mark as read"
                         >
                           <span className="material-symbols-outlined text-sm">done</span>
@@ -288,25 +307,33 @@ export default function Notifications() {
                       )}
                       <button
                         onClick={(e) => handleDeleteNotification(n.id, e)}
-                        className="w-7 h-7 rounded-full bg-slate-50 border text-slate-400 hover:text-red-600 hover:bg-red-50 flex items-center justify-center transition-all"
+                        className="w-7 h-7 rounded-full bg-surface-container-low border border-outline-variant/10 text-on-surface-variant hover:text-red-600 hover:bg-red-50 flex items-center justify-center transition-all opacity-0 group-hover:opacity-100"
                         title="Delete"
                       >
                         <span className="material-symbols-outlined text-sm">delete</span>
                       </button>
-                      <span className={`material-symbols-outlined text-slate-300 text-sm transition-transform ${isExpanded ? "rotate-180" : ""}`}>
+                      <span className={`material-symbols-outlined text-outline/40 text-sm transition-transform duration-300 ${isExpanded ? "rotate-180" : ""}`}>
                         expand_more
                       </span>
                     </div>
                   </div>
 
                   {/* Expanded Details */}
-                  <div className={`overflow-hidden transition-all duration-300 border-t bg-slate-50/30 rounded-b-xl ${
-                    isExpanded ? "max-h-32 py-3 px-4" : "max-h-0 py-0 px-4"
+                  <div className={`overflow-hidden transition-all duration-300 ease-in-out border-t border-surface-container-low bg-surface-container-low/30 rounded-b-xl px-5 ${
+                    isExpanded ? "max-h-48 py-4 opacity-100" : "max-h-0 py-0 opacity-0 pointer-events-none"
                   }`}>
-                    <div className="flex items-center justify-between text-xs">
-                      <span className="text-slate-500">Notification ID: #{n.id}</span>
-                      <span className="text-slate-400 text-[10px]">Category: {n.category}</span>
-                    </div>
+                    {n.details && (
+                      <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                        {Object.entries(n.details).map(([key, value]) => (
+                          <div key={key} className="bg-white p-2.5 rounded-lg border border-outline-variant/10 shadow-sm">
+                            <span className="block text-[10px] text-on-surface-variant capitalize mb-0.5">
+                              {key.replace(/([A-Z])/g, ' $1')}
+                            </span>
+                            <span className="text-xs font-bold text-on-surface truncate block">{value}</span>
+                          </div>
+                        ))}
+                      </div>
+                    )}
                   </div>
                 </div>
               );
@@ -315,9 +342,9 @@ export default function Notifications() {
         </div>
 
         {/* Footer */}
-        <footer className="mt-8 pt-4 text-center text-xs text-slate-400 border-t">
+        <div className="mt-8 pt-4 text-center text-xs text-on-surface-variant/40 border-t border-outline-variant/10">
           ScholarFlow Student Portal
-        </footer>
+        </div>
       </div>
     </MainLayout>
   );
