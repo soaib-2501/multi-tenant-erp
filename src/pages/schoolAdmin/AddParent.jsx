@@ -1,25 +1,20 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import SchoolLayout from "../../components/erp/school/SchoolLayout";
-import { schoolAdminApi } from '../../services/schoolAdminApi';
+import api from "../../services/axiosClient";
 
 export default function AddParent() {
   const navigate = useNavigate();
 
-  // STEP 1: Core User Fields
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
-  // STEP 2: Parent Profile Fields
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  
   const [phoneNumber, setPhoneNumber] = useState("");
   const [emergencyContact, setEmergencyContact] = useState("");
   const [occupation, setOccupation] = useState("");
-  const [dateOfBirth, setDateOfBirth] = useState("");
-  const [address, setAddress] = useState("");
 
-  // UI States
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [successMsg, setSuccessMsg] = useState(null);
@@ -31,50 +26,36 @@ export default function AddParent() {
     setSuccessMsg(null);
 
     try {
-      // ==========================================
-      // STEP 1: CREATE THE CORE IDENTITY (User)
-      // ==========================================
-      const userPayload = {
-        email: email,
-        password: password,
-        first_name: firstName,
-        last_name: lastName
-      };
+      const userPayload = { email, password, first_name: firstName, last_name: lastName };
+      const userResponse = await api.post(`/users/`, userPayload);
+      const userData = userResponse.data;
 
-      const userData = await schoolAdminApi.createUser(userPayload);
-
-      // ==========================================
-      // STEP 2: CREATE THE PARENT PROFILE
-      // ==========================================
       if (userData.id) {
         const profilePayload = {
-          user: userData.id, // Link to the user instance
+          user: userData.id,
           phone_number: phoneNumber,
           emergency_contact_number: emergencyContact,
           occupation: occupation,
-          date_of_birth: dateOfBirth || null,
-          address: address
         };
-
-        await schoolAdminApi.createParentProfile(profilePayload);
+        await api.post(`/profiles/parents/`, profilePayload);
       }
 
-      setSuccessMsg("Guardian registration complete! Profile established successfully.");
-      
-      setTimeout(() => {
-        navigate("/school-admin/parents");
-      }, 1500);
+      setSuccessMsg("Guardian successfully onboarded!");
+      setTimeout(() => navigate("/school-admin/parents"), 1500);
 
     } catch (err) {
-      console.error("Onboarding Error:", err);
-      // Extracts error detail if available, otherwise shows generic error
-      const errorMsg = err.response?.data 
-        ? Object.entries(err.response.data)
-            .map(([field, msgs]) => `${field}: ${Array.isArray(msgs) ? msgs.join(" ") : msgs}`)
-            .join(" | ")
-        : (err.message || "Failed to onboard guardian.");
-      
-      setError(errorMsg);
+      console.error(err);
+      if (err.response && err.response.data) {
+        const data = err.response.data;
+        if (typeof data === 'string' && data.includes('<!DOCTYPE')) {
+          setError("Server crashed (500 Internal Error). Please check your Django terminal for the exact python traceback.");
+        } else {
+          let errorMsg = Object.entries(data).map(([field, msgs]) => `${field}: ${Array.isArray(msgs) ? msgs.join(" ") : msgs}`).join(" | ");
+          setError(errorMsg);
+        }
+      } else {
+        setError(err.message);
+      }
       window.scrollTo(0, 0);
     } finally {
       setLoading(false);
@@ -82,274 +63,111 @@ export default function AddParent() {
   };
 
   return (
-    <SchoolLayout title="Parents">
-      <div className="max-w-6xl mx-auto space-y-10 px-8 py-10">
-
-        {/* breadcrumb */}
-        <div className="flex justify-between items-center">
-          <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-[#6b7280]">
-            <span className="cursor-pointer hover:text-[#0058be] transition-colors" onClick={() => navigate("/school-admin")}>Dashboard</span>
-            <span className="material-symbols-outlined text-[16px]">chevron_right</span>
-            <span className="cursor-pointer hover:text-[#0058be] transition-colors" onClick={() => navigate("/school-admin/parents")}>Guardians</span>
-            <span className="material-symbols-outlined text-[16px]">chevron_right</span>
-            <span className="text-[#0058be] font-bold">Add Guardian</span>
+    <SchoolLayout title="Add Guardian">
+      <div className="max-w-5xl mx-auto space-y-6 px-6 py-6">
+        
+        <div className="flex justify-between items-start">
+          <div>
+            <h1 className="text-2xl font-bold text-slate-800">Register New Guardian</h1>
+            <p className="text-[#6b7280] mt-1 max-w-2xl text-sm">Onboard a new guardian into the institutional ecosystem using the 2-step decoupled identity architecture.</p>
           </div>
-
-          <button
-            onClick={() => navigate("/school-admin/parents")}
-            className="flex items-center gap-2 px-4 py-2 text-[#0058be] font-bold hover:bg-[#eff4ff] rounded-md transition-colors"
-          >
-            <span className="material-symbols-outlined text-[18px]">arrow_back</span>
-            Directory
+          <button type="button" onClick={() => navigate("/school-admin/parents")} className="flex items-center gap-1 px-3 py-1.5 text-sm bg-white hover:bg-gray-50 text-[#0058be] font-semibold rounded transition border border-gray-200 shadow-sm">
+            <span className="material-symbols-outlined text-[16px]">arrow_back</span> Directory
           </button>
         </div>
 
-        {/* heading */}
-        <div>
-          <h1 className="text-4xl font-extrabold text-slate-800 tracking-tight">Register New Guardian</h1>
-          <p className="text-[#6b7280] mt-2 text-lg max-w-2xl">
-            Onboard a new guardian into the institutional ecosystem using the 2-step decoupled identity architecture.
-          </p>
-        </div>
-
         {error && (
-          <div className="p-4 bg-red-50 text-red-700 rounded-md border border-red-200 flex gap-3 shadow-sm">
-             <span className="material-symbols-outlined">error</span>
-             <div>
-               <p className="font-bold text-sm">API Error Occurred</p>
-               <p className="text-sm mt-1">{error}</p>
-             </div>
+          <div className="p-3 bg-red-50 text-red-700 rounded border border-red-200 flex gap-2 shadow-sm items-center">
+             <span className="material-symbols-outlined text-[20px]">error</span>
+             <p className="text-sm font-medium">{error}</p>
           </div>
         )}
 
         {successMsg && (
-          <div className="p-4 bg-green-50 text-green-800 rounded-md border border-green-200 flex gap-3 shadow-sm">
-             <span className="material-symbols-outlined">check_circle</span>
-             <div>
-               <p className="font-bold text-sm">Success!</p>
-               <p className="text-sm mt-1">{successMsg}</p>
-             </div>
+          <div className="p-3 bg-green-50 text-green-800 rounded border border-green-200 flex gap-2 shadow-sm items-center">
+             <span className="material-symbols-outlined text-[20px]">check_circle</span>
+             <p className="text-sm font-medium">{successMsg}</p>
           </div>
         )}
 
         <form onSubmit={handleSave}>
-          <div className="grid lg:grid-cols-12 gap-8">
-
-            {/* LEFT COLUMN */}
-            <div className="lg:col-span-4 space-y-8">
-
-              {/* photo placeholder */}
-              <div className="bg-white p-8 rounded-xl border border-gray-100 shadow-sm text-center">
-                <div className="relative group inline-block">
-                  <div className="w-48 h-48 rounded-full bg-[#f8f9ff] border-4 border-dashed border-[#c2c6d6] flex items-center justify-center text-[#0058be]/20">
-                    <span className="material-symbols-outlined text-6xl">add_a_photo</span>
-                  </div>
-                  <button type="button" className="absolute bottom-2 right-4 w-12 h-12 bg-[#0058be] text-white rounded-full flex items-center justify-center shadow-lg hover:scale-105 transition-transform border-4 border-white">
-                    <span className="material-symbols-outlined text-[20px]">edit</span>
-                  </button>
-                </div>
-                <h3 className="font-bold mt-6 text-slate-800">Profile Photo</h3>
-                <p className="text-sm text-[#6b7280] mt-2 leading-relaxed">
-                  Upload a high-resolution portrait for automated pickup verification.
-                </p>
-              </div>
-
-              {/* info card */}
-              <div className="bg-gradient-to-br from-[#0058be] to-[#2170e4] p-8 rounded-xl shadow-lg relative overflow-hidden text-white">
-                <span className="material-symbols-outlined absolute -bottom-4 -right-4 text-8xl opacity-10">
-                  security
-                </span>
-                <span className="material-symbols-outlined text-4xl mb-4 text-blue-200">
-                  lock
-                </span>
-                <h3 className="text-lg font-bold mb-2">Isolated Architecture</h3>
-                <p className="text-sm text-blue-100 leading-relaxed relative z-10">
-                  Guardians get access to the Parent Portal. Their view is restricted solely to data connected to their mapped `StudentProfile` entities via Django's row-level ORM filters.
-                </p>
-              </div>
-            </div>
-
-            {/* RIGHT COLUMN */}
-            <div className="lg:col-span-8 space-y-8">
-
+          <div className="grid lg:grid-cols-12 gap-6">
+            
+            <div className="lg:col-span-9 space-y-6">
+              
               {/* CORE IDENTITY */}
-              <div className="bg-white p-8 rounded-xl border border-gray-100 shadow-sm">
-                <div className="flex justify-between items-center mb-8 border-b border-gray-100 pb-4">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 bg-blue-50 rounded-lg flex items-center justify-center border border-blue-100">
-                      <span className="material-symbols-outlined text-[#0058be]">badge</span>
-                    </div>
-                    <h2 className="text-xl font-bold text-slate-800">Step 1: Core Identity</h2>
+              <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
+                <h3 className="text-base font-bold text-slate-800 flex items-center gap-2 mb-5">
+                   <span className="material-symbols-outlined text-[#0058be] text-[20px]">badge</span> Step 1: Core Identity
+                </h3>
+                <div className="grid md:grid-cols-2 gap-4 mb-4">
+                  <div className="flex flex-col gap-1.5">
+                    <label className="text-[10px] font-bold text-[#6b7280] tracking-wider uppercase">First Name</label>
+                    <input required value={firstName} onChange={(e) => setFirstName(e.target.value)} className="bg-[#eff4ff] px-3 py-2 text-sm rounded outline-none focus:bg-white focus:ring-2 focus:ring-[#0058be]/10 border border-transparent transition-all" />
                   </div>
-                  <span className="text-xs font-bold font-mono text-[#0058be] bg-blue-50 px-3 py-1 rounded-md border border-blue-100">Base User</span>
-                </div>
-
-                <div className="grid md:grid-cols-2 gap-6 mb-6">
-                  <div className="flex flex-col gap-2">
-                    <label className="text-xs font-bold uppercase tracking-wider text-[#6b7280]">First Name</label>
-                    <input
-                      required
-                      value={firstName}
-                      onChange={e => setFirstName(e.target.value)}
-                      placeholder="e.g. Jonathan"
-                      className="bg-[#f8f9ff] px-4 py-3.5 rounded-md outline-none focus:border-[#0058be]/40 focus:ring-2 focus:ring-[#0058be]/10 border border-transparent transition-all"
-                    />
-                  </div>
-                  <div className="flex flex-col gap-2">
-                    <label className="text-xs font-bold uppercase tracking-wider text-[#6b7280]">Last Name (Optional)</label>
-                    <input
-                      value={lastName}
-                      onChange={e => setLastName(e.target.value)}
-                      placeholder="e.g. Aris"
-                      className="bg-[#f8f9ff] px-4 py-3.5 rounded-md outline-none focus:border-[#0058be]/40 focus:ring-2 focus:ring-[#0058be]/10 border border-transparent transition-all"
-                    />
+                  <div className="flex flex-col gap-1.5">
+                    <label className="text-[10px] font-bold text-[#6b7280] tracking-wider uppercase">Last Name</label>
+                    <input value={lastName} onChange={(e) => setLastName(e.target.value)} className="bg-[#eff4ff] px-3 py-2 text-sm rounded outline-none focus:bg-white focus:ring-2 focus:ring-[#0058be]/10 border border-transparent transition-all" />
                   </div>
                 </div>
-
-                <div className="grid md:grid-cols-2 gap-6">
-                  <div className="flex flex-col gap-2">
-                    <label className="text-xs font-bold uppercase tracking-wider text-[#6b7280]">Login Email</label>
-                    <div className="relative">
-                      <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">alternate_email</span>
-                      <input
-                        type="email"
-                        required
-                        value={email}
-                        onChange={e => setEmail(e.target.value)}
-                        placeholder="j.aris@email.com"
-                        className="w-full bg-[#f8f9ff] pl-10 pr-4 py-3.5 rounded-md outline-none focus:border-[#0058be]/40 focus:ring-2 focus:ring-[#0058be]/10 border border-transparent transition-all"
-                      />
-                    </div>
+                <div className="grid md:grid-cols-2 gap-4">
+                  <div className="flex flex-col gap-1.5">
+                    <label className="text-[10px] font-bold text-[#6b7280] tracking-wider uppercase">Login Email</label>
+                    <input type="email" required value={email} onChange={(e) => setEmail(e.target.value)} className="bg-[#eff4ff] px-3 py-2 text-sm rounded outline-none focus:bg-white focus:ring-2 focus:ring-[#0058be]/10 border border-transparent transition-all" />
                   </div>
-                  <div className="flex flex-col gap-2">
-                    <label className="text-xs font-bold uppercase tracking-wider text-[#6b7280]">Temporary Password</label>
-                    <div className="relative">
-                      <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">lock</span>
-                      <input
-                        type="password"
-                        required
-                        value={password}
-                        onChange={e => setPassword(e.target.value)}
-                        placeholder="Min. 8 characters"
-                        className="w-full bg-[#f8f9ff] pl-10 pr-4 py-3.5 rounded-md outline-none focus:border-[#0058be]/40 focus:ring-2 focus:ring-[#0058be]/10 border border-transparent transition-all"
-                      />
-                    </div>
+                  <div className="flex flex-col gap-1.5">
+                    <label className="text-[10px] font-bold text-[#6b7280] tracking-wider uppercase">Temporary Password</label>
+                    <input type="password" required value={password} onChange={(e) => setPassword(e.target.value)} className="bg-[#eff4ff] px-3 py-2 text-sm rounded outline-none focus:bg-white focus:ring-2 focus:ring-[#0058be]/10 border border-transparent transition-all" />
                   </div>
                 </div>
               </div>
 
               {/* PARENT PROFILE */}
-              <div className="bg-white p-8 rounded-xl border border-gray-100 shadow-sm">
-                <div className="flex justify-between items-center mb-8 border-b border-gray-100 pb-4">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 bg-emerald-50 rounded-lg flex items-center justify-center border border-emerald-100">
-                      <span className="material-symbols-outlined text-emerald-600">contact_phone</span>
-                    </div>
-                    <h2 className="text-xl font-bold text-slate-800">Step 2: Profile Details</h2>
+              <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
+                <h3 className="text-base font-bold text-slate-800 flex items-center gap-2 mb-5">
+                   <span className="material-symbols-outlined text-[#6b38d4] text-[20px]">family_restroom</span> Step 2: Guardian Details
+                </h3>
+                <div className="grid md:grid-cols-2 gap-4 mb-4">
+                  <div className="flex flex-col gap-1.5">
+                    <label className="text-[10px] font-bold text-[#6b7280] tracking-wider uppercase">Primary Phone</label>
+                    <input required value={phoneNumber} onChange={(e) => setPhoneNumber(e.target.value)} className="bg-[#eff4ff] px-3 py-2 text-sm rounded outline-none focus:bg-white focus:ring-2 focus:ring-[#0058be]/10 border border-transparent transition-all" />
                   </div>
-                  <span className="text-xs font-bold font-mono text-emerald-700 bg-emerald-50 px-3 py-1 rounded-md border border-emerald-100">ParentProfile</span>
-                </div>
-
-                <div className="grid md:grid-cols-2 gap-6 mb-6">
-                  <div className="flex flex-col gap-2">
-                    <label className="text-xs font-bold uppercase tracking-wider text-[#6b7280]">Phone Number</label>
-                    <div className="relative">
-                      <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">call</span>
-                      <input
-                        required
-                        value={phoneNumber}
-                        onChange={e => setPhoneNumber(e.target.value)}
-                        placeholder="+1 (555) 000-0000"
-                        className="w-full bg-[#f8f9ff] pl-10 pr-4 py-3.5 rounded-md outline-none focus:border-[#0058be]/40 focus:ring-2 focus:ring-[#0058be]/10 border border-transparent transition-all"
-                      />
-                    </div>
-                  </div>
-                  <div className="flex flex-col gap-2">
-                    <label className="text-xs font-bold uppercase tracking-wider text-[#6b7280]">Emergency Contact</label>
-                    <div className="relative">
-                      <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-red-400">emergency</span>
-                      <input
-                        required
-                        value={emergencyContact}
-                        onChange={e => setEmergencyContact(e.target.value)}
-                        placeholder="Secondary Number"
-                        className="w-full bg-[#f8f9ff] pl-10 pr-4 py-3.5 rounded-md outline-none focus:border-red-400/40 focus:ring-2 focus:ring-red-400/10 border border-transparent transition-all"
-                      />
-                    </div>
+                  <div className="flex flex-col gap-1.5">
+                    <label className="text-[10px] font-bold text-[#6b7280] tracking-wider uppercase">Emergency Contact</label>
+                    <input required value={emergencyContact} onChange={(e) => setEmergencyContact(e.target.value)} className="bg-[#eff4ff] px-3 py-2 text-sm rounded outline-none focus:bg-white focus:ring-2 focus:ring-[#0058be]/10 border border-transparent transition-all" />
                   </div>
                 </div>
-
-                <div className="grid md:grid-cols-2 gap-6 mb-6">
-                  <div className="flex flex-col gap-2">
-                    <label className="text-xs font-bold uppercase tracking-wider text-[#6b7280]">Occupation</label>
-                    <input
-                      value={occupation}
-                      onChange={e => setOccupation(e.target.value)}
-                      placeholder="e.g. Software Engineer"
-                      className="w-full bg-[#f8f9ff] px-4 py-3.5 rounded-md outline-none focus:border-[#0058be]/40 focus:ring-2 focus:ring-[#0058be]/10 border border-transparent transition-all"
-                    />
-                  </div>
-                  <div className="flex flex-col gap-2">
-                    <label className="text-xs font-bold uppercase tracking-wider text-[#6b7280]">Date of Birth</label>
-                    <input
-                      type="date"
-                      value={dateOfBirth}
-                      onChange={e => setDateOfBirth(e.target.value)}
-                      className="w-full bg-[#f8f9ff] px-4 py-3.5 rounded-md outline-none focus:border-[#0058be]/40 focus:ring-2 focus:ring-[#0058be]/10 border border-transparent transition-all text-slate-700"
-                    />
-                  </div>
-                </div>
-
-                <div className="flex flex-col gap-2">
-                  <label className="text-xs font-bold uppercase tracking-wider text-[#6b7280]">Physical Address</label>
-                  <div className="relative">
-                    <span className="material-symbols-outlined absolute left-3 top-4 text-gray-400">location_on</span>
-                    <textarea
-                      required
-                      rows="3"
-                      value={address}
-                      onChange={e => setAddress(e.target.value)}
-                      placeholder="Street, City, Zip..."
-                      className="w-full bg-[#f8f9ff] pl-10 pr-4 py-3.5 rounded-md outline-none focus:border-[#0058be]/40 focus:ring-2 focus:ring-[#0058be]/10 border border-transparent transition-all resize-none"
-                    />
+                <div className="grid md:grid-cols-2 gap-4">
+                  <div className="flex flex-col gap-1.5">
+                    <label className="text-[10px] font-bold text-[#6b7280] tracking-wider uppercase">Occupation</label>
+                    <input value={occupation} onChange={(e) => setOccupation(e.target.value)} className="bg-[#eff4ff] px-3 py-2 text-sm rounded outline-none focus:bg-white focus:ring-2 focus:ring-[#0058be]/10 border border-transparent transition-all" />
                   </div>
                 </div>
               </div>
 
-              {/* ACTION BUTTONS */}
-              <div className="flex justify-end gap-4 pt-6">
-                <button
-                  type="button"
-                  disabled={loading}
-                  onClick={() => navigate("/school-admin/parents")}
-                  className="px-8 py-3.5 font-bold text-[#6b7280] hover:bg-slate-100 rounded-md transition-colors disabled:opacity-50"
-                >
-                  Cancel
-                </button>
-
-                <button
-                  type="submit"
-                  disabled={loading}
-                  className="px-10 py-3.5 bg-gradient-to-r from-[#0058be] to-[#2170e4] text-white font-bold rounded-md shadow-lg shadow-[#0058be]/20 hover:scale-[1.02] active:scale-95 transition-all flex items-center gap-2 min-w-[200px] disabled:opacity-70 disabled:scale-100"
-                >
-                  {loading ? (
-                    <>
-                      <span className="material-symbols-outlined animate-spin text-[18px]">progress_activity</span>
-                      Syncing Database...
-                    </>
-                  ) : (
-                    <>
-                      <span className="material-symbols-outlined text-[18px]">save</span>
-                      Save Guardian Profile
-                    </>
-                  )}
+              {/* FOOTER ACTIONS */}
+              <div className="flex justify-end gap-3 pt-2">
+                <button type="button" disabled={loading} onClick={() => navigate("/school-admin/parents")} className="px-6 py-2 text-sm text-[#6b7280] font-semibold hover:bg-gray-100 rounded transition-colors disabled:opacity-50">Cancel</button>
+                <button type="submit" disabled={loading} className="px-8 py-2 bg-gradient-to-r from-[#0058be] to-[#2170e4] text-white text-sm font-bold rounded shadow-md hover:shadow-lg transition flex items-center justify-center gap-2 min-w-[160px] disabled:opacity-70">
+                  {loading ? <span className="material-symbols-outlined animate-spin text-[16px]">progress_activity</span> : <span className="material-symbols-outlined text-[16px]">save</span>}
+                  {loading ? "Registering..." : "Add Guardian"}
                 </button>
               </div>
-
             </div>
+
+            {/* PROFILE ASSET */}
+            <div className="lg:col-span-3">
+              <div className="bg-white p-6 rounded-lg border border-gray-100 shadow-sm text-center">
+                <div className="w-28 h-28 mx-auto rounded-full bg-[#f8f9ff] flex items-center justify-center overflow-hidden border-4 border-white shadow-sm mb-3">
+                  <span className="material-symbols-outlined text-5xl text-gray-300">add_a_photo</span>
+                </div>
+                <h4 className="font-semibold text-slate-800 text-sm">Profile Photo</h4>
+                <p className="text-[11px] text-[#6b7280] mt-1 leading-relaxed">Upload a high-resolution portrait for visual identification across the platform.</p>
+              </div>
+            </div>
+
           </div>
         </form>
-
       </div>
     </SchoolLayout>
   );

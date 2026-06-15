@@ -9,45 +9,38 @@ export default function TeacherAssignment() {
   const [assignments, setAssignments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  
   const [totalCount, setTotalCount] = useState(0);
-
-  // Pagination & Search States
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+
   const [searchQuery, setSearchQuery] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
 
-  // Debounce search input (500ms)
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setDebouncedSearch(searchQuery);
-    }, 500);
+    const timer = setTimeout(() => setDebouncedSearch(searchQuery), 500);
     return () => clearTimeout(timer);
   }, [searchQuery]);
 
-  // Reset to page 1 whenever search changes
   useEffect(() => {
     setCurrentPage(1);
   }, [debouncedSearch]);
 
-  // Fetch assignments when page or debounced search changes
   useEffect(() => {
     fetchAssignments(currentPage, debouncedSearch);
   }, [currentPage, debouncedSearch]);
 
-  const fetchAssignments = async (page, search = "") => {
+  const fetchAssignments = async (page = 1, search = "") => {
     setLoading(true);
     setError(null);
 
     try {
-      // Pass both page and search parameters
       const data = await schoolAdminApi.getTeacherAssignments(page, search);
       
-      // Handle DRF pagination structure
       if (data.results) {
         setAssignments(data.results);
         setTotalCount(data.count);
-        setTotalPages(Math.ceil(data.count / 10)); // Assuming 10 items per page
+        setTotalPages(Math.ceil(data.count / 10)); 
       } else {
         setAssignments(data);
         setTotalCount(data.length);
@@ -55,7 +48,7 @@ export default function TeacherAssignment() {
       }
     } catch (err) {
       console.error("Fetch Assignments Error:", err);
-      setError(err.response?.data?.detail || "Failed to fetch teacher assignments.");
+      setError(err.message || "Failed to fetch teacher assignments.");
     } finally {
       setLoading(false);
     }
@@ -65,17 +58,9 @@ export default function TeacherAssignment() {
     if (window.confirm("Are you sure you want to remove this assignment?")) {
       try {
         await schoolAdminApi.deleteTeacherAssignment(id);
-        // Optimistic UI update: Remove it from the screen
         setAssignments(assignments.filter((item) => item.id !== id));
         setTotalCount(prevCount => prevCount - 1);
-        
-        // Optional: If you delete the last item on a page, fetch the previous page
-        if (assignments.length === 1 && currentPage > 1) {
-            setCurrentPage(currentPage - 1);
-        }
-        
       } catch (err) {
-        console.error("Failed to delete", err);
         alert("Failed to delete assignment.");
       }
     }
@@ -95,177 +80,137 @@ export default function TeacherAssignment() {
 
   return (
     <SchoolLayout title="Teacher Assignment">
-      <div className="max-w-7xl mx-auto px-8 pt-6 pb-12">
+      <div className="max-w-7xl mx-auto px-6 pt-4 pb-8">
 
-        {/* heading */}
-        <div className="flex justify-between items-end mb-8">
+        <div className="flex justify-between items-end mb-6">
           <div>
-            <h1 className="text-3xl font-bold text-slate-800">Resource Allocation</h1>
-            <p className="text-[#6b7280] mt-1 max-w-2xl">
+            <h1 className="text-2xl font-bold text-slate-800">Resource Allocation</h1>
+            <p className="text-sm text-[#6b7280] mt-1 max-w-2xl">
               Manage teaching staff roles across departments, subjects, and specific class sections.
             </p>
           </div>
-
           <button
             onClick={() => navigate("/school-admin/teacher-assignment/create")}
-            className="flex items-center gap-2 px-6 py-3 rounded-md bg-gradient-to-r from-[#0058be] to-[#2170e4] text-white font-semibold shadow-lg hover:shadow-xl transition-all"
+            className="flex items-center gap-1.5 px-4 py-2 text-sm bg-gradient-to-r from-[#0058be] to-[#2170e4] text-white font-semibold rounded shadow-sm hover:shadow-md transition-all"
           >
-            <span className="material-symbols-outlined">add</span>
-            Assign Teacher
+            <span className="material-symbols-outlined text-[18px]">add</span> Assign Teacher
           </button>
         </div>
 
         {error && (
-          <div className="mb-6 p-4 bg-red-50 text-red-700 rounded-md border border-red-200">
+          <div className="mb-4 p-3 bg-red-50 text-red-700 rounded text-sm border border-red-200">
             {error}
           </div>
         )}
 
-        {/* stats */}
-        <div className="grid md:grid-cols-4 gap-6 mb-10">
-          <div className="md:col-span-2 bg-white p-6 rounded-xl border-l-4 border-[#0058be] shadow-sm">
-            <p className="text-xs font-bold text-[#0058be] uppercase tracking-wider">
-              Allocation Overview
-            </p>
-            <div className="flex items-end gap-4 mt-3">
-              <h3 className="text-5xl font-bold text-slate-800">{totalCount}</h3>
-              <p className="text-sm text-[#6b7280] pb-1">Total Active Assignments</p>
+        <div className="grid md:grid-cols-4 gap-4 mb-6">
+          <div className="md:col-span-2 bg-white p-5 rounded-lg border-l-4 border-[#0058be] shadow-sm">
+            <p className="text-[10px] font-bold text-[#0058be] uppercase tracking-wider">Allocation Overview</p>
+            <div className="flex items-end gap-3 mt-2">
+              <h3 className="text-3xl font-bold text-slate-800">{totalCount}</h3>
+              <p className="text-xs text-[#6b7280] pb-1">Active Assignments</p>
             </div>
-            <div className="h-2 bg-[#eff4ff] rounded-full mt-4">
-              <div className="bg-[#0058be] h-full w-[84%] rounded-full shadow-sm"></div>
+            <div className="h-1.5 bg-[#eff4ff] rounded-full mt-3">
+              <div className="bg-[#0058be] h-full w-[84%] rounded-full"></div>
             </div>
           </div>
-
-          <div className="bg-[#eff4ff] p-6 rounded-xl shadow-sm border border-blue-50">
-            <span className="material-symbols-outlined text-[#0058be] text-3xl mb-3">class</span>
-            <h3 className="text-2xl font-bold text-slate-800">
-              {new Set(assignments.map(a => a.class_level_name)).size}
-            </h3>
-            <p className="text-sm text-[#6b7280]">Classes Covered</p>
+          <div className="bg-[#eff4ff] p-5 rounded-lg shadow-sm border border-blue-50">
+            <span className="material-symbols-outlined text-[#0058be] text-[24px] mb-2">class</span>
+            <h3 className="text-xl font-bold text-slate-800">{new Set(assignments.map(a => a.class_level_name)).size}</h3>
+            <p className="text-xs text-[#6b7280]">Classes Covered</p>
           </div>
-
-          <div className="bg-[#fff4ed] p-6 rounded-xl shadow-sm border border-orange-50">
-            <span className="material-symbols-outlined text-[#924700] text-3xl mb-3">menu_book</span>
-            <h3 className="text-2xl font-bold text-[#924700]">
-              {new Set(assignments.map(a => a.subject_name)).size}
-            </h3>
-            <p className="text-sm text-[#924700]/80">Subjects Taught</p>
+          <div className="bg-[#fff4ed] p-5 rounded-lg shadow-sm border border-orange-50">
+            <span className="material-symbols-outlined text-[#924700] text-[24px] mb-2">menu_book</span>
+            <h3 className="text-xl font-bold text-[#924700]">{new Set(assignments.map(a => a.subject_name)).size}</h3>
+            <p className="text-xs text-[#924700]/80">Subjects Taught</p>
           </div>
         </div>
 
-        {/* filters & table */}
-        <div className="bg-white rounded-xl shadow-sm overflow-hidden border border-gray-100">
-          <div className="p-6 flex gap-4 items-center border-b border-gray-100 bg-[#f8f9ff]">
+        <div className="bg-white rounded-lg shadow-sm overflow-hidden border border-gray-100">
+          <div className="p-4 flex gap-3 items-center border-b border-gray-100 bg-[#f8f9ff]">
             <div className="relative flex-1">
-              <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[#6b7280] text-sm">search</span>
+              <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[#6b7280] text-[18px]">search</span>
               <input
                 placeholder="Search assignment records..."
-                value={searchQuery} // CHANGED: Re-wired to robust state
+                value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-10 pr-9 py-2.5 bg-white rounded-md outline-none border border-gray-200 focus:border-[#0058be]/30 shadow-sm transition-all text-sm"
+                className="w-full pl-9 pr-3 py-2 bg-white rounded outline-none border border-gray-200 focus:border-[#0058be]/30 shadow-sm transition-all text-sm"
               />
-              {/* Added Clear Button */}
-              {searchQuery && (
-                <button 
-                  onClick={() => setSearchQuery("")}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
-                >
-                  <span className="material-symbols-outlined text-sm">close</span>
-                </button>
-              )}
             </div>
-            <button className="flex items-center gap-2 px-4 py-2.5 bg-white border border-gray-200 rounded-md text-sm font-medium text-slate-700 hover:bg-gray-50 shadow-sm transition-colors">
-              <span className="material-symbols-outlined text-[18px]">filter_list</span>
-              Filters
-            </button>
           </div>
 
           <div className="overflow-x-auto">
             <table className="w-full text-left">
-              <thead className="bg-white text-xs uppercase text-[#6b7280] tracking-wider border-b border-gray-100">
+              <thead className="bg-white text-[11px] uppercase text-[#6b7280] tracking-wider border-b border-gray-100">
                 <tr>
-                  <th className="px-6 py-4 font-semibold">Teacher Name</th>
-                  <th className="px-6 py-4 font-semibold">Subject</th>
-                  <th className="px-6 py-4 font-semibold">Class / Section</th>
-                  <th className="px-6 py-4 font-semibold">Academic Year</th>
-                  <th className="px-6 py-4 font-semibold">Role</th>
-                  <th className="px-6 py-4 text-right"></th>
+                  <th className="px-5 py-3 font-semibold">Teacher Name</th>
+                  <th className="px-5 py-3 font-semibold">Subject</th>
+                  <th className="px-5 py-3 font-semibold">Class / Section</th>
+                  <th className="px-5 py-3 font-semibold">Academic Year</th>
+                  <th className="px-5 py-3 font-semibold">Role</th>
+                  <th className="px-5 py-3 text-right"></th>
                 </tr>
               </thead>
-
-              <tbody className="divide-y divide-gray-50">
+              <tbody className="divide-y divide-gray-50 text-sm">
                 {loading ? (
                   <tr>
-                    <td colSpan="6" className="text-center py-12 text-gray-500">
+                    <td colSpan="6" className="text-center py-8 text-gray-500">
                       <div className="flex flex-col items-center gap-2">
                         <span className="material-symbols-outlined animate-spin text-[#0058be]">progress_activity</span>
                         Loading assignment matrix...
                       </div>
                     </td>
                   </tr>
-                ) : assignments.length === 0 ? ( // CHANGED: Mapping raw assignments (data from backend)
+                ) : assignments.length === 0 ? (
                   <tr>
-                    <td colSpan="6" className="text-center py-12 text-gray-500">
+                    <td colSpan="6" className="text-center py-8 text-gray-500">
                       {searchQuery ? "No assignments match your search." : "No teachers assigned to classes yet."}
                     </td>
                   </tr>
                 ) : (
                   assignments.map((a, i) => (
                     <tr key={a.id} className="hover:bg-[#fcfdff] transition-colors group">
-                      <td className="px-6 py-5">
+                      <td className="px-5 py-4">
                         <div className="flex items-center gap-3">
-                          <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm shadow-sm ${getColorClass(i)}`}>
+                          <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-[10px] shadow-sm ${getColorClass(i)}`}>
                             {getInitials(a.teacher_name)}
                           </div>
                           <div>
                             <p className="font-semibold text-slate-900">{a.teacher_name || "Unknown Teacher"}</p>
-                            <p className="text-xs text-[#6b7280] font-mono">EMP: {a.teacher_employee_id || "N/A"}</p>
+                            <p className="text-[10px] text-[#6b7280] font-mono mt-0.5">EMP: {a.teacher_employee_id || "N/A"}</p>
                           </div>
                         </div>
                       </td>
-
-                      <td className="px-6 py-5">
-                        <span className="px-3 py-1 rounded-full text-xs font-semibold bg-[#e9ddff] text-[#6b38d4] border border-[#d6beff]">
+                      <td className="px-5 py-4">
+                        <span className="px-2.5 py-1 rounded-full text-[11px] font-semibold bg-[#e9ddff] text-[#6b38d4] border border-[#d6beff]">
                           {a.subject_name || "Unknown Subject"}
                         </span>
                       </td>
-
-                      <td className="px-6 py-5">
-                        <p className="font-medium text-slate-800">{a.class_level_name || "Unknown Class"}</p>
-                        <p className="text-xs text-[#6b7280] mt-0.5">Section: {a.section_name || "N/A"}</p>
+                      <td className="px-5 py-4">
+                        <p className="font-medium text-slate-800 text-sm">{a.class_level_name || "Unknown Class"}</p>
+                        <p className="text-[11px] text-[#6b7280] mt-0.5">Section: {a.section_name || "N/A"}</p>
                       </td>
-
-                      <td className="px-6 py-5 text-sm text-[#475569] font-medium">
+                      <td className="px-5 py-4 text-sm text-[#475569] font-medium">
                         {a.academic_year_name || "Current Year"}
                       </td>
-
-                      <td className="px-6 py-5">
+                      <td className="px-5 py-4">
                         {a.is_class_teacher ? (
-                          <span className="text-xs font-bold flex items-center gap-1 text-[#0058be] bg-blue-50 px-2.5 py-1 rounded-full w-max border border-blue-100">
-                            <span className="material-symbols-outlined text-[14px]">star</span>
-                            Class Teacher
+                          <span className="text-[11px] font-bold flex items-center gap-1 text-[#0058be] bg-blue-50 px-2 py-0.5 rounded-full w-max border border-blue-100">
+                            <span className="material-symbols-outlined text-[12px]">star</span> Class Teacher
                           </span>
                         ) : (
-                          <span className="text-xs font-medium text-gray-500 flex items-center gap-1">
-                            <span className="material-symbols-outlined text-[14px]">person</span>
-                            Subject Teacher
+                          <span className="text-[11px] font-medium text-gray-500 flex items-center gap-1">
+                            <span className="material-symbols-outlined text-[12px]">person</span> Subject Teacher
                           </span>
                         )}
                       </td>
-
-                      <td className="px-6 py-5 text-right opacity-0 group-hover:opacity-100 transition-opacity">
-                        <div className="flex justify-end gap-2">
-                          <button 
-                            onClick={() => navigate(`/school-admin/teacher-assignment/edit/${a.id}`)}
-                            className="p-2 hover:bg-blue-50 text-[#0058be] rounded-md transition-colors"
-                          >
-                            <span className="material-symbols-outlined text-[18px]">edit</span>
+                      <td className="px-5 py-4 text-right opacity-0 group-hover:opacity-100 transition-opacity">
+                        <div className="flex justify-end gap-1">
+                          <button onClick={() => navigate(`/school-admin/teacher-assignment/edit/${a.id}`)} className="p-1.5 hover:bg-blue-50 text-[#0058be] rounded transition-colors">
+                            <span className="material-symbols-outlined text-[16px]">edit</span>
                           </button>
-                          <button 
-                            onClick={() => handleDelete(a.id)}
-                            className="p-2 hover:bg-red-50 text-red-500 rounded-md transition-colors"
-                          >
-                            <span className="material-symbols-outlined text-[18px]">delete</span>
+                          <button onClick={() => handleDelete(a.id)} className="p-1.5 hover:bg-red-50 text-red-500 rounded transition-colors">
+                            <span className="material-symbols-outlined text-[16px]">delete</span>
                           </button>
                         </div>
                       </td>
@@ -276,77 +221,17 @@ export default function TeacherAssignment() {
             </table>
           </div>
 
-          {/* Fully Functional Pagination */}
-          <div className="flex justify-between items-center p-4 border-t border-gray-100 bg-gray-50">
-            <p className="text-sm text-[#6b7280] font-medium">
-              Showing {assignments.length} of {totalCount} assignments
-            </p>
-            <div className="flex gap-2">
-              <button 
-                disabled={currentPage === 1}
-                onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
-                className={`w-10 h-10 flex items-center justify-center border border-gray-200 bg-white hover:bg-gray-50 rounded-md text-gray-500 transition-colors ${currentPage === 1 ? 'opacity-50 cursor-not-allowed' : ''}`}
-              >
-                <span className="material-symbols-outlined text-[18px]">chevron_left</span>
-              </button>
-              
-              <span className="w-10 h-10 flex items-center justify-center bg-[#0058be] text-white rounded-md font-bold shadow-sm">
-                {currentPage}
-              </span>
-              
-              <button 
-                disabled={currentPage >= totalPages || totalPages === 0}
-                onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
-                className={`w-10 h-10 flex items-center justify-center border border-gray-200 bg-white hover:bg-gray-50 rounded-md text-gray-500 transition-colors ${(currentPage >= totalPages || totalPages === 0) ? 'opacity-50 cursor-not-allowed' : ''}`}
-              >
-                <span className="material-symbols-outlined text-[18px]">chevron_right</span>
-              </button>
-            </div>
-          </div>
-        </div>
-
-        {/* insight section */}
-        <div className="mt-12 grid lg:grid-cols-3 gap-8">
-          <div className="lg:col-span-2 relative overflow-hidden rounded-xl p-8 bg-gradient-to-br from-[#f8f9ff] to-[#e5eeff] border border-blue-100 shadow-sm">
-            <div className="flex items-center gap-2 text-[#0058be] mb-4">
-              <span className="material-symbols-outlined">api</span>
-              <span className="text-xs font-bold tracking-widest uppercase">Relational Integrity</span>
-            </div>
-            <h3 className="text-2xl font-bold text-[#0b1c30] mb-3">
-              Django ORM Foreign Keys
-            </h3>
-            <p className="text-[#475569] max-w-xl leading-relaxed">
-              This ViewSet connects the `TeacherProfile`, `AcademicYear`, `ClassLevel`, `Section`, and `Subject` models together. These foreign keys ensure that grades and attendance are perfectly segmented by subject and section.
-            </p>
-            <div className="absolute right-4 bottom-4 opacity-10">
-              <span className="material-symbols-outlined text-[120px] text-[#0058be]">database</span>
-            </div>
-          </div>
-
-          <div className="bg-white p-8 rounded-xl shadow-sm border border-gray-100 flex flex-col justify-center">
-            <h4 className="font-bold text-[#0b1c30] mb-6 flex items-center gap-2">
-              <span className="material-symbols-outlined text-orange-500">warning</span>
-              Upcoming Gaps
-            </h4>
-            <div className="space-y-5">
-              <div className="flex gap-3">
-                <div className="w-2 h-2 rounded-full bg-red-500 mt-1.5 shrink-0"></div>
-                <div>
-                  <p className="font-semibold text-[#0b1c30] text-sm">Biology - Grade 11</p>
-                  <p className="text-xs text-[#6b7280] mt-0.5">Vacancy starting next week</p>
-                </div>
-              </div>
-              <div className="flex gap-3">
-                <div className="w-2 h-2 rounded-full bg-orange-500 mt-1.5 shrink-0"></div>
-                <div>
-                  <p className="font-semibold text-[#0b1c30] text-sm">History - Grade 10</p>
-                  <p className="text-xs text-[#6b7280] mt-0.5">Teacher on medical leave</p>
-                </div>
+          {totalPages > 1 && (
+            <div className="flex justify-between items-center p-4 border-t border-gray-100 bg-gray-50">
+              <p className="text-xs text-[#6b7280] font-medium">Showing page {currentPage} of {totalPages}</p>
+              <div className="flex gap-2">
+                <button onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))} disabled={currentPage === 1} className="w-8 h-8 flex items-center justify-center border border-gray-200 bg-white hover:bg-gray-50 rounded text-gray-500 transition-colors disabled:opacity-50"><span className="material-symbols-outlined text-[16px]">chevron_left</span></button>
+                <span className="w-8 h-8 flex items-center justify-center bg-[#0058be] text-white rounded text-sm font-bold shadow-sm">{currentPage}</span>
+                <button onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))} disabled={currentPage === totalPages} className="w-8 h-8 flex items-center justify-center border border-gray-200 bg-white hover:bg-gray-50 rounded text-gray-500 transition-colors disabled:opacity-50"><span className="material-symbols-outlined text-[16px]">chevron_right</span></button>
               </div>
             </div>
-          </div>
+          )}
         </div>
-
       </div>
     </SchoolLayout>
   );

@@ -77,7 +77,7 @@
 }
 
 /* ================================ */
-/*  Global Body — background + text */
+/*  Global Body                    */
 /* ================================ */
 html {
   background-color: var(--color-background);
@@ -96,7 +96,7 @@ body {
 }
 
 /* ===================== */
-/*   Existing Utilities  */
+/*   Utilities           */
 /* ===================== */
 .primary-gradient {
   background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-container) 100%);
@@ -127,6 +127,7 @@ body {
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
 }
 
+/* Range input */
 input[type="range"] {
   appearance: none;
   background: transparent;
@@ -145,4 +146,406 @@ input[type="range"]::-webkit-slider-thumb {
   height: 16px;
   width: 16px;
   border-radius: 50%;
+}
+
+/* ============================================================ */
+/*   DARK MODE OVERRIDES – Clean & Complete                    */
+/* ============================================================ */
+
+/* ----- Backgrounds ----- */
+.dark .bg-white,
+.dark .bg-\[\#ffffff\],
+.dark .bg-\[\#fff\] {
+  background-color: var(--color-surface-container-lowest) !important;
+}
+
+.dark .bg-\[\#f8f9ff\],
+.dark .bg-\[\#f3f6ff\],
+.dark .bg-\[\#eff4ff\],
+.dark .bg-slate-50,
+.dark .bg-gray-50,
+.dark .bg-gray-100,
+.dark .bg-slate-100 {
+  background-color: var(--color-surface-container) !important;
+}
+
+.dark .bg-slate-200,
+.dark .bg-gray-200 {
+  background-color: var(--color-surface-container-high) !important;
+}
+
+.dark .bg-white\/80 {
+  background-color: rgba(21, 29, 43, 0.9) !important;
+}
+
+/* ----- Text ----- */
+.dark h1, .dark h2, .dark h3, .dark h4, .dark h5, .dark h6,
+.dark .font-bold, .dark .font-semibold, .dark .font-extrabold,
+.dark .text-\[\#0b1c30\], .dark .text-slate-900, .dark .text-slate-800,
+.dark .text-gray-900, .dark .text-gray-800, .dark .text-black {
+  color: var(--color-on-surface) !important;
+}
+
+.dark .text-\[\#424754\], .dark .text-slate-700, .dark .text-gray-700,
+.dark .text-slate-600, .dark .text-slate-500, .dark .text-gray-600,
+.dark .text-gray-500, .dark .text-\[\#6b7280\] {
+  color: var(--color-on-surface-variant) !important;
+}
+
+.dark .text-slate-400, .dark .text-gray-400 {
+  color: var(--color-outline) !important;
+}
+
+.dark .text-\[\#0058be\], .dark .text-blue-600, .dark .text-purple-600,
+.dark .text-amber-600, .dark .text-emerald-600 {
+  color: var(--color-primary) !important;
+}
+
+/* ----- Borders ----- */
+.dark .border-\[\#e5eeff\], .dark .border-slate-100, .dark .border-gray-100,
+.dark .border-slate-200, .dark .border-gray-200,
+.dark .border-blue-100, .dark .border-green-100,
+.dark .border-purple-100, .dark .border-amber-100,
+.dark .border-red-100 {
+  border-color: var(--color-outline-variant) !important;
+}
+
+/* ----- Sidebar specific ----- */
+.dark .bg-\[\#f3f6ff\], .dark .bg-\[\#eff4ff\] {
+  background-color: var(--color-surface-container) !important;
+}
+
+.dark .hover\:bg-\[\#e5eeff\]:hover,
+.dark .hover\:bg-slate-100:hover,
+.dark .hover\:bg-gray-100:hover,
+.dark .hover\:bg-blue-100\/50:hover {
+  background-color: var(--color-surface-container-high) !important;
+}
+
+/* ----- Tables ----- */
+.dark table thead tr,
+.dark .bg-\[\#eff4ff\] {
+  background-color: var(--color-surface-container) !important;
+}
+
+.dark table tbody tr {
+  background-color: var(--color-surface-container-low) !important;
+}
+
+.dark table tbody tr:nth-child(even) {
+  background-color: var(--color-surface-container) !important;
+}
+
+.dark table tbody tr:hover {
+  background-color: var(--color-surface-container-high) !important;
+}
+
+.dark td, .dark th {
+  color: var(--color-on-surface) !important;
+}
+
+.dark .divide-slate-50 > * + *,
+.dark .divide-gray-100 > * + * {
+  border-color: var(--color-outline-variant) !important;
+}
+
+/* ----- Badges & Status indicators ----- */
+.dark .bg-blue-50, .dark .bg-green-50, .dark .bg-purple-50,
+.dark .bg-amber-50, .dark .bg-red-50, .dark .bg-emerald-50,
+.dark .bg-gray-100 {
+  background-color: var(--color-surface-container-high) !important;
+}
+
+.dark .text-blue-700, .dark .text-green-700, .dark .text-purple-700,
+.dark .text-amber-700, .dark .text-red-700, .dark .text-emerald-700 {
+  color: var(--color-primary) !important;
+}
+
+/* ----- Buttons ----- */
+.dark button:not(.bg-primary):not(.bg-gradient-to-r):not(.primary-gradient) {
+  background-color: var(--color-surface-container) !important;
+  color: var(--color-on-surface) !important;
+  border-color: var(--color-outline-variant) !important;
+}
+
+.dark button:not(.bg-primary):hover {
+  background-color: var(--color-surface-container-high) !important;
+}
+
+.dark .bg-gradient-to-r, .dark .bg-gradient-to-br, .dark .primary-gradient {
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-container) 100%) !important;
+  color: white !important;
+}
+
+/* ----- Form inputs ----- */
+.dark input, .dark select, .dark textarea {
+  background-color: var(--color-surface-container) !important;
+  color: var(--color-on-surface) !important;
+  border-color: var(--color-outline-variant) !important;
+}
+
+.dark input::placeholder, .dark textarea::placeholder {
+  color: var(--color-outline) !important;
+}
+
+.dark input:focus, .dark select:focus, .dark textarea:focus {
+  border-color: var(--color-primary) !important;
+  outline: none;
+  ring-color: var(--color-primary);
+}
+
+/* ----- Cards & containers ----- */
+.dark .rounded-xl, .dark .rounded-lg, .dark .bg-white.rounded-xl,
+.dark .bg-white.rounded-lg, .dark .bg-white.p-6.rounded-xl,
+.dark .bg-white.p-8.rounded-xl {
+  background-color: var(--color-surface-container-lowest) !important;
+}
+
+.dark .bg-gray-50.p-4.rounded-lg {
+  background-color: var(--color-surface-container) !important;
+}
+
+/* ----- Shadows in dark mode ----- */
+.dark .shadow-sm, .dark .shadow-md, .dark .shadow-lg,
+.dark .ambient-shadow, .dark .custom-shadow {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* ----- Stat cards (Allocation Overview etc.) ----- */
+.dark .bg-white.p-6.rounded-xl {
+  background-color: var(--color-surface-container-lowest) !important;
+}
+
+/* ----- Pagination ----- */
+.dark .bg-gray-50, .dark .bg-slate-50 {
+  background-color: var(--color-surface-container) !important;
+}
+
+.dark .border-slate-200, .dark .border-gray-200 {
+  border-color: var(--color-outline-variant) !important;
+}
+
+/* ----- Search input toolbar ----- */
+.dark .bg-white.pl-9.pr-9.py-2.rounded-md {
+  background-color: var(--color-surface-container) !important;
+  color: var(--color-on-surface) !important;
+  border-color: var(--color-outline-variant) !important;
+}
+
+/* ----- Dropdown rows per page ----- */
+.dark select.border-gray-200,
+.dark .border-gray-200 {
+  border-color: var(--color-outline-variant) !important;
+  background-color: var(--color-surface-container) !important;
+  color: var(--color-on-surface) !important;
+}
+
+/* ----- Links ----- */
+.dark a:not(.text-primary):not(.text-white) {
+  color: var(--color-on-surface-variant) !important;
+}
+.dark a:hover:not(.text-primary) {
+  color: var(--color-primary) !important;
+}
+
+/* ----- Permission icons in Mapping Details ----- */
+.dark .text-green-600.material-symbols-outlined {
+  color: var(--color-primary) !important;
+}
+
+/* ----- Floating action button ----- */
+.dark .fixed.bottom-8.right-8 button {
+  background-color: var(--color-primary) !important;
+  color: white !important;
+}
+
+/* ----- Scrollbar ----- */
+.dark ::-webkit-scrollbar-track {
+  background: var(--color-surface-container-low) !important;
+}
+.dark ::-webkit-scrollbar-thumb {
+  background: var(--color-outline-variant) !important;
+}
+
+/* ============================================================ */
+/*   FINAL MISSING PIECES – Dark Mode Visibility               */
+/* ============================================================ */
+
+/* ----- Dark Mode Toggle Switch (Settings page) ----- */
+.dark .w-14.h-7.rounded-full.flex.items-center.px-1,
+.dark .relative.inline-flex.h-6.w-11.items-center.rounded-full {
+  background-color: var(--color-surface-container-high) !important;
+  border: 1px solid var(--color-outline-variant) !important;
+}
+
+.dark .w-14.h-7.rounded-full.flex.items-center.px-1 .w-5.h-5.rounded-full,
+.dark .relative.inline-flex .w-4.h-4.rounded-full {
+  background-color: var(--color-on-surface) !important;
+}
+
+/* When toggle is ON (active) */
+.dark .bg-\[\#0058be\].w-14.h-7.rounded-full,
+.dark .bg-primary.w-14.h-7.rounded-full {
+  background-color: var(--color-primary) !important;
+  border-color: var(--color-primary) !important;
+}
+
+/* ----- Status Badges (ACTIVE / ARCHIVED) ----- */
+.dark .bg-emerald-50.text-emerald-700,
+.dark .bg-green-100.text-green-700 {
+  background-color: var(--color-surface-container-high) !important;
+  color: var(--color-primary) !important;
+  border-color: var(--color-outline-variant) !important;
+}
+
+.dark .bg-slate-100.text-slate-500,
+.dark .bg-gray-100.text-gray-500 {
+  background-color: var(--color-surface-container) !important;
+  color: var(--color-on-surface-variant) !important;
+}
+
+/* ----- Table Avatar Circles (initials) ----- */
+.dark .w-11.h-11.rounded-2xl.bg-gradient-to-br,
+.dark .w-11.h-11.rounded-full.bg-blue-50,
+.dark .w-10.h-10.rounded-full.bg-\[\#e9ddff\] {
+  background: var(--color-surface-container-high) !important;
+  color: var(--color-primary) !important;
+  border-color: var(--color-outline-variant) !important;
+}
+
+/* ----- "PRIMARY CONTACT" & "Verified Sync" Badges ----- */
+.dark .inline-flex.items-center.gap-1\.5.px-2.py-0\.5.rounded-full.text-xs.font-bold,
+.dark .px-3.py-1.rounded-full.text-xs.font-semibold {
+  background-color: var(--color-surface-container-high) !important;
+  color: var(--color-primary) !important;
+  border: 1px solid var(--color-outline-variant) !important;
+}
+
+/* ----- Teacher Assignment Table – class/section/year text ----- */
+.dark .text-sm.text-\[\#475569\],
+.dark .text-xs.text-\[\#6b7280\] {
+  color: var(--color-on-surface-variant) !important;
+}
+
+/* ----- Edit Assignment Card Background ----- */
+.dark .bg-white.p-8.rounded-xl.shadow-sm.border.border-gray-200 {
+  background-color: var(--color-surface-container-lowest) !important;
+  border-color: var(--color-outline-variant) !important;
+}
+
+/* ----- Settings Page – Dropdowns & Selects ----- */
+.dark select.bg-\[\#f9fbff\],
+.dark select.border-slate-200 {
+  background-color: var(--color-surface-container) !important;
+  color: var(--color-on-surface) !important;
+  border-color: var(--color-outline-variant) !important;
+}
+
+/* ----- Settings Page – "Dark Mode" label text ----- */
+.dark .text-\[\#0b1c30\].font-bold {
+  color: var(--color-on-surface) !important;
+}
+
+/* ----- Table "ACTIONS" icon (three dots) ----- */
+.dark .text-\[\#0058be\].hover\:bg-\[\#e5eeff\] {
+  color: var(--color-primary) !important;
+}
+
+.dark .hover\:bg-\[\#e5eeff\]:hover {
+  background-color: var(--color-surface-container-high) !important;
+}
+
+/* ============================================================ */
+/*   UNIFIED AVATAR STYLING (dark mode) – matches Teachers page */
+/* ============================================================ */
+
+/* All circular/rounded avatar containers with initials */
+.dark [class*="rounded-full"]:has(span:not(.material-symbols-outlined)),
+.dark [class*="rounded-lg"]:has(span:not(.material-symbols-outlined)),
+.dark .w-10.h-10.rounded-full,
+.dark .w-11.h-11.rounded-full,
+.dark .w-12.h-12.rounded-full,
+.dark .w-8.h-8.rounded-full,
+.dark .w-9.h-9.rounded-full,
+.dark .w-14.h-14.rounded-full,
+.dark .w-10.h-10.rounded-2xl,
+.dark .w-11.h-11.rounded-2xl {
+  background-color: var(--color-surface-container-high) !important;
+  color: var(--color-primary) !important;
+  border: 1px solid var(--color-outline-variant) !important;
+}
+
+/* If the avatar contains an image (profile picture) – override background */
+.dark [class*="rounded-full"] img,
+.dark [class*="rounded-lg"] img {
+  background-color: transparent !important;
+  border: none !important;
+}
+
+/* Avatar text (initials) – ensure it's visible */
+.dark [class*="rounded-full"] span:not(.material-symbols-outlined),
+.dark [class*="rounded-lg"] span:not(.material-symbols-outlined) {
+  color: var(--color-primary) !important;
+  font-weight: bold !important;
+}
+
+/* Specific pages that still need the same avatar look */
+/* Students page */
+.dark .w-11.h-11.rounded-2xl.bg-gradient-to-br {
+  background: var(--color-surface-container-high) !important;
+  color: var(--color-primary) !important;
+  border: 1px solid var(--color-outline-variant) !important;
+}
+
+/* Parents page */
+.dark .w-11.h-11.rounded-full.flex.items-center.justify-center.font-bold {
+  background-color: var(--color-surface-container-high) !important;
+  color: var(--color-primary) !important;
+}
+
+/* Parent-Student Mapping page – parent/student avatar in table */
+.dark .w-10.h-10.rounded-full.flex.items-center.justify-center.text-xs.font-bold {
+  background-color: var(--color-surface-container-high) !important;
+  color: var(--color-primary) !important;
+}
+
+/* Teacher Assignment page – avatar beside teacher name */
+.dark .w-10.h-10.rounded-full.flex.items-center.justify-center.font-bold.text-sm {
+  background-color: var(--color-surface-container-high) !important;
+  color: var(--color-primary) !important;
+}
+
+/* Edit Assignment page – any avatar (if present) */
+.dark .w-12.h-12.rounded-full {
+  background-color: var(--color-surface-container-high) !important;
+  color: var(--color-primary) !important;
+}
+
+/* Teacher Details page – avatar (if present) */
+.dark .w-16.h-16.rounded-full {
+  background-color: var(--color-surface-container-high) !important;
+  color: var(--color-primary) !important;
+}
+
+/* For any remaining avatar with dynamic background colors (blue-50, purple-50, etc.) */
+.dark .bg-blue-50,
+.dark .bg-purple-50,
+.dark .bg-amber-50,
+.dark .bg-red-50,
+.dark .bg-green-50,
+.dark .bg-indigo-50,
+.dark .bg-pink-50,
+.dark .bg-orange-50 {
+  background-color: var(--color-surface-container-high) !important;
+}
+
+.dark .text-blue-600,
+.dark .text-purple-600,
+.dark .text-amber-600,
+.dark .text-red-600,
+.dark .text-green-600,
+.dark .text-indigo-600,
+.dark .text-pink-600,
+.dark .text-orange-600 {
+  color: var(--color-primary) !important;
 }

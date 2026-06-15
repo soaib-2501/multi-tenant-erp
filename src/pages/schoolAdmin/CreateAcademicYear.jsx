@@ -1,21 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { schoolAdminApi } from '../../services/schoolAdminApi';
-
-// Mock layout for preview environment (uncomment your import locally)
-// import SchoolLayout from "../../components/erp/school/SchoolLayout";
-const SchoolLayout = ({ title, children }) => (
-  <div className="min-h-screen bg-slate-50 font-sans text-slate-900">
-    <header className="bg-white shadow-sm px-8 py-4 border-b border-slate-200">
-      <h1 className="text-xl font-bold text-[#0058be]">{title}</h1>
-    </header>
-    <main>{children}</main>
-  </div>
-);
+import SchoolLayout from "../../components/erp/school/SchoolLayout";
+import api from "../../services/axiosClient";
 
 export default function CreateAcademicYear() {
   const navigate = useNavigate();
-  const { id } = useParams(); 
+  const { id } = useParams();
   const isEditMode = Boolean(id);
 
   const [name, setName] = useState("");
@@ -24,30 +14,27 @@ export default function CreateAcademicYear() {
   const [isActive, setIsActive] = useState(true);
   
   const [loading, setLoading] = useState(false);
-  const [initialLoad, setInitialLoad] = useState(isEditMode); 
+  const [initialLoad, setInitialLoad] = useState(isEditMode);
   const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchAcademicYearDetails = async () => {
       try {
-        const data = await schoolAdminApi.getAcademicYearDetails(id);
-        
+        const response = await api.get(`academics/academic-years/${id}/`);
+        const data = response.data;
         setName(data.name || "");
         setStartDate(data.start_date || "");
         setEndDate(data.end_date || "");
         setIsActive(data.is_active ?? true);
-
       } catch (err) {
         console.error("Fetch Error:", err);
-        setError(err.response?.data?.detail || err.message || "Failed to load academic year details.");
+        setError("Failed to load academic year details.");
       } finally {
         setInitialLoad(false);
       }
     };
 
-    if (isEditMode) {
-      fetchAcademicYearDetails();
-    }
+    if (isEditMode) fetchAcademicYearDetails();
   }, [id, isEditMode]);
 
   const handleSubmit = async (e) => {
@@ -55,68 +42,37 @@ export default function CreateAcademicYear() {
     setLoading(true);
     setError(null);
 
+    if (new Date(startDate) >= new Date(endDate)) {
+      setError("End Date must be strictly after the Start Date.");
+      setLoading(false);
+      return;
+    }
+
     try {
-      const payload = {
-        name: name,
-        start_date: startDate,
-        end_date: endDate,
-        is_active: isActive
-      };
-
+      const payload = { name, start_date: startDate, end_date: endDate, is_active: isActive };
       if (isEditMode) {
-        await schoolAdminApi.updateAcademicYear(id, payload);
+        await api.patch(`academics/academic-years/${id}/`, payload);
       } else {
-        await schoolAdminApi.createAcademicYear(payload);
+        await api.post(`academics/academic-years/`, payload);
       }
-
       alert(`Academic Year ${isEditMode ? "updated" : "created"} successfully!`);
       navigate("/school-admin/academic-years");
-
     } catch (err) {
-      console.error("Submission Error:", err);
-      
-      // Improve the error message for the user
-      if (err.response?.status === 500 && err.response?.data?.includes("duplicate key")) {
-        setError("This Academic Year already exists. Please edit the existing one instead.");
+      if (err.response && err.response.data) {
+        setError(Object.entries(err.response.data).map(([field, msgs]) => `${field}: ${Array.isArray(msgs) ? msgs.join(" ") : msgs}`).join(" | "));
       } else {
-        setError("Failed to save. Please ensure all fields are correct.");
+        setError(err.message);
       }
     } finally {
       setLoading(false);
     }
   };
 
-  const handleDelete = async () => {
-    if (!window.confirm("Are you sure you want to delete this academic year? This action cannot be undone.")) {
-      return;
-    }
-
-    setLoading(true);
-    setError(null);
-
-    try {
-      await schoolAdminApi.deleteAcademicYear(id);
-      alert("Academic Year deleted successfully!");
-      navigate("/school-admin/academic-years");
-    } catch (err) {
-      console.error("Delete Error:", err);
-      setError(err.response?.data?.detail || err.message || "Failed to delete the academic year.");
-      setLoading(false);
-    }
-  };
-
-  const goBack = () => {
-    navigate("/school-admin/academic-years");
-  };
-
   if (initialLoad) {
     return (
       <SchoolLayout title="Academic Years">
-        <div className="flex items-center justify-center min-h-[50vh]">
-          <div className="text-[#0058be] font-semibold flex items-center gap-2">
-             <span className="material-symbols-outlined animate-spin">progress_activity</span>
-             Loading data...
-          </div>
+        <div className="flex items-center justify-center min-h-[50vh] text-[#0058be] font-semibold gap-2">
+          Loading data...
         </div>
       </SchoolLayout>
     );
@@ -124,182 +80,52 @@ export default function CreateAcademicYear() {
 
   return (
     <SchoolLayout title="Academic Years">
-      <div className="p-12 max-w-5xl mx-auto">
-        {/* breadcrumb + go back */}
+      <div className="p-8 max-w-3xl mx-auto">
         <div className="flex justify-between items-center mb-8">
-          <div className="flex items-center gap-2 text-sm text-gray-500">
-            <span className="cursor-pointer hover:text-[#0058be]" onClick={() => navigate("/school-admin")}>
-              Dashboard
-            </span>
-            <span className="material-symbols-outlined text-sm">chevron_right</span>
-            <span className="cursor-pointer hover:text-[#0058be]" onClick={goBack}>
-              Academic Years
-            </span>
-            <span className="material-symbols-outlined text-sm">chevron_right</span>
-            <span className="text-[#0058be] font-semibold">
-              {isEditMode ? "Edit Year" : "Create Year"}
-            </span>
+          <div>
+            <h1 className="text-2xl font-bold mb-1 text-slate-800">{isEditMode ? "Edit Academic Year" : "Create Academic Year"}</h1>
           </div>
-
-          <button
-            onClick={goBack}
-            className="flex items-center gap-2 px-4 py-2 text-[#0058be] font-semibold hover:bg-[#eff4ff] rounded-md transition-colors"
-          >
-            <span className="material-symbols-outlined text-sm">arrow_back</span>
-            Go Back
+          <button onClick={() => navigate("/school-admin/academic-years")} className="flex items-center gap-2 px-4 py-2 text-[#0058be] font-semibold hover:bg-[#eff4ff] rounded-md transition-colors border border-blue-100 text-sm">
+            <span className="material-symbols-outlined text-sm">arrow_back</span> Go Back
           </button>
         </div>
 
-        {/* heading */}
-        <div className="mb-10">
-          <h1 className="text-4xl font-bold mb-2">
-            {isEditMode ? "Edit Academic Year" : "Create Academic Year"}
-          </h1>
-          <p className="text-gray-500">
-            {isEditMode 
-              ? "Update the timeline or status for this academic session." 
-              : "Define timeline for upcoming academic session."}
-          </p>
-        </div>
+        <div className="bg-white rounded-lg p-8 shadow-sm border border-gray-100">
+          {error && <div className="mb-6 p-3 bg-red-50 text-red-700 rounded border border-red-200 text-sm font-medium flex gap-2"><span className="material-symbols-outlined text-[20px]">error</span>{error}</div>}
 
-        <div className="grid grid-cols-12 gap-8">
-          {/* form */}
-          <div className="col-span-8 bg-white rounded-lg p-8 shadow-sm border border-gray-100">
-            {error && (
-              <div className="mb-6 p-4 bg-red-50 text-red-700 rounded-md border border-red-200">
-                {error}
-              </div>
-            )}
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <div>
+              <label className="text-xs font-bold uppercase text-gray-500 block mb-1.5">Year Name</label>
+              <input type="text" required value={name} onChange={(e) => setName(e.target.value)} placeholder="e.g. 2024-2025" className="w-full bg-[#eff4ff] px-3 py-2.5 rounded outline-none focus:ring-2 focus:ring-[#0058be]/30 text-sm" />
+            </div>
 
-            <form onSubmit={handleSubmit} className="space-y-8">
-              {/* year */}
+            <div className="grid grid-cols-2 gap-6">
               <div>
-                <label className="text-sm font-semibold block mb-2">Year Name</label>
-                <input
-                  type="text"
-                  required
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  placeholder="e.g. 2024-2025"
-                  className="w-full bg-[#eff4ff] px-4 py-3 rounded-md outline-none focus:ring-2 focus:ring-[#0058be]/30 transition-all"
-                />
-                <p className="text-xs text-gray-500 mt-1">format YYYY-YYYY</p>
+                <label className="text-xs font-bold uppercase text-gray-500 block mb-1.5">Start Date</label>
+                <input type="date" required value={startDate} onChange={(e) => setStartDate(e.target.value)} className="w-full bg-[#eff4ff] px-3 py-2.5 rounded outline-none focus:ring-2 focus:ring-[#0058be]/30 text-sm" />
               </div>
-
-              {/* dates */}
-              <div className="grid grid-cols-2 gap-6">
-                <div>
-                  <label className="text-sm font-semibold block mb-2">Start Date</label>
-                  <input
-                    type="date"
-                    required
-                    value={startDate}
-                    onChange={(e) => setStartDate(e.target.value)}
-                    className="w-full bg-[#eff4ff] px-4 py-3 rounded-md outline-none focus:ring-2 focus:ring-[#0058be]/30 transition-all"
-                  />
-                </div>
-                <div>
-                  <label className="text-sm font-semibold block mb-2">End Date</label>
-                  <input
-                    type="date"
-                    required
-                    value={endDate}
-                    onChange={(e) => setEndDate(e.target.value)}
-                    className="w-full bg-[#eff4ff] px-4 py-3 rounded-md outline-none focus:ring-2 focus:ring-[#0058be]/30 transition-all"
-                  />
-                </div>
-              </div>
-
-              {/* toggle */}
-              <div className="flex justify-between items-center p-4 bg-[#eff4ff] rounded-md">
-                <div>
-                  <h4 className="font-semibold">Year Status</h4>
-                  <p className="text-xs text-gray-500">Set active or inactive</p>
-                </div>
-                <div className="flex items-center gap-3">
-                  <span className={`text-xs font-semibold ${!isActive ? 'text-[#0058be]' : 'text-gray-500'}`}>
-                    Inactive
-                  </span>
-                  <button
-                    type="button"
-                    onClick={() => setIsActive(!isActive)}
-                    className={`w-12 h-6 rounded-full p-1 transition-colors ${isActive ? "bg-[#0058be]" : "bg-gray-300"}`}
-                  >
-                    <div className={`w-4 h-4 bg-white rounded-full transition-transform ${isActive ? "translate-x-6" : "translate-x-0"}`} />
-                  </button>
-                  <span className={`text-xs font-semibold ${isActive ? 'text-[#0058be]' : 'text-gray-500'}`}>
-                    Active
-                  </span>
-                </div>
-              </div>
-
-              {/* actions */}
-              <div className="flex justify-between items-center pt-6 border-t border-gray-100">
-                <div>
-                  {isEditMode && (
-                    <button
-                      type="button"
-                      onClick={handleDelete}
-                      disabled={loading}
-                      className="px-4 py-2 text-red-600 font-semibold hover:bg-red-50 rounded-md transition-colors disabled:opacity-50 flex items-center gap-2"
-                    >
-                      <span className="material-symbols-outlined text-sm">delete</span>
-                      Delete
-                    </button>
-                  )}
-                </div>
-                
-                <div className="flex gap-4">
-                  <button
-                    type="button"
-                    onClick={goBack}
-                    disabled={loading}
-                    className="px-6 py-3 text-[#0058be] font-semibold hover:bg-[#eff4ff] rounded-md transition-colors disabled:opacity-50"
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    type="submit"
-                    disabled={loading}
-                    className="px-8 py-3 text-white font-bold rounded-md bg-gradient-to-r from-[#0058be] to-[#2170e4] hover:shadow-lg transition-all disabled:opacity-70 disabled:cursor-not-allowed"
-                  >
-                    {loading ? "Saving..." : (isEditMode ? "Update Academic Year" : "Save Academic Year")}
-                  </button>
-                </div>
-              </div>
-            </form>
-          </div>
-
-          {/* right panel */}
-          <div className="col-span-4 space-y-6">
-            <div className="bg-[#eff4ff] p-6 rounded-lg border border-blue-100">
-              <h3 className="font-bold mb-3 flex gap-2 text-[#0058be]">
-                <span className="material-symbols-outlined text-[#924700]">lightbulb</span>
-                Admin Insights
-              </h3>
-              <p className="text-sm text-gray-600 mb-4">
-                Academic year helps track student & teacher records accurately in Django.
-              </p>
-              <div className="space-y-3 text-xs text-gray-600">
-                <div className="flex gap-2 items-center">
-                  <span className="material-symbols-outlined text-[#0058be] text-sm">check_circle</span>
-                  Prevents duplicate student enrollments
-                </div>
-                <div className="flex gap-2 items-center">
-                  <span className="material-symbols-outlined text-[#0058be] text-sm">check_circle</span>
-                  Links assignments & report cards
-                </div>
+              <div>
+                <label className="text-xs font-bold uppercase text-gray-500 block mb-1.5">End Date</label>
+                <input type="date" required value={endDate} onChange={(e) => setEndDate(e.target.value)} className="w-full bg-[#eff4ff] px-3 py-2.5 rounded outline-none focus:ring-2 focus:ring-[#0058be]/30 text-sm" />
               </div>
             </div>
 
-            <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
-              <h3 className="font-bold mb-2">Quick Action</h3>
-              <p className="text-xs text-gray-500 mb-4">Import previous configuration</p>
-              <button className="w-full py-2 border rounded-md text-[#0058be] font-semibold hover:bg-[#eff4ff] transition-colors">
-                Review Past Configurations
+            <div className="flex justify-between items-center p-4 bg-[#eff4ff] rounded-md">
+              <div><h4 className="font-semibold text-sm">Year Status</h4></div>
+              <div className="flex items-center gap-3">
+                <button type="button" onClick={() => setIsActive(!isActive)} className={`w-10 h-5 rounded-full p-1 transition-colors ${isActive ? "bg-[#0058be]" : "bg-gray-300"}`}>
+                  <div className={`w-3 h-3 bg-white rounded-full transition-transform ${isActive ? "translate-x-5" : "translate-x-0"}`} />
+                </button>
+              </div>
+            </div>
+
+            <div className="flex justify-end gap-3 pt-6 border-t border-gray-100">
+              <button type="button" onClick={() => navigate("/school-admin/academic-years")} className="px-5 py-2 text-gray-600 font-semibold hover:bg-gray-50 rounded-md text-sm">Cancel</button>
+              <button type="submit" disabled={loading} className="px-6 py-2 text-white font-bold rounded-md bg-gradient-to-r from-[#0058be] to-[#2170e4] hover:shadow-lg transition-all disabled:opacity-70 text-sm">
+                {loading ? "Saving..." : (isEditMode ? "Update Year" : "Save Year")}
               </button>
             </div>
-          </div>
+          </form>
         </div>
       </div>
     </SchoolLayout>

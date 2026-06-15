@@ -1,60 +1,52 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import SchoolLayout from "../../components/erp/school/SchoolLayout";
-import { schoolAdminApi } from '../../services/schoolAdminApi';
+import api from "../../services/axiosClient";
 
 export default function AddStudent() {
   const navigate = useNavigate();
 
-  // STEP 1: Core User Model Fields
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   
-  // STEP 2: Student Profile Fields
   const [enrollmentNumber, setEnrollmentNumber] = useState("");
   const [dateOfBirth, setDateOfBirth] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [bloodGroup, setBloodGroup] = useState("");
   const [address, setAddress] = useState("");
 
-  // UI State
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [successMsg, setSuccessMsg] = useState(null);
 
-const handleSave = async (e) => {
+  const handleSave = async (e) => {
     e.preventDefault();
     setLoading(true);
     setError(null);
     setSuccessMsg(null);
 
     try {
-      // 1. Create the Core User
-      const userPayload = {
-        email: email,
-        password: password,
-        first_name: firstName,
-        last_name: lastName
-      };
+      const userPayload = { email, password, first_name: firstName, last_name: lastName };
+      const userResponse = await api.post(`users/`, userPayload);
+      const userData = userResponse.data;
 
-      // Use the service layer!
-      const userData = await schoolAdminApi.createUser(userPayload);
-
-      // 2. Create the Student Profile
       if (userData.id) {
+        // CRITICAL FIX: Only add optional fields if they are actually populated!
+        // Sending "" (empty strings) breaks Django DateFields and ChoiceFields causing 500s.
         const profilePayload = {
           user: userData.id,
           enrollment_number: enrollmentNumber,
-          date_of_birth: dateOfBirth || null,
-          phone_number: phoneNumber,
-          blood_group: bloodGroup,
-          address: address,
           is_archived: false
         };
+        
+        if (dateOfBirth) profilePayload.date_of_birth = dateOfBirth;
+        if (phoneNumber) profilePayload.phone_number = phoneNumber;
+        if (bloodGroup) profilePayload.blood_group = bloodGroup;
+        if (address) profilePayload.address = address;
 
-        await schoolAdminApi.createStudentProfile(profilePayload);
+        await api.post(`profiles/students/`, profilePayload);
       }
 
       setSuccessMsg("Student registration complete!");
@@ -62,7 +54,16 @@ const handleSave = async (e) => {
 
     } catch (err) {
       console.error(err);
-      setError(err.response?.data?.detail || "Registration failed. Check console for details.");
+      if (err.response && err.response.data) {
+        const data = err.response.data;
+        if (typeof data === 'string' && data.includes('<!DOCTYPE')) {
+          setError("Server crashed (500 Internal Error). Check Django terminal.");
+        } else {
+          setError(Object.entries(data).map(([field, msgs]) => `${field}: ${Array.isArray(msgs) ? msgs.join(" ") : msgs}`).join(" | "));
+        }
+      } else {
+        setError(err.message);
+      }
       window.scrollTo(0, 0);
     } finally {
       setLoading(false);
@@ -71,239 +72,85 @@ const handleSave = async (e) => {
 
   return (
     <SchoolLayout title="Student Registration">
-      <div className="max-w-6xl mx-auto space-y-8 px-8 py-10">
+      <div className="max-w-4xl mx-auto space-y-6 px-6 py-6">
         
-        {/* breadcrumb */}
         <div className="flex justify-between items-start">
           <div>
-            <h1 className="text-3xl font-semibold text-slate-800">
-              Register New Student
-            </h1>
-            <p className="text-[#6b7280] mt-1 max-w-2xl text-sm">
-              This two-step process automatically creates the authentication identity and links the extended student profile in your database.
-            </p>
+            <h1 className="text-2xl font-bold text-slate-800">Register New Student</h1>
+            <p className="text-[#6b7280] mt-1 max-w-2xl text-sm">Create authentication identity and academic profile.</p>
           </div>
-
-          <button
-            type="button"
-            onClick={() => navigate("/school-admin/students")}
-            className="flex items-center gap-2 px-4 py-2 bg-[#e5eeff] hover:bg-[#dce9ff] text-[#0058be] font-semibold rounded-md transition border border-blue-100"
-          >
-            <span className="material-symbols-outlined text-[18px]">arrow_back</span>
-            Directory
+          <button type="button" onClick={() => navigate("/school-admin/students")} className="flex items-center gap-1 px-3 py-1.5 text-sm bg-white hover:bg-gray-50 border border-gray-200 text-[#0058be] font-semibold rounded shadow-sm">
+            <span className="material-symbols-outlined text-[16px]">arrow_back</span> Directory
           </button>
         </div>
 
-        {error && (
-          <div className="p-4 bg-red-50 text-red-700 rounded-md border border-red-200 flex gap-3 shadow-sm">
-             <span className="material-symbols-outlined">error</span>
-             <div>
-               <p className="font-bold text-sm">API Error Occurred</p>
-               <p className="text-sm mt-1">{error}</p>
-             </div>
-          </div>
-        )}
+        {error && <div className="p-3 bg-red-50 text-red-700 rounded border border-red-200 text-sm font-medium flex gap-2"><span className="material-symbols-outlined text-[20px]">error</span>{error}</div>}
+        {successMsg && <div className="p-3 bg-green-50 text-green-800 rounded border border-green-200 text-sm font-medium flex gap-2"><span className="material-symbols-outlined text-[20px]">check_circle</span>{successMsg}</div>}
 
-        {successMsg && (
-          <div className="p-4 bg-green-50 text-green-800 rounded-md border border-green-200 flex gap-3 shadow-sm">
-             <span className="material-symbols-outlined">check_circle</span>
-             <div>
-               <p className="font-bold text-sm">Success!</p>
-               <p className="text-sm mt-1">{successMsg}</p>
-             </div>
-          </div>
-        )}
-
-        <form onSubmit={handleSave}>
-          <div className="grid lg:grid-cols-3 gap-8">
-            
-            {/* LEFT COLUMN */}
-            <div className="lg:col-span-2 space-y-8">
-
-              {/* CORE IDENTITY (User Model) */}
-              <div className="bg-white p-8 rounded-xl shadow-sm border border-gray-100">
-                <div className="flex justify-between items-center mb-6">
-                  <h3 className="text-lg font-bold text-slate-800 flex items-center gap-2">
-                     <span className="material-symbols-outlined text-[#0058be]">badge</span>
-                     Step 1: Core Identity
-                  </h3>
-                  <span className="text-xs font-mono bg-blue-50 text-[#0058be] px-2 py-1 rounded border border-blue-100">User Model</span>
-                </div>
-                
-                <div className="grid md:grid-cols-2 gap-6 mb-6">
-                  <div className="flex flex-col gap-2">
-                    <label className="text-xs font-semibold text-[#6b7280] tracking-wider uppercase">First Name</label>
-                    <input
-                      required
-                      value={firstName}
-                      onChange={(e) => setFirstName(e.target.value)}
-                      placeholder="e.g. Julian"
-                      className="bg-[#eff4ff] px-4 py-3 rounded-md outline-none focus:bg-white focus:border-[#0058be]/40 focus:ring-2 focus:ring-[#0058be]/10 border border-transparent transition-all"
-                    />
-                  </div>
-
-                  <div className="flex flex-col gap-2">
-                    <label className="text-xs font-semibold text-[#6b7280] tracking-wider uppercase">Last Name (Optional)</label>
-                    <input
-                      value={lastName}
-                      onChange={(e) => setLastName(e.target.value)}
-                      placeholder="e.g. Alexander"
-                      className="bg-[#eff4ff] px-4 py-3 rounded-md outline-none focus:bg-white focus:border-[#0058be]/40 focus:ring-2 focus:ring-[#0058be]/10 border border-transparent transition-all"
-                    />
-                  </div>
-                </div>
-
-                <div className="grid md:grid-cols-2 gap-6">
-                  <div className="flex flex-col gap-2">
-                    <label className="text-xs font-semibold text-[#6b7280] tracking-wider uppercase">Email Address (Login ID)</label>
-                    <input
-                      type="email"
-                      required
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      placeholder="student@academy.edu"
-                      className="bg-[#eff4ff] px-4 py-3 rounded-md outline-none focus:bg-white focus:border-[#0058be]/40 focus:ring-2 focus:ring-[#0058be]/10 border border-transparent transition-all"
-                    />
-                  </div>
-
-                  <div className="flex flex-col gap-2">
-                    <label className="text-xs font-semibold text-[#6b7280] tracking-wider uppercase">Temporary Password</label>
-                    <input
-                      type="password"
-                      required
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                      placeholder="Minimum 8 characters"
-                      className="bg-[#eff4ff] px-4 py-3 rounded-md outline-none focus:bg-white focus:border-[#0058be]/40 focus:ring-2 focus:ring-[#0058be]/10 border border-transparent transition-all"
-                    />
-                  </div>
-                </div>
+        <form onSubmit={handleSave} className="space-y-6">
+          <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
+            <h3 className="text-base font-bold text-slate-800 flex items-center gap-2 mb-5">
+               <span className="material-symbols-outlined text-[#0058be] text-[20px]">badge</span> Core Identity
+            </h3>
+            <div className="grid md:grid-cols-2 gap-4 mb-4">
+              <div className="flex flex-col gap-1.5">
+                <label className="text-[10px] font-bold text-[#6b7280] uppercase">First Name</label>
+                <input required value={firstName} onChange={(e) => setFirstName(e.target.value)} className="bg-[#eff4ff] px-3 py-2 text-sm rounded outline-none focus:ring-2 focus:ring-[#0058be]/20" />
               </div>
-
-              {/* STUDENT PROFILE (StudentProfile Model) */}
-              <div className="bg-white p-8 rounded-xl shadow-sm border border-gray-100">
-                <div className="flex justify-between items-center mb-6">
-                  <h3 className="text-lg font-bold text-slate-800 flex items-center gap-2">
-                     <span className="material-symbols-outlined text-[#6b38d4]">assignment_ind</span>
-                     Step 2: Academic Profile
-                  </h3>
-                  <span className="text-xs font-mono bg-purple-50 text-[#6b38d4] px-2 py-1 rounded border border-purple-100">StudentProfile Model</span>
-                </div>
-
-                <div className="grid md:grid-cols-2 gap-6 mb-6">
-                  <div className="flex flex-col gap-2">
-                    <label className="text-xs font-semibold text-[#6b7280] tracking-wider uppercase">Enrollment Number</label>
-                    <input
-                      required
-                      value={enrollmentNumber}
-                      onChange={(e) => setEnrollmentNumber(e.target.value)}
-                      placeholder="e.g. STU-2024-001"
-                      className="bg-[#eff4ff] px-4 py-3 rounded-md outline-none focus:bg-white focus:border-[#0058be]/40 focus:ring-2 focus:ring-[#0058be]/10 border border-transparent transition-all"
-                    />
-                  </div>
-
-                  <div className="flex flex-col gap-2">
-                    <label className="text-xs font-semibold text-[#6b7280] tracking-wider uppercase">Date of Birth</label>
-                    <input
-                      type="date"
-                      required
-                      value={dateOfBirth}
-                      onChange={(e) => setDateOfBirth(e.target.value)}
-                      className="bg-[#eff4ff] px-4 py-3 rounded-md outline-none focus:bg-white focus:border-[#0058be]/40 focus:ring-2 focus:ring-[#0058be]/10 border border-transparent transition-all text-slate-700"
-                    />
-                  </div>
-                </div>
-
-                <div className="grid md:grid-cols-2 gap-6 mb-6">
-                  <div className="flex flex-col gap-2">
-                    <label className="text-xs font-semibold text-[#6b7280] tracking-wider uppercase">Phone Number</label>
-                    <input
-                      value={phoneNumber}
-                      onChange={(e) => setPhoneNumber(e.target.value)}
-                      placeholder="+1 (555) 000-0000"
-                      className="bg-[#eff4ff] px-4 py-3 rounded-md outline-none focus:bg-white focus:border-[#0058be]/40 focus:ring-2 focus:ring-[#0058be]/10 border border-transparent transition-all"
-                    />
-                  </div>
-
-                  <div className="flex flex-col gap-2">
-                    <label className="text-xs font-semibold text-[#6b7280] tracking-wider uppercase">Blood Group</label>
-                    <select
-                      value={bloodGroup}
-                      onChange={(e) => setBloodGroup(e.target.value)}
-                      className="bg-[#eff4ff] px-4 py-3 rounded-md outline-none focus:bg-white focus:border-[#0058be]/40 focus:ring-2 focus:ring-[#0058be]/10 border border-transparent transition-all"
-                    >
-                      <option value="">Select Group</option>
-                      <option value="A+">A+</option>
-                      <option value="A-">A-</option>
-                      <option value="B+">B+</option>
-                      <option value="B-">B-</option>
-                      <option value="AB+">AB+</option>
-                      <option value="AB-">AB-</option>
-                      <option value="O+">O+</option>
-                      <option value="O-">O-</option>
-                    </select>
-                  </div>
-                </div>
-
-                <div className="flex flex-col gap-2">
-                  <label className="text-xs font-semibold text-[#6b7280] tracking-wider uppercase">Residential Address</label>
-                  <textarea
-                    rows="2"
-                    value={address}
-                    onChange={(e) => setAddress(e.target.value)}
-                    placeholder="Enter full address..."
-                    className="bg-[#eff4ff] px-4 py-3 rounded-md outline-none focus:bg-white focus:border-[#0058be]/40 focus:ring-2 focus:ring-[#0058be]/10 border border-transparent transition-all resize-none"
-                  />
-                </div>
-              </div>
-
-              {/* FOOTER */}
-              <div className="flex justify-end gap-4 pt-4">
-                <button
-                  type="button"
-                  disabled={loading}
-                  onClick={() => navigate("/school-admin/students")}
-                  className="px-8 py-3 text-[#6b7280] font-semibold hover:bg-gray-100 rounded-md transition-colors disabled:opacity-50"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  disabled={loading}
-                  className="px-10 py-3 bg-gradient-to-r from-[#0058be] to-[#2170e4] text-white font-bold rounded-md shadow-lg shadow-[#0058be]/20 hover:scale-[1.02] active:scale-95 transition flex items-center justify-center gap-2 min-w-[200px] disabled:opacity-70 disabled:scale-100"
-                >
-                  {loading ? (
-                    <>
-                      <span className="material-symbols-outlined animate-spin text-sm">progress_activity</span>
-                      Syncing Database...
-                    </>
-                  ) : (
-                    <>
-                      <span className="material-symbols-outlined text-sm">save</span>
-                      Complete Registration
-                    </>
-                  )}
-                </button>
-              </div>
-
-            </div>
-
-            {/* RIGHT COLUMN */}
-            <div className="space-y-6">
-              <div className="bg-[#0b1c30] text-white p-6 rounded-xl shadow-lg relative overflow-hidden">
-                 <div className="absolute top-0 right-0 p-4 opacity-10">
-                    <span className="material-symbols-outlined text-8xl">data_object</span>
-                 </div>
-                 <h3 className="text-lg font-bold mb-3 relative z-10 text-blue-200">Relational Architecture</h3>
-                 <p className="text-sm text-slate-300 relative z-10 leading-relaxed mb-4">
-                    Your Django backend is executing two sequential REST transactions here.
-                 </p>
-                 <div className="bg-[#1e3450] p-3 rounded-md border border-[#2b4b72] relative z-10 space-y-1">
-                    <p className="text-xs font-mono text-green-300">1. POST /api/v1/users/</p>
-                    <p className="text-xs font-mono text-purple-300">2. POST /api/v1/profiles/students/</p>
-                 </div>/
+              <div className="flex flex-col gap-1.5">
+                <label className="text-[10px] font-bold text-[#6b7280] uppercase">Last Name</label>
+                <input value={lastName} onChange={(e) => setLastName(e.target.value)} className="bg-[#eff4ff] px-3 py-2 text-sm rounded outline-none focus:ring-2 focus:ring-[#0058be]/20" />
               </div>
             </div>
+            <div className="grid md:grid-cols-2 gap-4">
+              <div className="flex flex-col gap-1.5">
+                <label className="text-[10px] font-bold text-[#6b7280] uppercase">Email Address</label>
+                <input type="email" required value={email} onChange={(e) => setEmail(e.target.value)} className="bg-[#eff4ff] px-3 py-2 text-sm rounded outline-none focus:ring-2 focus:ring-[#0058be]/20" />
+              </div>
+              <div className="flex flex-col gap-1.5">
+                <label className="text-[10px] font-bold text-[#6b7280] uppercase">Temporary Password</label>
+                <input type="password" required value={password} onChange={(e) => setPassword(e.target.value)} className="bg-[#eff4ff] px-3 py-2 text-sm rounded outline-none focus:ring-2 focus:ring-[#0058be]/20" />
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
+            <h3 className="text-base font-bold text-slate-800 flex items-center gap-2 mb-5">
+               <span className="material-symbols-outlined text-[#6b38d4] text-[20px]">assignment_ind</span> Academic Profile
+            </h3>
+            <div className="grid md:grid-cols-2 gap-4 mb-4">
+              <div className="flex flex-col gap-1.5">
+                <label className="text-[10px] font-bold text-[#6b7280] uppercase">Enrollment Number</label>
+                <input required value={enrollmentNumber} onChange={(e) => setEnrollmentNumber(e.target.value)} className="bg-[#eff4ff] px-3 py-2 text-sm rounded outline-none focus:ring-2 focus:ring-[#0058be]/20" />
+              </div>
+              <div className="flex flex-col gap-1.5">
+                <label className="text-[10px] font-bold text-[#6b7280] uppercase">Date of Birth</label>
+                <input type="date" value={dateOfBirth} onChange={(e) => setDateOfBirth(e.target.value)} className="bg-[#eff4ff] px-3 py-2 text-sm rounded outline-none focus:ring-2 focus:ring-[#0058be]/20" />
+              </div>
+            </div>
+            <div className="grid md:grid-cols-2 gap-4 mb-4">
+              <div className="flex flex-col gap-1.5">
+                <label className="text-[10px] font-bold text-[#6b7280] uppercase">Phone Number</label>
+                <input value={phoneNumber} onChange={(e) => setPhoneNumber(e.target.value)} className="bg-[#eff4ff] px-3 py-2 text-sm rounded outline-none focus:ring-2 focus:ring-[#0058be]/20" />
+              </div>
+              <div className="flex flex-col gap-1.5">
+                <label className="text-[10px] font-bold text-[#6b7280] uppercase">Blood Group</label>
+                <select value={bloodGroup} onChange={(e) => setBloodGroup(e.target.value)} className="bg-[#eff4ff] px-3 py-2 text-sm rounded outline-none focus:ring-2 focus:ring-[#0058be]/20">
+                  <option value="">Select Group</option><option value="A+">A+</option><option value="A-">A-</option><option value="B+">B+</option><option value="B-">B-</option><option value="AB+">AB+</option><option value="AB-">AB-</option><option value="O+">O+</option><option value="O-">O-</option>
+                </select>
+              </div>
+            </div>
+            <div className="flex flex-col gap-1.5">
+              <label className="text-[10px] font-bold text-[#6b7280] uppercase">Residential Address</label>
+              <textarea rows="2" value={address} onChange={(e) => setAddress(e.target.value)} className="bg-[#eff4ff] px-3 py-2 text-sm rounded outline-none focus:ring-2 focus:ring-[#0058be]/20 resize-none" />
+            </div>
+          </div>
+
+          <div className="flex justify-end gap-3 pt-2">
+            <button type="button" disabled={loading} onClick={() => navigate("/school-admin/students")} className="px-6 py-2 text-sm text-[#6b7280] font-semibold hover:bg-gray-100 rounded disabled:opacity-50">Cancel</button>
+            <button type="submit" disabled={loading} className="px-8 py-2 bg-gradient-to-r from-[#0058be] to-[#2170e4] text-white text-sm font-bold rounded shadow-md hover:shadow-lg transition flex items-center gap-2 disabled:opacity-70">
+              {loading ? "Registering..." : "Register Student"}
+            </button>
           </div>
         </form>
       </div>
