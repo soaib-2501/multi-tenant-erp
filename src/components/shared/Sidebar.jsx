@@ -8,17 +8,14 @@ const navItems = [
   { icon: 'description',     label: 'Grades & Report Card', path: '/student/grades'     },
   { icon: 'event_available', label: 'Attendance',           path: '/student/attendance' },
   { icon: 'psychology',      label: 'AI Tutor',             path: '/student/ai-tutor'   },
+  { icon: 'account_balance_wallet', label: 'Fees',          path: '/student/fees'       },
+  { icon: 'support_agent',   label: 'Help Desk',            path: '/student/help'       },
 ];
 
 export default function Sidebar() {
   const { profile: student, enrollment: enroll } = useStudent();
   const navigate = useNavigate();
 
-  /*
-    ── SIDEBAR STATE ──
-    Desktop (≥ 768px): expanded by default (w-72)
-    Mobile  (< 768px): collapsed by default (hidden via -translate-x-full)
-  */
   const [isExpanded, setIsExpanded] = useState(true);
   const [isMobile, setIsMobile]     = useState(false);
 
@@ -30,10 +27,6 @@ export default function Sidebar() {
       const mobile = window.innerWidth < 768;
       setIsMobile(mobile);
       if (mobile) {
-        /*
-          On mobile: always collapse the sidebar and notify MainLayout
-          so the main content gets 0 margin (not 288px margin).
-        */
         setIsExpanded(false);
         window.dispatchEvent(
           new CustomEvent('sidebar-toggle', { detail: { expanded: false } })
@@ -43,7 +36,6 @@ export default function Sidebar() {
 
     check();
 
-    // On initial desktop load, fire event so MainLayout sets correct margin
     if (window.innerWidth >= 768) {
       window.dispatchEvent(
         new CustomEvent('sidebar-toggle', { detail: { expanded: true } })
@@ -64,7 +56,6 @@ export default function Sidebar() {
     });
   };
 
-  // Close sidebar when a nav link is tapped on mobile
   const close = () => {
     if (isMobile) {
       setIsExpanded(false);
@@ -83,12 +74,6 @@ export default function Sidebar() {
 
   return (
     <>
-      {/*
-        ── MOBILE OVERLAY ──
-        Semi-transparent dark overlay behind the sidebar on mobile.
-        Tapping it closes the sidebar.
-        Only rendered on mobile when sidebar is open.
-      */}
       {isMobile && isExpanded && (
         <div
           className="fixed inset-0 bg-black/50 z-40"
@@ -97,17 +82,6 @@ export default function Sidebar() {
         />
       )}
 
-      {/*
-        ── SIDEBAR SHELL ──
-        Desktop collapsed : w-16  (icon-only)
-        Desktop expanded  : w-72  (icon + label)
-        Mobile closed     : -translate-x-full (off-screen, 0 width impact)
-        Mobile open       : translate-x-0 w-72 (slides in over content)
-
-        Key fix: on mobile we always use w-72 when open (full drawer),
-        and -translate-x-full when closed so it takes no layout space.
-        This prevents the 64px icon column from eating into mobile content.
-      */}
       <aside
         className={`
           fixed top-0 left-0 h-full z-50 flex flex-col
@@ -131,7 +105,6 @@ export default function Sidebar() {
               {isExpanded ? 'menu_open' : 'menu'}
             </span>
           </button>
-          {/* Logo text — only visible when expanded */}
           <div className={`overflow-hidden transition-all duration-300 ${
             isExpanded ? 'w-auto opacity-100 ml-3' : 'w-0 opacity-0 ml-0'
           }`}>
@@ -145,7 +118,6 @@ export default function Sidebar() {
         <div className={`flex items-center border-b border-outline-variant/20 flex-shrink-0
                          transition-all duration-300
                          ${isExpanded ? 'gap-3 px-4 py-4' : 'justify-center px-3 py-4'}`}>
-          {/* Avatar — always visible */}
           <div className="w-10 h-10 rounded-full overflow-hidden bg-surface-container-highest border-2 border-primary-container flex-shrink-0">
             <img
               src="https://lh3.googleusercontent.com/aida-public/AB6AXuA4LdDXGxUTIj7HONBN-CW82BGC6EFYuHPaHMAz6iW8UEXuuCT3zciyD0shypraeKaWTvVsV441roXBXes6KJauvXAIOdDGtrEtm-cEwnnIAkoYgpP1Yw--PtNzgrsuo5VK1mtG2j9neJr3yMZN7wz4XZGUGptnG1_dzKJZtFlD5ACkwx6xGhU3i5P1pkg1JQ7sxojTwzbsLIVQ_1rdxqVCQmpbt9WBfGB5Gej7XxjuUbCWSutuKvzc-AX7Ovp3gp-NRpGpaMCAvg"
@@ -153,7 +125,6 @@ export default function Sidebar() {
               className="w-full h-full object-cover"
             />
           </div>
-          {/* Name + details — hidden when collapsed */}
           <div className={`overflow-hidden transition-all duration-300 min-w-0 ${
             isExpanded ? 'w-auto opacity-100' : 'w-0 opacity-0'
           }`}>
@@ -248,12 +219,6 @@ export default function Sidebar() {
         </nav>
       </aside>
 
-      {/*
-        ── MOBILE FLOATING HAMBURGER ──
-        Only shown on mobile when sidebar is closed.
-        Fixed position, always accessible in top-left corner.
-        On desktop this never renders.
-      */}
       {isMobile && !isExpanded && (
         <button
           onClick={toggle}
