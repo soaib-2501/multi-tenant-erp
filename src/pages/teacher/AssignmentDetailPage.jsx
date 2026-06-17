@@ -90,7 +90,7 @@ export default function ExamDetailPage() {
       <div className="mb-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <Link className="inline-flex items-center text-[#0058be] font-medium text-sm hover:-translate-x-1 transition-transform mb-2" to="/teacher/exams">
-            <span className="material-symbols-outlined text-[18px] mr-1">arrow_back</span>
+            <span className="material-symbols-outlined text-lg mr-1">arrow_back</span>
             Back to Exams
           </Link>
           <h2 className="font-display text-3xl font-extrabold tracking-tight text-slate-800">Exam Details</h2>
@@ -98,7 +98,7 @@ export default function ExamDetailPage() {
         <div className="flex gap-3">
           <button className="px-5 py-2.5 bg-white border border-gray-200 text-slate-700 font-semibold rounded-md text-sm hover:bg-gray-50 transition-colors shadow-sm">Edit Configuration</button>
           <button className="px-5 py-2.5 bg-[#0058be] text-white font-semibold rounded-md text-sm hover:bg-blue-700 transition-colors shadow-md flex items-center gap-2">
-            <span className="material-symbols-outlined text-[18px]">download</span>
+            <span className="material-symbols-outlined text-lg">download</span>
             Export Results
           </button>
         </div>
@@ -124,14 +124,14 @@ export default function ExamDetailPage() {
               </div>
             </div>
             <div className="text-right bg-blue-50 px-4 py-2 rounded-lg border border-blue-100">
-              <p className="text-[10px] text-[#0058be] font-bold uppercase tracking-wider mb-1">Timeframe</p>
+              <p className="text-2xs text-[#0058be] font-bold uppercase tracking-wider mb-1">Timeframe</p>
               <p className="font-display font-bold text-slate-800 text-sm">
                 {formatDate(exam.start_date)} <br />to {formatDate(exam.end_date)}
               </p>
             </div>
           </div>
           <div className="mb-6 bg-[#f8f9ff] p-5 rounded-lg border border-blue-50">
-            <h4 className="text-[10px] font-bold text-[#0058be] uppercase tracking-widest mb-2">System Mapping</h4>
+            <h4 className="text-2xs font-bold text-[#0058be] uppercase tracking-widest mb-2">System Mapping</h4>
             <p className="text-slate-700 text-sm leading-relaxed mb-3 font-medium">
               This exam serves as a top-level container. When teachers enter grades via the "Enter New Grades" module, they will associate their subject and student records directly to this Exam ID.
             </p>
@@ -198,10 +198,10 @@ export default function ExamDetailPage() {
           <table className="w-full text-left border-collapse">
             <thead>
               <tr className="bg-white border-b border-gray-100">
-                <th className="px-6 py-4 text-[10px] font-black text-gray-500 uppercase tracking-widest">Student Name</th>
-                <th className="px-6 py-4 text-[10px] font-black text-gray-500 uppercase tracking-widest">Roll No.</th>
-                <th className="px-6 py-4 text-[10px] font-black text-gray-500 uppercase tracking-widest">Status</th>
-                <th className="px-6 py-4 text-[10px] font-black text-gray-500 uppercase tracking-widest text-center">Score</th>
+                <th className="px-6 py-4 text-2xs font-black text-gray-500 uppercase tracking-widest">Student Name</th>
+                <th className="px-6 py-4 text-2xs font-black text-gray-500 uppercase tracking-widest">Roll No.</th>
+                <th className="px-6 py-4 text-2xs font-black text-gray-500 uppercase tracking-widest">Status</th>
+                <th className="px-6 py-4 text-2xs font-black text-gray-500 uppercase tracking-widest text-center">Score</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-50">
@@ -215,7 +215,7 @@ export default function ExamDetailPage() {
                   </td>
                   <td className="px-6 py-4 text-sm font-medium text-gray-500 font-mono">{sub.roll}</td>
                   <td className="px-6 py-4">
-                    <span className={`px-2.5 py-1 ${sub.statusClass} border border-current/20 text-[10px] uppercase tracking-wider font-black rounded-full`}>{sub.status}</span>
+                    <span className={`px-2.5 py-1 ${sub.statusClass} border border-current/20 text-2xs uppercase tracking-wider font-black rounded-full`}>{sub.status}</span>
                   </td>
                   <td className="px-6 py-4 text-center">
                     {sub.marks === '—' ? (

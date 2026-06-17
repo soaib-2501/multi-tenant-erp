@@ -10,7 +10,7 @@ export default function PracticeQuizHub() {
 <section className="grid grid-cols-1 lg:grid-cols-3 gap-6">
 <div className="lg:col-span-2 bg-gradient-to-br from-primary to-primary-container p-8 rounded-lg shadow-lg relative overflow-hidden group">
 <div className="relative z-10 max-w-md">
-<span className="inline-block px-3 py-1 rounded-full bg-white/20 text-white text-[10px] font-bold uppercase tracking-widest mb-4">Preparation Mode</span>
+<span className="inline-block px-3 py-1 rounded-full bg-white/20 text-white text-2xs font-bold uppercase tracking-widest mb-4">Preparation Mode</span>
 <h2 className="text-3xl font-bold font-manrope text-white mb-3">Master Your Subjects with AI-Powered Practice</h2>
 <p className="text-blue-50 text-sm mb-6 leading-relaxed">Personalized question sets adapted to your learning speed. Track your progress and bridge knowledge gaps before exams.</p>
 <div className="flex flex-wrap gap-4">
@@ -33,7 +33,7 @@ export default function PracticeQuizHub() {
 
 <section className="bg-surface-container-lowest p-6 rounded-lg shadow-sm border-none flex flex-wrap items-center gap-6">
 <div className="flex-1 min-w-[200px]">
-<label className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">Subject</label>
+<label className="block text-2xs font-bold text-slate-400 uppercase tracking-widest mb-2">Subject</label>
 <select className="w-full bg-surface-container-low border-none rounded-md py-2.5 px-4 text-sm focus:ring-2 focus:ring-primary/20">
 <option>Mathematics</option>
 <option>Physics</option>
@@ -42,7 +42,7 @@ export default function PracticeQuizHub() {
 </select>
 </div>
 <div className="flex-1 min-w-[200px]">
-<label className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">Difficulty</label>
+<label className="block text-2xs font-bold text-slate-400 uppercase tracking-widest mb-2">Difficulty</label>
 <div className="flex bg-surface-container-low p-1 rounded-md">
 <button className="flex-1 py-1.5 text-xs font-semibold rounded-sm bg-white shadow-sm text-primary">Easy</button>
 <button className="flex-1 py-1.5 text-xs font-semibold text-slate-500 hover:text-slate-700">Medium</button>
@@ -50,7 +50,7 @@ export default function PracticeQuizHub() {
 </div>
 </div>
 <div className="flex-1 min-w-[200px]">
-<label className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">Topic</label>
+<label className="block text-2xs font-bold text-slate-400 uppercase tracking-widest mb-2">Topic</label>
 <select className="w-full bg-surface-container-low border-none rounded-md py-2.5 px-4 text-sm focus:ring-2 focus:ring-primary/20">
 <option>All Topics</option>
 <option>Polynomial Factorization</option>
@@ -82,7 +82,7 @@ export default function PracticeQuizHub() {
 <div className="p-3 bg-blue-50 rounded-xl text-primary">
 <span className="material-symbols-outlined">functions</span>
 </div>
-<span className="px-3 py-1 bg-surface-container-highest text-primary text-[10px] font-bold rounded-full uppercase">Mathematics</span>
+<span className="px-3 py-1 bg-surface-container-highest text-primary text-2xs font-bold rounded-full uppercase">Mathematics</span>
 </div>
 <h3 className="text-lg font-bold font-manrope text-slate-900 mb-2">Polynomial Factorization</h3>
 <p className="text-slate-500 text-sm mb-6 line-clamp-2">Master the techniques of grouping, difference of squares, and synthetic division for complex polynomials.</p>
@@ -108,7 +108,7 @@ export default function PracticeQuizHub() {
 <div className="p-3 bg-purple-50 rounded-xl text-secondary">
 <span className="material-symbols-outlined">architecture</span>
 </div>
-<span className="px-3 py-1 bg-surface-container-highest text-secondary text-[10px] font-bold rounded-full uppercase">Physics</span>
+<span className="px-3 py-1 bg-surface-container-highest text-secondary text-2xs font-bold rounded-full uppercase">Physics</span>
 </div>
 <h3 className="text-lg font-bold font-manrope text-slate-900 mb-2">Projectile Motion</h3>
 <p className="text-slate-500 text-sm mb-6 line-clamp-2">In-depth analysis of kinematic equations in two dimensions including air resistance considerations.</p>
@@ -134,7 +134,7 @@ export default function PracticeQuizHub() {
 <section className="grid grid-cols-1 md:grid-cols-4 gap-6 pb-12">
 <div className="md:col-span-2 bg-white p-6 rounded-lg shadow-sm flex flex-col justify-between">
 <div>
-<h4 className="text-slate-400 text-[10px] font-bold uppercase tracking-widest mb-1">Weekly Progress</h4>
+<h4 className="text-slate-400 text-2xs font-bold uppercase tracking-widest mb-1">Weekly Progress</h4>
 <div className="flex items-end gap-2">
 <span className="text-3xl font-bold font-manrope">84%</span>
 <span className="text-success text-xs font-bold text-green-600 mb-1.5 flex items-center">

@@ -87,7 +87,7 @@ function SchoolLayoutInner({ children, title = "Dashboard" }) {
             </button>
             <div className="flex flex-col">
               <h1 className={`font-black text-lg tracking-tight transition-all ${dk ? "text-on-surface" : "text-on-surface"}`}>{title}</h1>
-              <span className={`text-[10px] font-bold uppercase tracking-wider hidden sm:inline text-outline`}>
+              <span className={`text-2xs font-bold uppercase tracking-wider hidden sm:inline text-outline`}>
                 Institutional Administration Panel
               </span>
             </div>
@@ -113,7 +113,7 @@ function SchoolLayoutInner({ children, title = "Dashboard" }) {
                     : dk ? "hover:bg-surface-container-high text-on-surface-variant" : "hover:bg-surface-container-high text-on-surface-variant"}`}>
                 <span className="material-symbols-outlined text-xl">notifications</span>
                 {unreadCount > 0 && (
-                  <span className="absolute top-0 right-0 min-w-[18px] h-[18px] bg-error text-white text-[10px] font-black rounded-full flex items-center justify-center px-1 shadow-sm border-2 border-surface-container-lowest">
+                  <span className="absolute top-0 right-0 min-w-[18px] h-[18px] bg-error text-white text-2xs font-black rounded-full flex items-center justify-center px-1 shadow-sm border-2 border-surface-container-lowest">
                     {unreadCount}
                   </span>
                 )}
@@ -126,7 +126,7 @@ function SchoolLayoutInner({ children, title = "Dashboard" }) {
                     ${dk ? "bg-surface-container-lowest border-outline-variant/20" : "bg-surface-container-lowest border-outline-variant/10"}`}>
                     <div className={`p-4 border-b flex justify-between items-center ${dk ? "bg-surface-container-high border-outline-variant/20" : "bg-surface-container-high border-outline-variant/10"}`}>
                       <span className={`text-xs font-black uppercase tracking-tight text-on-surface`}>Active Operation Logs</span>
-                      <span className="text-[10px] font-bold text-primary bg-primary/10 px-2 py-0.5 rounded-full">{unreadCount} Pending</span>
+                      <span className="text-2xs font-bold text-primary bg-primary/10 px-2 py-0.5 rounded-full">{unreadCount} Pending</span>
                     </div>
                     <div className="divide-y divide-outline-variant/10 max-h-64 overflow-y-auto">
                       {notificationPreviewList.map((n) => (
@@ -136,7 +136,7 @@ function SchoolLayoutInner({ children, title = "Dashboard" }) {
                           <div className={`w-2 h-2 rounded-full mt-1.5 shrink-0 ${n.category === 'security' ? 'bg-error' : n.category === 'academic' ? 'bg-tertiary' : 'bg-primary'}`} />
                           <div className="flex-1 min-w-0">
                             <p className={`text-xs font-bold truncate text-on-surface`}>{n.title}</p>
-                            <p className={`text-[11px] truncate mt-0.5 text-on-surface-variant`}>{n.message}</p>
+                            <p className={`text-xs truncate mt-0.5 text-on-surface-variant`}>{n.message}</p>
                           </div>
                           {!n.is_read && (
                             <button onClick={(e) => handleQuickResolve(n.id, e)}

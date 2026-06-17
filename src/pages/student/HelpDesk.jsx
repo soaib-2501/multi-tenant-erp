@@ -172,7 +172,7 @@ export default function HelpDesk() {
 <img alt="Digital Knowledge" className="absolute inset-0 w-full h-full object-cover" data-alt="conceptual 3D render of floating digital library books and glowing interface elements representing digital knowledge" src="https://lh3.googleusercontent.com/aida-public/AB6AXuADyt9ZtlGnlpWSnrzWJZVW4hgzjKt71P0B0cwsy4EaIULnOdH6hY73h4t16xaq56w9At814REEylFdmQcHMHl1qSd1yl6Osw-TQjQzQsY4ShfEYFPC0bdp9Y7TsOHbMN8HaOu2UqzclAPpf6XYRrLGwzUER4a5KZg879MuuFpz9vhv4cf_7GLmzIzxsX2OKliTahO2w3EuT4tKhVkkma5YdVmzdhvRNd9Yc7auNLAr6K5pTtJwxnq-upevyJB2PIWqLrn23ZAUfQ"/>
 <div className="absolute inset-0 bg-gradient-to-r from-on-surface/40 to-transparent"/>
 <div className="absolute bottom-6 left-6 text-white">
-<span className="bg-tertiary-container px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest">New Guide</span>
+<span className="bg-tertiary-container px-3 py-1 rounded-full text-2xs font-bold uppercase tracking-widest">New Guide</span>
 </div>
 </div>
 <div className="md:w-2/3 p-10 flex flex-col justify-center">

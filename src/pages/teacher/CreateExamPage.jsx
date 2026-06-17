@@ -170,7 +170,7 @@ const CreateExamPage = () => {
             <div className="flex items-center gap-3 mb-2">
               <span className="material-symbols-outlined text-[#924700]">psychology</span>
               <h2 className="text-xl font-bold font-display text-on-surface">AI Question Paper Generator</h2>
-              <span className="px-2 py-0.5 bg-[#b75b00]/10 text-[#924700] text-[10px] font-bold rounded uppercase tracking-wider">Beta</span>
+              <span className="px-2 py-0.5 bg-[#b75b00]/10 text-[#924700] text-2xs font-bold rounded uppercase tracking-wider">Beta</span>
             </div>
             <p className="text-sm text-on-surface-variant max-w-2xl">Use our intelligent engine to generate high-quality questions based on your curriculum and past paper trends.</p>
           </div>

@@ -553,7 +553,7 @@ const ClassPerformanceManagement = () => {
                           </div>
                         )}
                         {item.tag && (
-                          <span className="mt-2 inline-flex items-center gap-1 text-[10px] font-bold text-green-600 uppercase">
+                          <span className="mt-2 inline-flex items-center gap-1 text-2xs font-bold text-green-600 uppercase">
                             {item.tag}
                           </span>
                         )}

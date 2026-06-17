@@ -196,7 +196,7 @@ Settings
     onClick={handleLogout}
     className="flex items-center gap-2 w-full px-3 py-2 rounded-lg text-red-500 hover:text-red-600 hover:bg-red-50 transition-all text-sm font-semibold"
   >
-    <span className="material-symbols-outlined text-[18px]">logout</span>
+    <span className="material-symbols-outlined text-lg">logout</span>
     Log Out
   </button>
 </div>

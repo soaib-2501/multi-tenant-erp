@@ -259,7 +259,7 @@ export default function Dashboard() {
                 </p>
               </div>
             </div>
-            <span className={`text-[10px] font-bold px-2 py-1 rounded-full ${attendanceStatus.className}`}>
+            <span className={`text-2xs font-bold px-2 py-1 rounded-full ${attendanceStatus.className}`}>
               {attendanceStatus.label}
             </span>
           </div>
@@ -277,7 +277,7 @@ export default function Dashboard() {
                 </p>
               </div>
             </div>
-            <span className={`text-[10px] font-bold px-2 py-1 rounded-full ${percentageStatus.className}`}>
+            <span className={`text-2xs font-bold px-2 py-1 rounded-full ${percentageStatus.className}`}>
               {percentageStatus.label}
             </span>
           </div>
@@ -291,7 +291,7 @@ export default function Dashboard() {
               <div>
                 <p className="text-xs font-medium text-on-surface-variant">Fees Status</p>
                 <p className="text-xl font-bold font-headline text-on-surface leading-tight">Paid</p>
-                <p className="text-[10px] text-on-surface-variant">Next due: Oct 15, 2024</p>
+                <p className="text-2xs text-on-surface-variant">Next due: Oct 15, 2024</p>
               </div>
             </div>
             <div className="h-2 w-2 bg-green-500 rounded-full animate-pulse" />
@@ -309,9 +309,9 @@ export default function Dashboard() {
                 <div className="flex items-center justify-between mb-3">
                   <div>
                     <p className="text-xs font-bold text-on-surface">{monthWord} {year}</p>
-                    <p className="text-[10px] text-on-surface-variant">Visual Presence Log</p>
+                    <p className="text-2xs text-on-surface-variant">Visual Presence Log</p>
                   </div>
-                  <span className="flex items-center gap-0.5 text-[10px] font-bold text-primary group-hover:underline">
+                  <span className="flex items-center gap-0.5 text-2xs font-bold text-primary group-hover:underline">
                     View all
                     <span className="material-symbols-outlined text-xs">arrow_forward</span>
                   </span>
@@ -327,7 +327,7 @@ export default function Dashboard() {
                       const record  = attendanceMap[dateKey];
                       return (
                         <div key={day}
-                          className={`aspect-square flex items-center justify-center rounded text-[9px] font-semibold border transition-all ${
+                          className={`aspect-square flex items-center justify-center rounded text-3xs font-semibold border transition-all ${
                             record
                               ? (dayStatusCls[record.status] ?? "bg-surface-container border-surface-container")
                               : "bg-surface-container-lowest border-surface-container text-on-surface-variant"
@@ -346,7 +346,7 @@ export default function Dashboard() {
                   ].map(({ color, label, count }) => (
                     <div key={label} className="flex items-center gap-1">
                       <div className={`w-2 h-2 rounded-full flex-shrink-0 ${color}`} />
-                      <span className="text-[9px] font-semibold text-on-surface-variant">
+                      <span className="text-3xs font-semibold text-on-surface-variant">
                         {label}<span className="ml-0.5 font-bold text-on-surface">{count}</span>
                       </span>
                     </div>
@@ -360,9 +360,9 @@ export default function Dashboard() {
               <div className="flex items-center justify-between px-4 pt-4 pb-2 border-b border-surface-container-low flex-shrink-0">
                 <div>
                   <p className="text-xs font-bold text-on-surface">My Subjects</p>
-                  <p className="text-[10px] text-on-surface-variant">Graded first</p>
+                  <p className="text-2xs text-on-surface-variant">Graded first</p>
                 </div>
-                <Link to="/student/grades" className="flex items-center gap-0.5 text-[10px] font-bold text-primary hover:underline">
+                <Link to="/student/grades" className="flex items-center gap-0.5 text-2xs font-bold text-primary hover:underline">
                   View More
                   <span className="material-symbols-outlined text-xs">arrow_forward</span>
                 </Link>
@@ -388,7 +388,7 @@ export default function Dashboard() {
                             {subPct ? (
                               <span className="text-xs text-on-surface-variant flex-shrink-0 font-semibold">{subPct}%</span>
                             ) : (
-                              <span className="text-[10px] text-outline flex-shrink-0">N/A</span>
+                              <span className="text-2xs text-outline flex-shrink-0">N/A</span>
                             )}
                           </div>
                           <div className="w-full bg-surface-container-high rounded-full h-1 overflow-hidden">
@@ -396,9 +396,9 @@ export default function Dashboard() {
                           </div>
                         </div>
                         {grade ? (
-                          <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded flex-shrink-0 ${grade.cls}`}>{grade.letter}</span>
+                          <span className={`text-2xs font-bold px-1.5 py-0.5 rounded flex-shrink-0 ${grade.cls}`}>{grade.letter}</span>
                         ) : (
-                          <span className="text-[10px] text-outline flex-shrink-0 w-6 text-center">—</span>
+                          <span className="text-2xs text-outline flex-shrink-0 w-6 text-center">—</span>
                         )}
                       </div>
                     );
@@ -406,7 +406,7 @@ export default function Dashboard() {
                 )}
               </div>
               <div className="px-4 py-2 border-t border-surface-container-low flex-shrink-0">
-                <Link to="/student/grades" className="w-full flex items-center justify-center gap-1 text-[10px] font-bold text-primary hover:text-primary-container transition-colors py-0.5">
+                <Link to="/student/grades" className="w-full flex items-center justify-center gap-1 text-2xs font-bold text-primary hover:text-primary-container transition-colors py-0.5">
                   <span className="material-symbols-outlined text-xs">open_in_new</span>
                   View Full Report Card
                 </Link>
@@ -439,7 +439,7 @@ export default function Dashboard() {
                   </div>
                   <p className="text-sm font-bold text-on-surface">Grade Updated: Physics Lab</p>
                   <p className="text-xs text-on-surface-variant">You received an <span className="font-bold text-green-700">A</span> for the Optics experiment.</p>
-                  <span className="text-[10px] text-outline-variant mt-1 block">15 mins ago</span>
+                  <span className="text-2xs text-outline-variant mt-1 block">15 mins ago</span>
                 </div>
                 <div className="relative pl-8">
                   <div className="absolute left-0 top-1 w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center ring-4 ring-white">
@@ -447,7 +447,7 @@ export default function Dashboard() {
                   </div>
                   <p className="text-sm font-bold text-on-surface">Submission Received</p>
                   <p className="text-xs text-on-surface-variant">English Literature Essay: &quot;Modernism in 1920s&quot;</p>
-                  <span className="text-[10px] text-outline-variant mt-1 block">2 hours ago</span>
+                  <span className="text-2xs text-outline-variant mt-1 block">2 hours ago</span>
                 </div>
                 <div className="relative pl-8">
                   <div className="absolute left-0 top-1 w-6 h-6 rounded-full bg-amber-100 flex items-center justify-center ring-4 ring-white">
@@ -455,7 +455,7 @@ export default function Dashboard() {
                   </div>
                   <p className="text-sm font-bold text-on-surface">Attendance Marked</p>
                   <p className="text-xs text-on-surface-variant">Present for Period 4: Computer Science.</p>
-                  <span className="text-[10px] text-outline-variant mt-1 block">4 hours ago</span>
+                  <span className="text-2xs text-outline-variant mt-1 block">4 hours ago</span>
                 </div>
               </div>
               <button className="w-full mt-5 py-3 border-t border-surface-container text-xs font-bold text-primary hover:text-primary-container transition-colors uppercase tracking-tight">
@@ -464,13 +464,13 @@ export default function Dashboard() {
             </section>
 
             <div className="relative p-5 rounded-lg bg-surface-container-highest overflow-hidden">
-              <div className="absolute top-4 right-4 bg-white/40 backdrop-blur-md px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest text-on-surface">Active</div>
+              <div className="absolute top-4 right-4 bg-white/40 backdrop-blur-md px-3 py-1 rounded-full text-2xs font-black uppercase tracking-widest text-on-surface">Active</div>
               <h4 className="text-sm font-medium text-on-surface-variant mb-4">Course Credits</h4>
               <div className="text-2xl font-bold font-headline text-on-surface">24.0 / 30.0</div>
               <div className="w-full bg-white/30 h-1.5 rounded-full mt-4">
                 <div className="bg-primary h-full rounded-full" style={{ width: "80%" }} />
               </div>
-              <p className="text-[10px] text-on-surface-variant mt-3">You are on track to graduate early in June 2025.</p>
+              <p className="text-2xs text-on-surface-variant mt-3">You are on track to graduate early in June 2025.</p>
             </div>
           </div>
         </div>

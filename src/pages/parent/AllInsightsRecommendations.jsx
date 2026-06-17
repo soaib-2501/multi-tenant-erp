@@ -21,7 +21,7 @@ const AIInsightsRecommendations = () => {
             </div>
             <div>
               <p className="text-xs font-bold text-on-surface">Alex Rivera</p>
-              <p className="text-[10px] text-on-surface-variant font-medium uppercase tracking-tighter">Grade 8 • Section B</p>
+              <p className="text-2xs text-on-surface-variant font-medium uppercase tracking-tighter">Grade 8 • Section B</p>
             </div>
           </div>
           <button className="bg-gradient-to-r from-primary to-primary-container text-white px-5 py-3 rounded-md flex items-center gap-2 font-semibold text-sm shadow-lg shadow-primary/20 hover:opacity-90 transition-opacity">
@@ -39,7 +39,7 @@ const AIInsightsRecommendations = () => {
           <div>
             <div className="flex items-center justify-between mb-4">
               <span className="material-symbols-outlined text-primary" data-icon="speed">speed</span>
-              <span className="bg-green-100 text-green-700 text-[10px] px-2 py-1 rounded font-bold">+12% vs last month</span>
+              <span className="bg-green-100 text-green-700 text-2xs px-2 py-1 rounded font-bold">+12% vs last month</span>
             </div>
             <h3 className="text-xl font-bold font-headline mb-1">Learning Efficiency</h3>
             <p className="text-sm text-on-surface-variant leading-relaxed">Alex is absorbing concepts faster during morning sessions. Information retention in STEM subjects has peaked at 88%.</p>
@@ -99,7 +99,7 @@ const AIInsightsRecommendations = () => {
         {/* Behavioral Insights */}
         <div className="md:col-span-5 bg-primary-container text-white p-8 rounded-lg relative overflow-hidden shadow-sm">
           <div className="relative z-10">
-            <div className="inline-block px-3 py-1 bg-white/20 backdrop-blur rounded-full text-[10px] font-bold uppercase mb-4">Sentiment Analysis</div>
+            <div className="inline-block px-3 py-1 bg-white/20 backdrop-blur rounded-full text-2xs font-bold uppercase mb-4">Sentiment Analysis</div>
             <h3 className="text-2xl font-bold font-headline mb-4">Behavioral Insights</h3>
             <p className="opacity-90 leading-relaxed mb-6">AI notes a high level of collaborative initiative. Alex frequently assists peers in group projects, showing strong leadership potential and emotional intelligence.</p>
             <div className="flex items-center gap-4">
@@ -126,7 +126,7 @@ const AIInsightsRecommendations = () => {
                 <p className="text-sm font-bold">Focus: Science (Advanced Chemistry)</p>
                 <p className="text-xs text-on-surface-variant">Bridge the gap between current mastery and semester goal.</p>
               </div>
-              <span className="ml-auto text-[10px] font-bold text-tertiary">NEXT WEEK</span>
+              <span className="ml-auto text-2xs font-bold text-tertiary">NEXT WEEK</span>
             </div>
             <div className="flex items-start gap-4 p-4 bg-surface-container-low rounded-md">
               <div className="text-primary bg-white p-2 rounded-md shadow-sm">
@@ -136,7 +136,7 @@ const AIInsightsRecommendations = () => {
                 <p className="text-sm font-bold">Creative Writing Workshop</p>
                 <p className="text-xs text-on-surface-variant">Optional AI-recommended module to boost literacy scores.</p>
               </div>
-              <span className="ml-auto text-[10px] font-bold text-primary">ENROLLING</span>
+              <span className="ml-auto text-2xs font-bold text-primary">ENROLLING</span>
             </div>
           </div>
         </div>

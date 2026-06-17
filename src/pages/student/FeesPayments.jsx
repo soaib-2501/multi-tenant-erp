@@ -44,8 +44,8 @@ function FullLedgerModal({ onClose }) {
                 </div>
                 <div>
                   <p className="text-sm font-bold text-on-surface">{t.name}</p>
-                  <p className="text-[11px] text-on-surface-variant">{t.method}</p>
-                  <p className="text-[10px] text-slate-400 mt-1">{t.date} &bull; #{t.txn}</p>
+                  <p className="text-xs text-on-surface-variant">{t.method}</p>
+                  <p className="text-2xs text-slate-400 mt-1">{t.date} &bull; #{t.txn}</p>
                 </div>
               </div>
               <p className={`text-sm font-bold whitespace-nowrap ${t.status === 'paid' ? 'text-green-700' : 'text-amber-600'}`}>
@@ -173,7 +173,7 @@ export default function FeesPayments() {
             {/* Balance hero — shrink-0 */}
             <section className="relative overflow-hidden bg-gradient-to-br from-primary to-primary-container rounded-xl px-6 py-5 text-on-primary shadow-xl flex justify-between items-center shrink-0">
               <div className="relative z-10">
-                <p className="text-primary-fixed text-[11px] font-semibold mb-0.5 uppercase tracking-widest opacity-80">Outstanding Balance</p>
+                <p className="text-primary-fixed text-xs font-semibold mb-0.5 uppercase tracking-widest opacity-80">Outstanding Balance</p>
                 <h2 className="text-3xl font-extrabold font-headline leading-none">${outstandingBalance.toFixed(2)}</h2>
                 <div className="mt-3 flex gap-2.5">
                   <button className="bg-surface-container-lowest text-primary px-5 py-2 rounded-md font-bold text-xs hover:bg-opacity-90 transition-all active:scale-95">
@@ -191,7 +191,7 @@ export default function FeesPayments() {
               </div>
 
               <div className="hidden md:block bg-white/10 backdrop-blur-md px-4 py-3 rounded-xl border border-white/20 rotate-3">
-                <p className="text-white text-[9px] font-bold uppercase mb-1 opacity-80">Status</p>
+                <p className="text-white text-3xs font-bold uppercase mb-1 opacity-80">Status</p>
                 <div className="flex items-center gap-1.5">
                   <span className="w-1.5 h-1.5 rounded-full bg-red-400 animate-pulse" />
                   <span className="text-white font-bold text-xs">Action Required</span>
@@ -205,12 +205,12 @@ export default function FeesPayments() {
             <section className="flex-1 bg-surface-container-lowest rounded-xl p-5 flex flex-col min-h-0">
               <div className="flex items-center justify-between mb-3 shrink-0">
                 <h3 className="text-base font-bold font-headline">Academic Year Breakdown</h3>
-                <span className="text-[10px] font-semibold text-on-surface-variant bg-surface-container px-2 py-1 rounded-md">
+                <span className="text-2xs font-semibold text-on-surface-variant bg-surface-container px-2 py-1 rounded-md">
                   Fall Semester 2024
                 </span>
               </div>
 
-              <div className="grid grid-cols-12 text-[9px] font-bold text-slate-400 uppercase tracking-widest px-3 mb-1.5 shrink-0">
+              <div className="grid grid-cols-12 text-3xs font-bold text-slate-400 uppercase tracking-widest px-3 mb-1.5 shrink-0">
                 <div className="col-span-6">Description</div>
                 <div className="col-span-3 text-right">Amount</div>
                 <div className="col-span-3 text-right">Due Date</div>
@@ -225,7 +225,7 @@ export default function FeesPayments() {
                       </div>
                       <div>
                         <p className="text-sm font-bold text-on-surface">{f.name}</p>
-                        <p className="text-[11px] text-on-surface-variant">{f.desc}</p>
+                        <p className="text-xs text-on-surface-variant">{f.desc}</p>
                       </div>
                     </div>
                     <div className="col-span-3 text-right font-headline font-bold text-sm">${f.amount.toFixed(2)}</div>
@@ -263,8 +263,8 @@ export default function FeesPayments() {
                       </div>
                       <div>
                         <p className="text-xs font-bold text-on-surface">{t.name}</p>
-                        <p className="text-[10px] text-on-surface-variant">{t.method}</p>
-                        <p className="text-[9px] text-slate-400 mt-0.5">{t.date} &bull; #{t.txn}</p>
+                        <p className="text-2xs text-on-surface-variant">{t.method}</p>
+                        <p className="text-3xs text-slate-400 mt-0.5">{t.date} &bull; #{t.txn}</p>
                       </div>
                     </div>
                     <p className={`text-xs font-bold whitespace-nowrap ${t.status === 'paid' ? 'text-green-700' : 'text-amber-600'}`}>
@@ -276,7 +276,7 @@ export default function FeesPayments() {
 
               <button
                 onClick={() => setShowLedger(true)}
-                className="w-full mt-3 py-2.5 border border-outline-variant/30 text-on-surface-variant rounded-md text-[10px] font-bold uppercase tracking-widest hover:bg-surface-container-low transition-colors shrink-0"
+                className="w-full mt-3 py-2.5 border border-outline-variant/30 text-on-surface-variant rounded-md text-2xs font-bold uppercase tracking-widest hover:bg-surface-container-low transition-colors shrink-0"
               >
                 View Full Ledger
               </button>

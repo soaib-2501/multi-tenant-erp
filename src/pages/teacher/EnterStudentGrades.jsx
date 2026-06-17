@@ -230,11 +230,11 @@ const EnterStudentGrades = () => {
             <div className="flex items-center justify-between bg-surface-container-low p-4 rounded-xl">
               <div className="flex gap-8 px-4">
                 <div>
-                  <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Total Students</p>
+                  <p className="text-2xs font-bold text-slate-500 uppercase tracking-widest">Total Students</p>
                   <p className="text-xl font-bold text-on-surface text-center">{students.length}</p>
                 </div>
                 <div>
-                  <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Graded</p>
+                  <p className="text-2xs font-bold text-slate-500 uppercase tracking-widest">Graded</p>
                   <p className="text-xl font-bold text-primary text-center">{gradedCount}/{students.length}</p>
                 </div>
               </div>
@@ -245,11 +245,11 @@ const EnterStudentGrades = () => {
                 <table className="w-full border-collapse min-w-[700px]">
                   <thead>
                     <tr className="bg-surface-container-low/50 text-left border-b border-surface-container">
-                      <th className="px-6 py-4 text-[10px] font-black text-slate-500 uppercase tracking-wider">Student</th>
-                      <th className="px-6 py-4 text-[10px] font-black text-slate-500 uppercase tracking-wider">Enrollment No.</th>
-                      <th className="px-6 py-4 text-[10px] font-black text-slate-500 uppercase tracking-wider text-center">Marks ({currentExam?.max_marks || 100})</th>
-                      <th className="px-6 py-4 text-[10px] font-black text-slate-500 uppercase tracking-wider">Grade</th>
-                      <th className="px-6 py-4 text-[10px] font-black text-slate-500 uppercase tracking-wider">Remarks</th>
+                      <th className="px-6 py-4 text-2xs font-black text-slate-500 uppercase tracking-wider">Student</th>
+                      <th className="px-6 py-4 text-2xs font-black text-slate-500 uppercase tracking-wider">Enrollment No.</th>
+                      <th className="px-6 py-4 text-2xs font-black text-slate-500 uppercase tracking-wider text-center">Marks ({currentExam?.max_marks || 100})</th>
+                      <th className="px-6 py-4 text-2xs font-black text-slate-500 uppercase tracking-wider">Grade</th>
+                      <th className="px-6 py-4 text-2xs font-black text-slate-500 uppercase tracking-wider">Remarks</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-surface-container/50">
@@ -325,31 +325,31 @@ const EnterStudentGrades = () => {
           <div className="col-span-12 lg:col-span-3 space-y-8">
             {/* Grading Rules Card */}
             <div className="bg-surface-container-low p-6 rounded-xl space-y-4 shadow-sm border border-outline-variant/10">
-              <h4 className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Grading Schema</h4>
+              <h4 className="text-2xs font-black text-slate-400 uppercase tracking-widest">Grading Schema</h4>
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
                   <span className="text-sm font-bold text-on-surface">90% - 100%</span>
-                  <span className="px-2 py-0.5 bg-green-100 text-green-700 text-[10px] font-black rounded">A+</span>
+                  <span className="px-2 py-0.5 bg-green-100 text-green-700 text-2xs font-black rounded">A+</span>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-sm font-bold text-on-surface">80% - 89%</span>
-                  <span className="px-2 py-0.5 bg-blue-100 text-blue-700 text-[10px] font-black rounded">A</span>
+                  <span className="px-2 py-0.5 bg-blue-100 text-blue-700 text-2xs font-black rounded">A</span>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-sm font-bold text-on-surface">70% - 79%</span>
-                  <span className="px-2 py-0.5 bg-purple-100 text-purple-700 text-[10px] font-black rounded">B</span>
+                  <span className="px-2 py-0.5 bg-purple-100 text-purple-700 text-2xs font-black rounded">B</span>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-sm font-bold text-on-surface">60% - 69%</span>
-                  <span className="px-2 py-0.5 bg-orange-100 text-orange-700 text-[10px] font-black rounded">C</span>
+                  <span className="px-2 py-0.5 bg-orange-100 text-orange-700 text-2xs font-black rounded">C</span>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-sm font-bold text-on-surface">50% - 59%</span>
-                  <span className="px-2 py-0.5 bg-yellow-100 text-yellow-700 text-[10px] font-black rounded">D</span>
+                  <span className="px-2 py-0.5 bg-yellow-100 text-yellow-700 text-2xs font-black rounded">D</span>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-sm font-bold text-on-surface">Below 50%</span>
-                  <span className="px-2 py-0.5 bg-red-100 text-red-700 text-[10px] font-black rounded">F</span>
+                  <span className="px-2 py-0.5 bg-red-100 text-red-700 text-2xs font-black rounded">F</span>
                 </div>
               </div>
             </div>

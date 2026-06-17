@@ -372,7 +372,7 @@ const AIToolWorkspaceRubric = () => {
                           <tr key={i} className="hover:bg-slate-50 transition-colors">
                             <td className="px-4 py-5 font-bold text-on-surface align-top space-y-2">
                               <p className="font-display text-sm">{c.criterion_name}</p>
-                              <span className="inline-block bg-primary/10 text-primary px-2 py-0.5 rounded text-[10px] font-bold font-display uppercase tracking-tight">
+                              <span className="inline-block bg-primary/10 text-primary px-2 py-0.5 rounded text-2xs font-bold font-display uppercase tracking-tight">
                                 Weight: {c.weight}%
                               </span>
                             </td>
@@ -415,7 +415,7 @@ const AIToolWorkspaceRubric = () => {
                               <tr key={i} className="hover:bg-slate-50 transition-colors">
                                 <td className="px-4 py-5 font-bold text-on-surface align-top space-y-2">
                                   <p className="font-display text-sm">{c.criterion_name}</p>
-                                  <span className="inline-block bg-primary/10 text-primary px-2 py-0.5 rounded text-[10px] font-bold font-display uppercase tracking-tight">
+                                  <span className="inline-block bg-primary/10 text-primary px-2 py-0.5 rounded text-2xs font-bold font-display uppercase tracking-tight">
                                     Weight: {c.weight}%
                                   </span>
                                 </td>

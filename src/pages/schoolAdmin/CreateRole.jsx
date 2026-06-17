@@ -171,7 +171,7 @@ export default function CreateRole() {
 
         {error && (
           <div className="mb-6 p-3 bg-error/10 text-error rounded-md border border-error/20 text-sm font-medium flex gap-2 font-body">
-            <span className="material-symbols-outlined text-[20px]">error</span>
+            <span className="material-symbols-outlined text-xl">error</span>
             {error}
           </div>
         )}
@@ -186,7 +186,7 @@ export default function CreateRole() {
                 </h2>
                 <div className="space-y-4">
                   <div>
-                    <label className="text-[10px] font-bold uppercase tracking-wider text-on-surface-variant block mb-1.5 font-body">
+                    <label className="text-2xs font-bold uppercase tracking-wider text-on-surface-variant block mb-1.5 font-body">
                       Role Name <span className="text-error">*</span>
                     </label>
                     <input
@@ -198,7 +198,7 @@ export default function CreateRole() {
                     />
                   </div>
                   <div>
-                    <label className="text-[10px] font-bold uppercase tracking-wider text-on-surface-variant block mb-1.5 font-body">
+                    <label className="text-2xs font-bold uppercase tracking-wider text-on-surface-variant block mb-1.5 font-body">
                       Description
                     </label>
                     <textarea
@@ -240,7 +240,7 @@ export default function CreateRole() {
                           <div className="bg-surface-container-high/50 px-4 py-2.5 flex flex-wrap justify-between items-center gap-2 border-b border-outline-variant/10">
                             <div className="flex items-center gap-2">
                               <span
-                                className="material-symbols-outlined text-[18px]"
+                                className="material-symbols-outlined text-lg"
                                 style={{ color: aes.color }}
                               >
                                 {aes.icon}
@@ -248,14 +248,14 @@ export default function CreateRole() {
                               <h3 className="font-bold text-sm text-on-surface font-headline">
                                 {moduleName}
                               </h3>
-                              <span className="text-[10px] px-1.5 py-0.5 bg-surface-container-lowest text-on-surface-variant rounded border border-outline-variant/10 font-bold font-body">
+                              <span className="text-2xs px-1.5 py-0.5 bg-surface-container-lowest text-on-surface-variant rounded border border-outline-variant/10 font-bold font-body">
                                 {selectedCount} / {modulePermIds.length}
                               </span>
                             </div>
                             <button
                               type="button"
                               onClick={() => handleModuleToggle(moduleName, !allSelected)}
-                              className="text-[11px] font-bold text-primary hover:underline font-body"
+                              className="text-xs font-bold text-primary hover:underline font-body"
                             >
                               {allSelected ? "Deselect All" : "Select All"}
                             </button>
@@ -283,7 +283,7 @@ export default function CreateRole() {
                                   <p className="text-xs font-bold text-on-surface leading-none mb-0.5 font-body">
                                     {p.name}
                                   </p>
-                                  <p className="text-[10px] text-on-surface-variant font-mono font-body">
+                                  <p className="text-2xs text-on-surface-variant font-mono font-body">
                                     coden: {p.codename}
                                   </p>
                                 </div>
@@ -308,7 +308,7 @@ export default function CreateRole() {
               <div className="space-y-3 text-sm text-on-surface-variant font-body">
                 <div className="flex justify-between items-center border-b border-outline-variant/10 pb-2">
                   <span>Scope</span>
-                  <span className="font-bold text-[11px] bg-surface-container-lowest px-1.5 py-0.5 rounded border border-outline-variant/10 uppercase font-body">
+                  <span className="font-bold text-xs bg-surface-container-lowest px-1.5 py-0.5 rounded border border-outline-variant/10 uppercase font-body">
                     Tenant Isolated
                   </span>
                 </div>

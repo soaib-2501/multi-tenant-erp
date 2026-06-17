@@ -25,7 +25,7 @@ export default function ActionMenu({ studentId }) {
         }}
         className="text-[#0058be] hover:bg-[#e5eeff] p-2 rounded-full transition-colors"
       >
-        <span className="material-symbols-outlined text-[20px]">more_vert</span>
+        <span className="material-symbols-outlined text-xl">more_vert</span>
       </button>
 
       {isOpen && (

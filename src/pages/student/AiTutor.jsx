@@ -258,7 +258,7 @@ function TrashView({ onBack }) {
             <div key={item.id} className="bg-white border rounded-xl p-3 flex flex-col md:flex-row md:items-center gap-2 md:gap-3 shadow-sm">
               <div className="flex-1 min-w-0">
                 <p className="text-sm font-semibold truncate">{item.title}</p>
-                {item.subject && <span className="text-[10px] font-bold bg-primary/10 text-primary px-2 py-0.5 rounded-full inline-block mt-1">{item.subject}</span>}
+                {item.subject && <span className="text-2xs font-bold bg-primary/10 text-primary px-2 py-0.5 rounded-full inline-block mt-1">{item.subject}</span>}
                 <p className="text-xs text-on-surface-variant mt-1">Deleted on {new Date(item.deleted_at).toLocaleDateString()}</p>
               </div>
               <div className="flex gap-2 flex-shrink-0">
@@ -412,7 +412,7 @@ export default function AiTutor() {
         <div className="flex justify-between items-center flex-wrap gap-2">
           <div className="min-w-0">
             <h2 className="text-base md:text-lg font-bold text-on-surface truncate">AI Intelligent Tutor</h2>
-            <p className="text-[10px] md:text-xs text-on-surface-variant truncate">Your personal academic companion powered by ScholarFlow AI.</p>
+            <p className="text-2xs md:text-xs text-on-surface-variant truncate">Your personal academic companion powered by ScholarFlow AI.</p>
           </div>
           <div className="flex gap-2 flex-shrink-0">
             <button onClick={() => setShowTrash(true)}
@@ -453,11 +453,11 @@ export default function AiTutor() {
                     className={`px-3 py-2 cursor-pointer border-b hover:bg-gray-50 ${activeConv?.id === conv.id ? 'bg-primary/5 border-l-2 border-l-primary' : ''}`}>
                     <p className="text-sm font-semibold truncate">{conv.title}</p>
                     <div className="flex items-center gap-2 mt-0.5">
-                      {conv.subject && <span className="text-[9px] font-bold bg-primary/10 text-primary px-1.5 py-0.5 rounded-full">{conv.subject}</span>}
-                      <span className="text-[9px] text-gray-400">{timeAgo(conv.updated_at)}</span>
+                      {conv.subject && <span className="text-3xs font-bold bg-primary/10 text-primary px-1.5 py-0.5 rounded-full">{conv.subject}</span>}
+                      <span className="text-3xs text-gray-400">{timeAgo(conv.updated_at)}</span>
                     </div>
                     {conv.last_message_preview && (
-                      <p className="text-[10px] text-gray-400 mt-1 truncate">{conv.last_message_preview}</p>
+                      <p className="text-2xs text-gray-400 mt-1 truncate">{conv.last_message_preview}</p>
                     )}
                   </div>
                 ))}
@@ -562,14 +562,14 @@ export default function AiTutor() {
                         <p className="text-sm font-semibold truncate">{conv.title}</p>
                         <div className="flex items-center gap-2 mt-0.5">
                           {conv.subject && (
-                            <span className="text-[9px] font-bold bg-primary/10 text-primary px-1.5 py-0.5 rounded-full">
+                            <span className="text-3xs font-bold bg-primary/10 text-primary px-1.5 py-0.5 rounded-full">
                               {conv.subject}
                             </span>
                           )}
-                          <span className="text-[9px] text-gray-400">{timeAgo(conv.updated_at)}</span>
+                          <span className="text-3xs text-gray-400">{timeAgo(conv.updated_at)}</span>
                         </div>
                         {conv.last_message_preview && (
-                          <p className="text-[10px] text-gray-400 mt-1 truncate">{conv.last_message_preview}</p>
+                          <p className="text-2xs text-gray-400 mt-1 truncate">{conv.last_message_preview}</p>
                         )}
                       </div>
                     ))
@@ -603,7 +603,7 @@ export default function AiTutor() {
                     <span className="w-1.5 h-1.5 rounded-full bg-green-500 flex-shrink-0" />
                     <span className="text-sm font-semibold truncate">{activeConv.title}</span>
                     {activeConv.subject && (
-                      <span className="text-[9px] font-bold bg-primary/10 text-primary px-2 py-0.5 rounded-full flex-shrink-0 hidden sm:inline-block">
+                      <span className="text-3xs font-bold bg-primary/10 text-primary px-2 py-0.5 rounded-full flex-shrink-0 hidden sm:inline-block">
                         {activeConv.subject}
                       </span>
                     )}
@@ -638,7 +638,7 @@ export default function AiTutor() {
                     <div key={msg.id} className="flex justify-end">
                       <div className="max-w-[85%] sm:max-w-[75%] bg-primary/10 text-on-surface p-3 rounded-2xl rounded-tr-none shadow-sm">
                         <p className="text-sm leading-relaxed whitespace-pre-wrap break-words">{msg.content}</p>
-                        <span className="text-[9px] mt-1 block opacity-50 text-right">
+                        <span className="text-3xs mt-1 block opacity-50 text-right">
                           {new Date(msg.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                         </span>
                       </div>
@@ -654,7 +654,7 @@ export default function AiTutor() {
                             {msg.content}
                           </ReactMarkdown>
                         </div>
-                        <span className="text-[9px] mt-2 block opacity-40">
+                        <span className="text-3xs mt-2 block opacity-40">
                           AI Generated · {new Date(msg.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                         </span>
                       </div>
@@ -708,7 +708,7 @@ export default function AiTutor() {
                   <span className="material-symbols-outlined text-base">send</span>
                 </button>
               </div>
-              <p className="text-[9px] text-gray-400 italic text-center mt-1.5">AI Tutor can make mistakes. Verify important information.</p>
+              <p className="text-3xs text-gray-400 italic text-center mt-1.5">AI Tutor can make mistakes. Verify important information.</p>
             </div>
           </div>
 

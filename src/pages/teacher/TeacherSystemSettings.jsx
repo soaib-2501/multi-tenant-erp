@@ -160,7 +160,7 @@ const TeacherSystemSettings = () => {
                   </div>
                   <span className="font-bold text-sm text-on-surface">Two-Factor Auth</span>
                 </div>
-                <span className="px-2 py-0.5 bg-green-100 text-green-700 text-[10px] font-black rounded-full uppercase">Enabled</span>
+                <span className="px-2 py-0.5 bg-green-100 text-green-700 text-2xs font-black rounded-full uppercase">Enabled</span>
               </div>
               <p className="text-xs text-on-surface-variant">Your account is currently protected by an extra layer of security via SMS/App.</p>
               <button className="text-primary text-xs font-bold text-left hover:underline outline-none border-none cursor-pointer bg-transparent mt-auto">Manage 2FA →</button>

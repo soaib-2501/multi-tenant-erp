@@ -36,7 +36,7 @@ export default function GuardianDetails() {
     <SchoolLayout title="Guardian Details">
       <div className="max-w-4xl mx-auto px-8 py-8">
         <button onClick={() => navigate("/school-admin/parents")} className="flex items-center gap-1.5 text-[#0058be] text-sm font-semibold hover:underline mb-8">
-          <span className="material-symbols-outlined text-[18px]">arrow_back</span> Back to Directory
+          <span className="material-symbols-outlined text-lg">arrow_back</span> Back to Directory
         </button>
 
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-8">

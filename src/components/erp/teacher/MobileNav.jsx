@@ -89,7 +89,7 @@ isActive
 
 
 <span
-className={`text-[11px] font-semibold text-center ${
+className={`text-xs font-semibold text-center ${
 isActive ? "text-blue-600" : "text-gray-500 dark:text-slate-400"
 }`}
 >
@@ -142,7 +142,7 @@ isActive
 </span>
 
 
-<span className="text-[10px]">
+<span className="text-2xs">
 
 {item.label}
 
@@ -165,7 +165,7 @@ className="flex flex-col items-center text-gray-400 dark:text-slate-400"
 more_horiz
 </span>
 
-<span className="text-[10px]">
+<span className="text-2xs">
 More
 </span>
 

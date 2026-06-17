@@ -182,7 +182,7 @@ export default function Settings() {
                   { key: "phone", label: "Phone" },
                 ].map(({ key, label }) => (
                   <div key={key}>
-                    <label className={`text-[10px] font-headline font-black tracking-widest uppercase mb-2 block ${dk ? "text-on-surface-variant" : "text-on-surface-variant"}`}>
+                    <label className={`text-2xs font-headline font-black tracking-widest uppercase mb-2 block ${dk ? "text-on-surface-variant" : "text-on-surface-variant"}`}>
                       {label}
                     </label>
                     <input
@@ -195,7 +195,7 @@ export default function Settings() {
                   </div>
                 ))}
                 <div>
-                  <label className={`text-[10px] font-headline font-black tracking-widest uppercase mb-2 block ${dk ? "text-on-surface-variant" : "text-on-surface-variant"}`}>
+                  <label className={`text-2xs font-headline font-black tracking-widest uppercase mb-2 block ${dk ? "text-on-surface-variant" : "text-on-surface-variant"}`}>
                     Country
                   </label>
                   <select
@@ -209,7 +209,7 @@ export default function Settings() {
                   </select>
                 </div>
                 <div className="md:col-span-2">
-                  <label className={`text-[10px] font-headline font-black tracking-widest uppercase mb-2 block ${dk ? "text-on-surface-variant" : "text-on-surface-variant"}`}>
+                  <label className={`text-2xs font-headline font-black tracking-widest uppercase mb-2 block ${dk ? "text-on-surface-variant" : "text-on-surface-variant"}`}>
                     Street Address
                   </label>
                   <input

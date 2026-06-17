@@ -115,7 +115,7 @@ export default function CreateExamPage() {
             to="/teacher/exams"
             className="flex items-center gap-2 text-[#0058be] font-semibold text-sm mb-4 hover:-translate-x-1 transition-transform w-max"
           >
-            <span className="material-symbols-outlined text-[18px]">arrow_back</span>
+            <span className="material-symbols-outlined text-lg">arrow_back</span>
             Back to Exams
           </Link>
           <h2 className="text-3xl font-bold font-display text-slate-800 tracking-tight">Configure Exam</h2>
@@ -135,9 +135,9 @@ export default function CreateExamPage() {
             className="px-6 py-2.5 bg-gradient-to-r from-[#0058be] to-[#2170e4] text-white font-bold rounded-md text-sm shadow-md hover:shadow-lg transition-all flex items-center gap-2 disabled:opacity-50"
           >
             {submitting ? (
-              <span className="material-symbols-outlined animate-spin text-[18px]">progress_activity</span>
+              <span className="material-symbols-outlined animate-spin text-lg">progress_activity</span>
             ) : (
-              <span className="material-symbols-outlined text-[18px]">publish</span>
+              <span className="material-symbols-outlined text-lg">publish</span>
             )}
             Save Configuration
           </button>

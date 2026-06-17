@@ -175,7 +175,7 @@ export default function Sidebar() {
             <p className="text-xs text-on-surface-variant whitespace-nowrap">
               {class_level_name} - {section_name}
             </p>
-            <p className="text-[10px] text-primary font-bold whitespace-nowrap">
+            <p className="text-2xs text-primary font-bold whitespace-nowrap">
               ID: {enrollment_number}
             </p>
           </div>

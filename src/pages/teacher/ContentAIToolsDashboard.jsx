@@ -179,7 +179,7 @@ const ContentAIToolsDashboard = () => {
                           </div>
                         </td>
                         <td className="px-6 py-5">
-                          <span className={`px-3 py-1 ${visuals.badgeColor} rounded-full text-[11px] font-bold uppercase tracking-tight whitespace-nowrap`}>
+                          <span className={`px-3 py-1 ${visuals.badgeColor} rounded-full text-xs font-bold uppercase tracking-tight whitespace-nowrap`}>
                             {item.content_type.replace(/([A-Z])/g, ' $1').trim()}
                           </span>
                         </td>

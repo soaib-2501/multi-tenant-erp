@@ -385,7 +385,7 @@ export default function AttendanceTracker() {
                     const heightPercent = total > 0 ? Math.round((count / total) * 100) : 0;
                     return (
                       <div key={label} className="flex-1 flex flex-col items-center gap-1">
-                        <span className={`text-[10px] font-bold ${textColor}`}>{count}</span>
+                        <span className={`text-2xs font-bold ${textColor}`}>{count}</span>
                         <div className="w-full flex items-end" style={{ height: "44px" }}>
                           <div
                             className={`w-full ${barColor} rounded-t-md transition-all duration-500`}
@@ -439,7 +439,7 @@ export default function AttendanceTracker() {
                     <div
                       key={day}
                       title={record?.status || ""}
-                      className={`h-8 sm:h-10 rounded-lg flex items-center justify-center text-[11px] sm:text-xs font-semibold border transition-all cursor-default ${
+                      className={`h-8 sm:h-10 rounded-lg flex items-center justify-center text-xs sm:text-xs font-semibold border transition-all cursor-default ${
                         record
                           ? (statusClasses[record.status] ?? "bg-surface-container dark:bg-slate-700 border-surface-container dark:border-slate-600")
                           : "bg-surface-container-lowest dark:bg-slate-800 border-surface-container dark:border-slate-700 text-on-surface-variant dark:text-slate-300"

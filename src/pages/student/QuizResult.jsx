@@ -4,7 +4,7 @@ import MainLayout from '../../layouts/MainLayout';
 
 export default function QuizResult() {
   return (
-    <MainLayout title={<Link to="/student/quiz" className="flex items-center gap-2 text-primary hover:text-primary-container transition-colors border border-primary/30 bg-primary/5 px-4 py-1.5 rounded-full"><span className="material-symbols-outlined text-[18px]">arrow_back</span> <span className="text-sm font-bold">Back to Practice &amp; Quiz</span></Link>}>
+    <MainLayout title={<Link to="/student/quiz" className="flex items-center gap-2 text-primary hover:text-primary-container transition-colors border border-primary/30 bg-primary/5 px-4 py-1.5 rounded-full"><span className="material-symbols-outlined text-lg">arrow_back</span> <span className="text-sm font-bold">Back to Practice &amp; Quiz</span></Link>}>
       <section className="flex-1 space-y-8">
 
 

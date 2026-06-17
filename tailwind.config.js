@@ -32,7 +32,21 @@ module.exports = {
       },
       fontFamily: {
         headline: ["Manrope"],
-        body: ["Inter"],
+        display:  ["Manrope"],   // alias — fixes teacher panel font-display bug
+        body:     ["Inter"],
+      },
+      fontSize: {
+        "3xs": ["var(--font-size-3xs)", { lineHeight: "1rem"    }],
+        "2xs": ["var(--font-size-2xs)", { lineHeight: "1rem"    }],
+        xs:    ["var(--font-size-xs)",  { lineHeight: "1.25rem" }],
+        sm:    ["var(--font-size-sm)",  { lineHeight: "1.5rem"  }],
+        base:  ["var(--font-size-base)",{ lineHeight: "1.75rem" }],
+        lg:    ["var(--font-size-lg)",  { lineHeight: "1.75rem" }],
+        xl:    ["var(--font-size-xl)",  { lineHeight: "1.75rem" }],
+        "2xl": ["var(--font-size-2xl)", { lineHeight: "2rem"    }],
+        "3xl": ["var(--font-size-3xl)", { lineHeight: "2.25rem" }],
+        "4xl": ["var(--font-size-4xl)", { lineHeight: "2.5rem"  }],
+        "5xl": ["var(--font-size-5xl)", { lineHeight: "1.1"     }],
       },
     },
   },

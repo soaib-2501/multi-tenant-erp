@@ -4,7 +4,7 @@ import MainLayout from '../../layouts/MainLayout';
 
 export default function LearningMaterialDetailView() {
   return (
-    <MainLayout title={<Link to="/student/materials" className="flex items-center gap-2 text-primary hover:text-primary-container transition-colors border border-primary/30 bg-primary/5 px-4 py-1.5 rounded-full"><span className="material-symbols-outlined text-[18px]">arrow_back</span> <span className="text-sm font-bold">Back to Learning Materials</span></Link>}>
+    <MainLayout title={<Link to="/student/materials" className="flex items-center gap-2 text-primary hover:text-primary-container transition-colors border border-primary/30 bg-primary/5 px-4 py-1.5 rounded-full"><span className="material-symbols-outlined text-lg">arrow_back</span> <span className="text-sm font-bold">Back to Learning Materials</span></Link>}>
       <div className="p-8 max-w-7xl mx-auto space-y-8">
 
 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -140,7 +140,7 @@ export default function LearningMaterialDetailView() {
 <div className="aspect-video bg-slate-200 rounded-xl mb-4 overflow-hidden">
 <img alt="Related PDF material thumbnail" className="w-full h-full object-cover" data-alt="A futuristic laboratory scene with blue digital screens and complex mathematical equations floating in the air, soft lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCxKGn27W1wgEfOUZ2fO4DXe9tIPke-3GXU3ZF0qVHlA_Vcct4khJOS9I0iOsqW3knGMV5yzjZ_NaGiY1Bku2ZpeP_2w1k0zJQwvHjxsc9db0zxZaEXjWj4jGVetzPjSjLzFX4AFJNTcGBE5s5X1FhbTKUnS5NJXb9R46F6scXLnw6v-EiHy6UnI8p0_2hUUaILHuuXensX8kfdPXvuLlgoQjzR589hgjPq-ixmghi8SAMCWkRawDXyep7kcPPE7Y1fQWO5Nvi-2g"/>
 </div>
-<span className="px-2 py-0.5 bg-tertiary-fixed text-on-tertiary-fixed text-[10px] font-bold rounded uppercase">PDF Guide</span>
+<span className="px-2 py-0.5 bg-tertiary-fixed text-on-tertiary-fixed text-2xs font-bold rounded uppercase">PDF Guide</span>
 <h4 className="font-bold text-on-surface mt-2 group-hover:text-primary transition-colors">Calculus for Neural Nets</h4>
 <p className="text-xs text-on-surface-variant mt-1">12 Pages &#x2022; Supplementary</p>
 </div>
@@ -149,7 +149,7 @@ export default function LearningMaterialDetailView() {
 <div className="aspect-video bg-slate-200 rounded-xl mb-4 overflow-hidden">
 <img alt="Related Quiz material thumbnail" className="w-full h-full object-cover" data-alt="Digital motherboard background with glowing green circuitry and data pathways, high-tech aesthetic" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCbeihGZhAYvge6mgck7MaulRpj8fuSPFbafSecEtkXsZ14Kn9iokUh22pfvgm2VRMi9qF2gzrp66LkmiQ0HgrvgSxeSRYxjQy8-ETGazdnuG0qaNqqkGvavp7yrCPtXhl0FhO1FFoqPtBXiHzLPB1-RatdkYT_b69sLAn2JVg4oMX8xXc17VpbtzjY_233iR7BeUi1qnFpedA9XiSh_Cqe3BwkOFu65AC94XH-kdDLrEWw8m2_-KsKjKgD_9DA5aIVwUhrHVZLyw"/>
 </div>
-<span className="px-2 py-0.5 bg-primary-fixed text-on-primary-fixed text-[10px] font-bold rounded uppercase">Practice</span>
+<span className="px-2 py-0.5 bg-primary-fixed text-on-primary-fixed text-2xs font-bold rounded uppercase">Practice</span>
 <h4 className="font-bold text-on-surface mt-2 group-hover:text-primary transition-colors">Activation Functions Quiz</h4>
 <p className="text-xs text-on-surface-variant mt-1">10 Qs &#x2022; Self Assessment</p>
 </div>
@@ -158,7 +158,7 @@ export default function LearningMaterialDetailView() {
 <div className="aspect-video bg-slate-200 rounded-xl mb-4 overflow-hidden">
 <img alt="Related Notebook thumbnail" className="w-full h-full object-cover" data-alt="Modern clean workspace with a laptop displaying code, a coffee cup, and a plant in soft morning sunlight" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDT7KkaZDpiMJ1X2Ht-CzouZIgTohzRtbAOGRrCAfXzjPWBV5wNsV5lpq50i_bHF89YDgqh51j-YbvPn8mlvbzdKqoX8JdS6uvHTOYl38Xi5AFQkyHhBCTTAe90GFs9QhkfoR1_fCsAhfBy4CfW0Aa1YfLEZqsrD05g9TUqlw0d61IxB-w_VepSHVO4WHCKTlIMHu6_qJ18j5USowPkDYNV9224M-vSXHRdSThRANMs8XAPtg_5gdTeo4xs943jZEy8rVdSYdcoIg"/>
 </div>
-<span className="px-2 py-0.5 bg-secondary-fixed text-on-secondary-fixed text-[10px] font-bold rounded uppercase">Notebook</span>
+<span className="px-2 py-0.5 bg-secondary-fixed text-on-secondary-fixed text-2xs font-bold rounded uppercase">Notebook</span>
 <h4 className="font-bold text-on-surface mt-2 group-hover:text-primary transition-colors">Python Implementation</h4>
 <p className="text-xs text-on-surface-variant mt-1">Interactive &#x2022; Lab Work</p>
 </div>
@@ -167,7 +167,7 @@ export default function LearningMaterialDetailView() {
 <div className="aspect-video bg-slate-200 rounded-xl mb-4 overflow-hidden">
 <img alt="Related Reading thumbnail" className="w-full h-full object-cover" data-alt="Satellite view of Earth at night with interconnected lines of light representing global internet traffic, cinematic blue glow" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDfEedj-hbhvxP1gBlse9reeVxldxUM6taKjoUrMEzruwPIsF3NrEFa8qHrRD0gjDJR9jrTxLl8Yp-qV6-1DDrJEs07j00MofoJe1AVDccUPBmg-p-OXi3JT0BvL1NxeFAdc3XUoQq4bqO9qMzILTKnuXXx4k91hY128HThEyDLX6So53Bp09MGWRjTl6QJyRq4VNKfbFlIHx93PUVMS2LRXpPfRIhRg_VrevSqeNIpbBncOhrYfm0j15X-zChBeRrySbNfDx75KQ"/>
 </div>
-<span className="px-2 py-0.5 bg-blue-100 text-blue-800 text-[10px] font-bold rounded uppercase">Reading</span>
+<span className="px-2 py-0.5 bg-blue-100 text-blue-800 text-2xs font-bold rounded uppercase">Reading</span>
 <h4 className="font-bold text-on-surface mt-2 group-hover:text-primary transition-colors">The History of Deep Learning</h4>
 <p className="text-xs text-on-surface-variant mt-1">15 min read &#x2022; Context</p>
 </div>

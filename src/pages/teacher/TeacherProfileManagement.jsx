@@ -440,7 +440,7 @@ const TeacherProfileManagement = () => {
                   />
                   <span className="absolute right-4 top-3.5 text-gray-400 group-focus-within:text-[#0058be] material-symbols-outlined text-sm block">lock</span>
                 </div>
-                <p className="text-[10px] text-gray-500 dark:text-slate-400 ml-1 font-medium">Leave blank if you do not wish to change your password.</p>
+                <p className="text-2xs text-gray-500 dark:text-slate-400 ml-1 font-medium">Leave blank if you do not wish to change your password.</p>
               </div>
               
               <div className="bg-amber-50 dark:bg-amber-950/20 p-4 rounded-xl flex items-start gap-3 border border-amber-100 dark:border-amber-900/30 md:col-span-2">
@@ -477,7 +477,7 @@ const TeacherProfileManagement = () => {
                 type="submit"
                 disabled={saving}
               >
-                {saving ? <span className="material-symbols-outlined animate-spin text-[18px]">progress_activity</span> : <span className="material-symbols-outlined text-[18px]">save</span>}
+                {saving ? <span className="material-symbols-outlined animate-spin text-lg">progress_activity</span> : <span className="material-symbols-outlined text-lg">save</span>}
                 {saving ? "Synchronizing..." : "Save Configuration"}
               </button>
             </div>

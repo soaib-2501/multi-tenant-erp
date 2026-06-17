@@ -102,7 +102,7 @@ export default function AddMapping() {
 
         {error && (
           <div className="p-3 bg-error/10 text-error rounded-md border border-error/20 text-sm font-medium flex gap-2 font-body">
-            <span className="material-symbols-outlined text-[20px]">error</span>{error}
+            <span className="material-symbols-outlined text-xl">error</span>{error}
           </div>
         )}
 
@@ -113,7 +113,7 @@ export default function AddMapping() {
 
           <div className="grid md:grid-cols-2 gap-6 mb-8">
             <div className="flex flex-col gap-2">
-              <label className="text-[11px] font-headline font-bold text-on-surface-variant uppercase">Select Guardian</label>
+              <label className="text-xs font-headline font-bold text-on-surface-variant uppercase">Select Guardian</label>
               <select 
                 required 
                 value={selectedParent} 
@@ -125,7 +125,7 @@ export default function AddMapping() {
               </select>
             </div>
             <div className="flex flex-col gap-2">
-              <label className="text-[11px] font-headline font-bold text-on-surface-variant uppercase">Select Student</label>
+              <label className="text-xs font-headline font-bold text-on-surface-variant uppercase">Select Student</label>
               <select 
                 required 
                 value={selectedStudent} 
@@ -139,7 +139,7 @@ export default function AddMapping() {
           </div>
 
           <div className="mb-8">
-            <label className="text-[11px] font-headline font-bold text-on-surface-variant uppercase block mb-3">Relationship Designation</label>
+            <label className="text-xs font-headline font-bold text-on-surface-variant uppercase block mb-3">Relationship Designation</label>
             <div className="grid grid-cols-3 gap-4">
               {["Father", "Mother", "Guardian"].map((rel) => (
                 <button 

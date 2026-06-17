@@ -61,7 +61,7 @@ export default function ExamListPage() {
         <div>
           <nav className="flex text-xs text-slate-500 mb-2 gap-2 items-center font-medium">
             <span className="hover:text-[#0058be] cursor-pointer" onClick={() => navigate("/teacher")}>Dashboard</span>
-            <span className="material-symbols-outlined text-[10px]">chevron_right</span>
+            <span className="material-symbols-outlined text-2xs">chevron_right</span>
             <span className="font-semibold text-slate-800">Exams</span>
           </nav>
           <h2 className="text-3xl font-extrabold font-display text-slate-800 tracking-tight">Examinations</h2>
@@ -71,7 +71,7 @@ export default function ExamListPage() {
           onClick={() => navigate("/teacher/exams/create")}
           className="px-6 py-3 bg-gradient-to-r from-[#0058be] to-[#2170e4] text-white rounded-md font-semibold text-sm shadow-lg hover:shadow-xl transition-all flex items-center gap-2"
         >
-          <span className="material-symbols-outlined text-[18px]">add</span>
+          <span className="material-symbols-outlined text-lg">add</span>
           Create Exam
         </button>
       </div>
@@ -138,7 +138,7 @@ export default function ExamListPage() {
                       </div>
                     </td>
                     <td className="px-6 py-5">
-                      <span className="text-[10px] uppercase tracking-wider font-bold text-[#6b38d4] bg-[#e9ddff] px-2.5 py-1 rounded-full inline-block border border-[#d6beff]">
+                      <span className="text-2xs uppercase tracking-wider font-bold text-[#6b38d4] bg-[#e9ddff] px-2.5 py-1 rounded-full inline-block border border-[#d6beff]">
                         {item.academic_year_name || "General Year"}
                       </span>
                     </td>
@@ -150,9 +150,9 @@ export default function ExamListPage() {
                     </td>
                     <td className="px-6 py-5 text-center">
                       {item.is_published ? (
-                        <span className="px-3 py-1 bg-green-50 text-green-700 text-[10px] font-bold uppercase rounded-full border border-green-200">Published</span>
+                        <span className="px-3 py-1 bg-green-50 text-green-700 text-2xs font-bold uppercase rounded-full border border-green-200">Published</span>
                       ) : (
-                        <span className="px-3 py-1 bg-gray-100 text-gray-500 text-[10px] font-bold uppercase rounded-full border border-gray-200">Draft</span>
+                        <span className="px-3 py-1 bg-gray-100 text-gray-500 text-2xs font-bold uppercase rounded-full border border-gray-200">Draft</span>
                       )}
                     </td>
                     <td className="px-6 py-5 text-right">

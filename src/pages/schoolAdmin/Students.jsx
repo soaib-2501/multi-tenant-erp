@@ -68,7 +68,7 @@ export default function Students() {
             onClick={() => navigate("/school-admin/students/add")} 
             className="bg-primary text-white px-5 py-2.5 rounded-md font-semibold text-sm flex items-center gap-2 shadow-sm hover:bg-primary/90 transition-colors font-body"
           >
-            <span className="material-symbols-outlined text-[18px]">person_add</span> 
+            <span className="material-symbols-outlined text-lg">person_add</span> 
             Register Student
           </button>
         </div>
@@ -156,18 +156,18 @@ export default function Students() {
                             <p className="font-semibold text-on-surface group-hover:text-primary transition-colors font-body">
                               {fName || lName ? `${fName} ${lName}` : emailAddr}
                             </p>
-                            <p className="text-[10px] text-outline font-mono mt-0.5">{emailAddr}</p>
+                            <p className="text-2xs text-outline font-mono mt-0.5">{emailAddr}</p>
                           </div>
                         </td>
                         <td className="font-mono text-on-surface-variant text-xs font-semibold">{s.enrollment_number || "N/A"}</td>
                         <td className="text-on-surface-variant text-xs">{s.phone_number || "N/A"}</td>
                         <td className="text-center">
                           {!s.is_archived ? (
-                            <span className="text-[10px] uppercase font-bold bg-success/20 text-success dark:bg-success/30 px-2 py-0.5 rounded-full">
+                            <span className="text-2xs uppercase font-bold bg-success/20 text-success dark:bg-success/30 px-2 py-0.5 rounded-full">
                               Active
                             </span>
                           ) : (
-                            <span className="text-[10px] uppercase font-bold bg-outline-variant/20 text-outline px-2 py-0.5 rounded-full">
+                            <span className="text-2xs uppercase font-bold bg-outline-variant/20 text-outline px-2 py-0.5 rounded-full">
                               Archived
                             </span>
                           )}

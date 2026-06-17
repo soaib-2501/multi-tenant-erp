@@ -85,14 +85,14 @@ export default function AddParent() {
 
         {error && (
           <div className="p-3 bg-error/10 text-error rounded-md border border-error/20 flex gap-2 shadow-sm items-center font-body">
-            <span className="material-symbols-outlined text-[20px]">error</span>
+            <span className="material-symbols-outlined text-xl">error</span>
             <p className="text-sm font-medium">{error}</p>
           </div>
         )}
 
         {successMsg && (
           <div className="p-3 bg-success/10 text-success rounded-md border border-success/20 flex gap-2 shadow-sm items-center font-body">
-            <span className="material-symbols-outlined text-[20px]">check_circle</span>
+            <span className="material-symbols-outlined text-xl">check_circle</span>
             <p className="text-sm font-medium">{successMsg}</p>
           </div>
         )}
@@ -105,11 +105,11 @@ export default function AddParent() {
               {/* CORE IDENTITY */}
               <div className="bg-surface-container-lowest p-6 rounded-lg shadow-sm border border-outline-variant/10">
                 <h3 className="text-base font-headline font-bold text-on-surface flex items-center gap-2 mb-5">
-                  <span className="material-symbols-outlined text-primary text-[20px]">badge</span> Step 1: Core Identity
+                  <span className="material-symbols-outlined text-primary text-xl">badge</span> Step 1: Core Identity
                 </h3>
                 <div className="grid md:grid-cols-2 gap-4 mb-4">
                   <div className="flex flex-col gap-1.5">
-                    <label className="text-[10px] font-headline font-bold text-on-surface-variant tracking-wider uppercase">First Name</label>
+                    <label className="text-2xs font-headline font-bold text-on-surface-variant tracking-wider uppercase">First Name</label>
                     <input 
                       required 
                       value={firstName} 
@@ -118,7 +118,7 @@ export default function AddParent() {
                     />
                   </div>
                   <div className="flex flex-col gap-1.5">
-                    <label className="text-[10px] font-headline font-bold text-on-surface-variant tracking-wider uppercase">Last Name</label>
+                    <label className="text-2xs font-headline font-bold text-on-surface-variant tracking-wider uppercase">Last Name</label>
                     <input 
                       value={lastName} 
                       onChange={(e) => setLastName(e.target.value)} 
@@ -128,7 +128,7 @@ export default function AddParent() {
                 </div>
                 <div className="grid md:grid-cols-2 gap-4">
                   <div className="flex flex-col gap-1.5">
-                    <label className="text-[10px] font-headline font-bold text-on-surface-variant tracking-wider uppercase">Login Email</label>
+                    <label className="text-2xs font-headline font-bold text-on-surface-variant tracking-wider uppercase">Login Email</label>
                     <input 
                       type="email" 
                       required 
@@ -138,7 +138,7 @@ export default function AddParent() {
                     />
                   </div>
                   <div className="flex flex-col gap-1.5">
-                    <label className="text-[10px] font-headline font-bold text-on-surface-variant tracking-wider uppercase">Temporary Password</label>
+                    <label className="text-2xs font-headline font-bold text-on-surface-variant tracking-wider uppercase">Temporary Password</label>
                     <input 
                       type="password" 
                       required 
@@ -153,11 +153,11 @@ export default function AddParent() {
               {/* PARENT PROFILE */}
               <div className="bg-surface-container-lowest p-6 rounded-lg shadow-sm border border-outline-variant/10">
                 <h3 className="text-base font-headline font-bold text-on-surface flex items-center gap-2 mb-5">
-                  <span className="material-symbols-outlined text-secondary text-[20px]">family_restroom</span> Step 2: Guardian Details
+                  <span className="material-symbols-outlined text-secondary text-xl">family_restroom</span> Step 2: Guardian Details
                 </h3>
                 <div className="grid md:grid-cols-2 gap-4 mb-4">
                   <div className="flex flex-col gap-1.5">
-                    <label className="text-[10px] font-headline font-bold text-on-surface-variant tracking-wider uppercase">Primary Phone</label>
+                    <label className="text-2xs font-headline font-bold text-on-surface-variant tracking-wider uppercase">Primary Phone</label>
                     <input 
                       required 
                       value={phoneNumber} 
@@ -166,7 +166,7 @@ export default function AddParent() {
                     />
                   </div>
                   <div className="flex flex-col gap-1.5">
-                    <label className="text-[10px] font-headline font-bold text-on-surface-variant tracking-wider uppercase">Emergency Contact</label>
+                    <label className="text-2xs font-headline font-bold text-on-surface-variant tracking-wider uppercase">Emergency Contact</label>
                     <input 
                       required 
                       value={emergencyContact} 
@@ -177,7 +177,7 @@ export default function AddParent() {
                 </div>
                 <div className="grid md:grid-cols-2 gap-4">
                   <div className="flex flex-col gap-1.5">
-                    <label className="text-[10px] font-headline font-bold text-on-surface-variant tracking-wider uppercase">Occupation</label>
+                    <label className="text-2xs font-headline font-bold text-on-surface-variant tracking-wider uppercase">Occupation</label>
                     <input 
                       value={occupation} 
                       onChange={(e) => setOccupation(e.target.value)} 
@@ -219,7 +219,7 @@ export default function AddParent() {
                   <span className="material-symbols-outlined text-5xl text-outline/50">add_a_photo</span>
                 </div>
                 <h4 className="font-headline font-semibold text-on-surface text-sm">Profile Photo</h4>
-                <p className="text-[11px] text-on-surface-variant mt-1 leading-relaxed font-body">
+                <p className="text-xs text-on-surface-variant mt-1 leading-relaxed font-body">
                   Upload a high-resolution portrait for visual identification across the platform.
                 </p>
               </div>

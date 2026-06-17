@@ -177,7 +177,7 @@ const Dashboard = () => {
             <div className={`p-2.5 rounded-lg transition-transform duration-500 group-hover:rotate-12 group-hover:scale-105 ${darkMode ? 'bg-white/20 text-white' : 'bg-slate-200 text-slate-600'}`}>
               <span className="material-symbols-outlined text-xl">groups</span>
             </div>
-            <span className={`text-[10px] font-black uppercase tracking-widest px-2 py-1 rounded-lg ${darkMode ? 'text-blue-200 bg-white/10' : 'text-slate-500 bg-slate-200'}`}>Today</span>
+            <span className={`text-2xs font-black uppercase tracking-widest px-2 py-1 rounded-lg ${darkMode ? 'text-blue-200 bg-white/10' : 'text-slate-500 bg-slate-200'}`}>Today</span>
           </div>
           <p className={`text-xs font-bold uppercase tracking-wider ${darkMode ? 'text-blue-200' : 'text-slate-500'}`}>Total Classes</p>
           {loading && classes.length === 0 ? (
@@ -192,7 +192,7 @@ const Dashboard = () => {
             <div className={`p-2.5 rounded-lg transition-transform duration-500 group-hover:rotate-12 group-hover:scale-105 ${darkMode ? 'bg-white/20 text-white' : 'bg-slate-200 text-slate-600'}`}>
               <span className="material-symbols-outlined text-xl">how_to_reg</span>
             </div>
-            <span className={`text-[10px] font-bold flex items-center gap-1 px-2 py-1 rounded-lg ${darkMode ? 'text-green-200 bg-green-900/30' : 'text-green-700 bg-green-100'}`}>
+            <span className={`text-2xs font-bold flex items-center gap-1 px-2 py-1 rounded-lg ${darkMode ? 'text-green-200 bg-green-900/30' : 'text-green-700 bg-green-100'}`}>
               <span className="material-symbols-outlined text-xs">trending_up</span> 2.1%
             </span>
           </div>
@@ -386,7 +386,7 @@ View Students
                 <div className="flex-1">
                   <p className="text-xs font-bold text-on-surface">Physics Assignment Submitted</p>
                   <p className="text-xs text-on-surface-variant">15 students from Grade 11-B</p>
-                  <p className="text-[10px] text-slate-400 mt-1">24 minutes ago</p>
+                  <p className="text-2xs text-slate-400 mt-1">24 minutes ago</p>
                 </div>
               </div>
               <div className="flex gap-4 relative">
@@ -397,7 +397,7 @@ View Students
                 <div className="flex-1">
                   <p className="text-xs font-bold text-on-surface">New Message from Admin</p>
                   <p className="text-xs text-on-surface-variant">Regarding semester schedule change</p>
-                  <p className="text-[10px] text-slate-400 mt-1">1 hour ago</p>
+                  <p className="text-2xs text-slate-400 mt-1">1 hour ago</p>
                 </div>
               </div>
               <div className="flex gap-4">
@@ -407,7 +407,7 @@ View Students
                 <div className="flex-1">
                   <p className="text-xs font-bold text-on-surface">Exam Dates Confirmed</p>
                   <p className="text-xs text-on-surface-variant">Calculus Midterm set for Dec 12</p>
-                  <p className="text-[10px] text-slate-400 mt-1">3 hours ago</p>
+                  <p className="text-2xs text-slate-400 mt-1">3 hours ago</p>
                 </div>
               </div>
             </div>
@@ -421,7 +421,7 @@ View Students
           <div className="relative overflow-hidden rounded-lg shadow-ambient aspect-[4/3] group" style={{boxShadow: '0px 12px 32px rgba(11,28,48,0.06)'}}>
             <img alt="Class Spotlight" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC8I8LaH-fxwzUfYcklh-0WSH91hBgGJv97HDznz2ihqwjbWy9o6bZ2olprlFKl5PjSOP9PtWz02FrtzqYxTJA6LbuycXjRXfxiSvF_V90ha85ocjHmQJs_X-vp-xprHqsguPNKbZ8q5c-QUjBRHjd2MukIOkSKeghbznUzsSSB5QnUv70pdVSU4kuq9OxbxH-q8tLSB22Sdvvqgtn8Yf2vFHtsUrBsYkpXkJYd5yXsFY6FgUxR4OZkEt_ItOGfCzzlAweX2sQytg" className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
             <div className="absolute inset-0 bg-gradient-to-t from-primary/90 to-transparent flex flex-col justify-end p-5">
-              <span className="bg-white/20 backdrop-blur-md text-white text-[10px] font-bold uppercase tracking-widest px-2 py-1 rounded w-fit mb-2">Class Spotlight</span>
+              <span className="bg-white/20 backdrop-blur-md text-white text-2xs font-bold uppercase tracking-widest px-2 py-1 rounded w-fit mb-2">Class Spotlight</span>
               <h5 className="text-white font-display text-base font-bold">Advanced Physics Lab</h5>
               <p className="text-white/80 text-xs">Achieved 100% submission rate today.</p>
             </div>

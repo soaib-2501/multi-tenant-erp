@@ -388,7 +388,7 @@ const AIToolWorkspaceQuestionPaper = () => {
                                     <div className="flex flex-col gap-1.5 ml-5">
                                       <button 
                                         onClick={() => toggleAnswer(keyId)}
-                                        className="flex items-center gap-1 text-[11px] font-bold text-primary hover:underline outline-none border-none cursor-pointer bg-transparent w-max self-start font-display"
+                                        className="flex items-center gap-1 text-xs font-bold text-primary hover:underline outline-none border-none cursor-pointer bg-transparent w-max self-start font-display"
                                       >
                                         <span className="material-symbols-outlined text-xs">
                                           {visibleAnswers[keyId] ? 'visibility_off' : 'visibility'}
@@ -398,7 +398,7 @@ const AIToolWorkspaceQuestionPaper = () => {
 
                                       {visibleAnswers[keyId] && (
                                         <div className="mt-2 p-4 bg-primary/5 rounded-lg border border-primary/10 relative text-xs">
-                                          <span className="absolute -top-2.5 left-4 bg-white px-2 text-[9px] font-bold text-primary uppercase tracking-wider font-display">Answer Key & Grading Notes</span>
+                                          <span className="absolute -top-2.5 left-4 bg-white px-2 text-3xs font-bold text-primary uppercase tracking-wider font-display">Answer Key & Grading Notes</span>
                                           <div className="text-slate-700 leading-relaxed font-sans prose prose-sm max-w-none">
                                             <ReactMarkdown remarkPlugins={[remarkMath, remarkGfm]} rehypePlugins={[rehypeKatex]}>{q.answer_key}</ReactMarkdown>
                                           </div>

@@ -59,7 +59,7 @@ export default function CreateClass() {
           <form onSubmit={handleSave} className="space-y-5">
             
             <div className="space-y-1.5">
-              <label className="text-[10px] font-bold uppercase tracking-wider text-[#6b7280] ml-1">Class Level Name</label>
+              <label className="text-2xs font-bold uppercase tracking-wider text-[#6b7280] ml-1">Class Level Name</label>
               <input
                 required
                 value={name}
@@ -70,7 +70,7 @@ export default function CreateClass() {
             </div>
 
             <div className="space-y-1.5">
-              <label className="text-[10px] font-bold uppercase tracking-wider text-[#6b7280] ml-1">Numeric Sort Order</label>
+              <label className="text-2xs font-bold uppercase tracking-wider text-[#6b7280] ml-1">Numeric Sort Order</label>
               <input
                 type="number"
                 required
@@ -79,7 +79,7 @@ export default function CreateClass() {
                 placeholder="e.g., 10"
                 className="w-full bg-[#eff4ff] text-sm rounded px-3 py-2.5 outline-none focus:ring-2 focus:ring-[#0058be]/20 border border-transparent focus:border-[#0058be]/40 transition-all"
               />
-              <p className="text-[11px] text-gray-500 ml-1 mt-0.5">
+              <p className="text-xs text-gray-500 ml-1 mt-0.5">
                 Used to accurately sort classes logically (Grade 9 comes before Grade 10) instead of alphabetically.
               </p>
             </div>

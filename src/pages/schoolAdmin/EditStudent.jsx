@@ -99,7 +99,7 @@ export default function EditStudent() {
 
         <div className="grid md:grid-cols-2 gap-6 mb-6">
           <div>
-            <label className="block text-[10px] font-headline font-bold text-on-surface-variant uppercase tracking-wider mb-1">
+            <label className="block text-2xs font-headline font-bold text-on-surface-variant uppercase tracking-wider mb-1">
               First Name
             </label>
             <input
@@ -111,7 +111,7 @@ export default function EditStudent() {
           </div>
 
           <div>
-            <label className="block text-[10px] font-headline font-bold text-on-surface-variant uppercase tracking-wider mb-1">
+            <label className="block text-2xs font-headline font-bold text-on-surface-variant uppercase tracking-wider mb-1">
               Last Name
             </label>
             <input
@@ -125,7 +125,7 @@ export default function EditStudent() {
 
         <div className="grid md:grid-cols-2 gap-6 mb-6">
           <div>
-            <label className="block text-[10px] font-headline font-bold text-on-surface-variant uppercase tracking-wider mb-1">
+            <label className="block text-2xs font-headline font-bold text-on-surface-variant uppercase tracking-wider mb-1">
               Enrollment Number
             </label>
             <input
@@ -137,7 +137,7 @@ export default function EditStudent() {
           </div>
 
           <div>
-            <label className="block text-[10px] font-headline font-bold text-on-surface-variant uppercase tracking-wider mb-1">
+            <label className="block text-2xs font-headline font-bold text-on-surface-variant uppercase tracking-wider mb-1">
               Phone Number
             </label>
             <input
@@ -150,7 +150,7 @@ export default function EditStudent() {
         </div>
 
         <div className="mb-6">
-          <label className="block text-[10px] font-headline font-bold text-on-surface-variant uppercase tracking-wider mb-1">
+          <label className="block text-2xs font-headline font-bold text-on-surface-variant uppercase tracking-wider mb-1">
             Email Address
           </label>
           <input
@@ -164,7 +164,7 @@ export default function EditStudent() {
         </div>
 
         <div className="mb-8">
-          <label className="block text-[10px] font-headline font-bold text-on-surface-variant uppercase tracking-wider mb-2">
+          <label className="block text-2xs font-headline font-bold text-on-surface-variant uppercase tracking-wider mb-2">
             Status
           </label>
           <div className="flex gap-3 flex-wrap">
@@ -203,7 +203,7 @@ export default function EditStudent() {
           >
             {saving ? (
               <>
-                <span className="material-symbols-outlined animate-spin text-[18px]">progress_activity</span>
+                <span className="material-symbols-outlined animate-spin text-lg">progress_activity</span>
                 Saving...
               </>
             ) : (

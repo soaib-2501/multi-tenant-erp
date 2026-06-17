@@ -170,7 +170,7 @@ export default function ClassLevels() {
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
-              <tr className="bg-surface-container-high/50 border-b border-outline-variant/10 text-[11px] font-black text-on-surface-variant uppercase tracking-wider font-body">
+              <tr className="bg-surface-container-high/50 border-b border-outline-variant/10 text-xs font-black text-on-surface-variant uppercase tracking-wider font-body">
                 <th className="py-4 px-6 w-10"></th>
                 <th className="py-4 px-4">Class Details</th>
                 <th className="py-4 px-4">Identification Code</th>
@@ -199,7 +199,7 @@ export default function ClassLevels() {
                     <div className="flex flex-col items-center justify-center gap-1.5 py-4">
                       <span className="material-symbols-outlined text-3xl text-outline">grid_off</span>
                       <p className="font-bold text-xs">No matching live class level clusters recorded.</p>
-                      <p className="text-[11px] text-on-surface-variant font-medium">
+                      <p className="text-xs text-on-surface-variant font-medium">
                         Seed parameters through your administration interface panel.
                       </p>
                     </div>
@@ -243,7 +243,7 @@ export default function ClassLevels() {
                               <p className="font-bold text-on-surface group-hover:text-primary transition-colors font-headline">
                                 {cls.name || "Unnamed Class Level"}
                               </p>
-                              <p className="text-[10px] text-on-surface-variant mt-0.5 font-mono font-body">
+                              <p className="text-2xs text-on-surface-variant mt-0.5 font-mono font-body">
                                 ID: {String(cls.id).substring(0, 8).toUpperCase()}
                               </p>
                             </div>
@@ -255,7 +255,7 @@ export default function ClassLevels() {
                         </td>
 
                         <td className="py-4 px-4">
-                          <span className="bg-primary/10 text-primary border border-primary/20 px-2.5 py-0.5 rounded-full text-[10px] font-bold font-body">
+                          <span className="bg-primary/10 text-primary border border-primary/20 px-2.5 py-0.5 rounded-full text-2xs font-bold font-body">
                             {(cls.sectionCount || cls.sections?.length || sections.length || 0)} Active
                             Sections
                           </span>
@@ -263,7 +263,7 @@ export default function ClassLevels() {
 
                         <td className="py-4 px-4">
                           <span
-                            className={`inline-block px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase font-body ${
+                            className={`inline-block px-2.5 py-0.5 rounded-full text-2xs font-black uppercase font-body ${
                               cls.status === "Active" || cls.is_active === true
                                 ? "bg-success/10 text-success border border-success/20"
                                 : "bg-surface-container-high text-on-surface-variant border border-outline-variant/20"
@@ -295,27 +295,27 @@ export default function ClassLevels() {
                               </div>
 
                               {isLoadingSections ? (
-                                <div className="text-center py-6 text-on-surface-variant text-[11px] font-bold flex justify-center items-center gap-2 font-body">
+                                <div className="text-center py-6 text-on-surface-variant text-xs font-bold flex justify-center items-center gap-2 font-body">
                                   <span className="material-symbols-outlined animate-spin text-sm">
                                     refresh
                                   </span>
                                   Sorting and verifying strict section data...
                                 </div>
                               ) : sections.length === 0 ? (
-                                <div className="text-center py-6 bg-surface-container-lowest border border-outline-variant/10 rounded-lg text-on-surface-variant text-[11px] font-bold shadow-2xs font-body">
+                                <div className="text-center py-6 bg-surface-container-lowest border border-outline-variant/10 rounded-lg text-on-surface-variant text-xs font-bold shadow-2xs font-body">
                                   No sections currently deployed to this class level.
                                 </div>
                               ) : (
                                 <div className="bg-surface-container-lowest border border-outline-variant/10 rounded-lg overflow-hidden shadow-2xs">
                                   <table className="w-full text-left">
-                                    <thead className="bg-surface-container-high/50 border-b border-outline-variant/10 text-[10px] text-on-surface-variant uppercase tracking-wider font-black font-body">
+                                    <thead className="bg-surface-container-high/50 border-b border-outline-variant/10 text-2xs text-on-surface-variant uppercase tracking-wider font-black font-body">
                                       <tr>
                                         <th className="py-2.5 px-4">Section Name</th>
                                         <th className="py-2.5 px-4">Section Level</th>
                                         <th className="py-2.5 px-4 text-right">Remove</th>
                                       </tr>
                                     </thead>
-                                    <tbody className="divide-y divide-outline-variant/10 text-[11px] font-bold text-on-surface font-body">
+                                    <tbody className="divide-y divide-outline-variant/10 text-xs font-bold text-on-surface font-body">
                                       {sections.map((sec) => (
                                         <tr key={sec.id} className="hover:bg-surface-container-high/30 transition-colors">
                                           <td className="py-3 px-4 flex items-center gap-2">
