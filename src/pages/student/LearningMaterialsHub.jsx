@@ -122,15 +122,15 @@ export default function LearningMaterialsHub() {
 <div className="relative h-48 overflow-hidden">
 <img alt="Programming material" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" data-alt="Professional workspace with a laptop showing lines of code, soft coffee mug, and warm morning light" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC8G7aQhtU6lxaxqtdKXo10rs43y-G4S-q5FMdYz5iu599cxOur34VrhPLI47_PmJz4whcl4uaGuxBMg2m2jyOop4RkX799adLr0B6n_XEWwyzhrku-dFOrXQ0Ataj6V4_vTWpDIYs37YJyuubDcMlur_eyHvKgXT6kxw7JqyUWE0YXeZsYZYbRqN0m6L8drCpI1fFBwAHHvDhXT6cV1LYZzj2yk5lu6Mx2ODWbcgUhHu1zpoeHtvWRgCzFBHxBiiGEDkJQwfNwHg"/>
 <div className="absolute top-3 left-3 flex gap-2">
-<span className="bg-blue-600/90 text-white text-[10px] font-bold px-2 py-1 rounded uppercase tracking-wide backdrop-blur-sm">Video</span>
-<span className="bg-surface-container-lowest/90 text-on-surface text-[10px] font-bold px-2 py-1 rounded uppercase tracking-wide backdrop-blur-sm">Beginner</span>
+<span className="bg-blue-600/90 text-white text-2xs font-bold px-2 py-1 rounded uppercase tracking-wide backdrop-blur-sm">Video</span>
+<span className="bg-surface-container-lowest/90 text-on-surface text-2xs font-bold px-2 py-1 rounded uppercase tracking-wide backdrop-blur-sm">Beginner</span>
 </div>
 </div>
 <div className="p-6 flex-1 flex flex-col">
 <div className="flex items-center gap-2 mb-2">
-<span className="text-[11px] font-bold text-primary uppercase">Computer Science</span>
+<span className="text-xs font-bold text-primary uppercase">Computer Science</span>
 <span className="w-1 h-1 bg-slate-300 rounded-full"/>
-<span className="text-[11px] font-medium text-slate-500">Data Structures</span>
+<span className="text-xs font-medium text-slate-500">Data Structures</span>
 </div>
 <h4 className="font-manrope font-bold text-lg mb-3 leading-tight group-hover:text-primary transition-colors">Arrays and Linked Lists: Fundamental Building Blocks</h4>
 <div className="mt-auto flex items-center justify-between">
@@ -149,15 +149,15 @@ export default function LearningMaterialsHub() {
 <div className="relative h-48 overflow-hidden">
 <img alt="Physics Material" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" data-alt="Digital illustration of magnetic fields and atomic particles in glowing purple and blue tones" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCUnxkL0ZbuHjMz8Ov_x0RrwpdaSCENWhPmr0yKlsu18fVUKmQreQDwx3i_GQkfQvS6j2ZxdybkJJ87Ctcf939ALNkP-eec46HgsURqfbcuqY9P733w-giFd3SV_RLCeos-rSJj-cQ3BJ_TQPQdaYRqHjXn_DTbuD-aWar8Kin-YyjbANnuxq0WRom6X8V8YU4urEYaS5k76dUFHiU5RjOZJp3QHp8BFUaMIKvAiJUB2K9JZ8F3UFKREoM8d3rimlwlUlKEOWY4Eg"/>
 <div className="absolute top-3 left-3 flex gap-2">
-<span className="bg-red-600/90 text-white text-[10px] font-bold px-2 py-1 rounded uppercase tracking-wide backdrop-blur-sm">PDF Guide</span>
-<span className="bg-surface-container-lowest/90 text-on-surface text-[10px] font-bold px-2 py-1 rounded uppercase tracking-wide backdrop-blur-sm">Advanced</span>
+<span className="bg-red-600/90 text-white text-2xs font-bold px-2 py-1 rounded uppercase tracking-wide backdrop-blur-sm">PDF Guide</span>
+<span className="bg-surface-container-lowest/90 text-on-surface text-2xs font-bold px-2 py-1 rounded uppercase tracking-wide backdrop-blur-sm">Advanced</span>
 </div>
 </div>
 <div className="p-6 flex-1 flex flex-col">
 <div className="flex items-center gap-2 mb-2">
-<span className="text-[11px] font-bold text-primary uppercase">Physics</span>
+<span className="text-xs font-bold text-primary uppercase">Physics</span>
 <span className="w-1 h-1 bg-slate-300 rounded-full"/>
-<span className="text-[11px] font-medium text-slate-500">Quantum Theory</span>
+<span className="text-xs font-medium text-slate-500">Quantum Theory</span>
 </div>
 <h4 className="font-manrope font-bold text-lg mb-3 leading-tight group-hover:text-primary transition-colors">The Particle-Wave Duality and Uncertainty Principle</h4>
 <div className="mt-auto flex items-center justify-between">
@@ -176,15 +176,15 @@ export default function LearningMaterialsHub() {
 <div className="relative h-48 overflow-hidden">
 <img alt="Mathematics material" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" data-alt="Chalkboard filled with complex mathematical equations, calculus, and geometry diagrams in a soft-focus classroom setting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAOzR-OFqqfDiWAyakLs9Ad4qu2NkcOfIDky53h0QrZ7638HwIDa6LEXVku1tbtvGCjcyBk94Q3Vf7QSrM8eYTapsk782R72Wo7kRMi59yj41GxQNBeEKBs6DgQIa3UwWZD3XpV2cYmfCD57YO7J1WZrqEhHOphRfBwq2e8qZ9qVB2k2beFHK5PIw98cAWDepjFVZTi49_wLWhKfb50Nl4ZmZemF_E6vNPcZGWCi_9pGM1Z2FHFjZVq4U4NmWKTBTDbD6SaIW5lgw"/>
 <div className="absolute top-3 left-3 flex gap-2">
-<span className="bg-amber-500/90 text-white text-[10px] font-bold px-2 py-1 rounded uppercase tracking-wide backdrop-blur-sm">Slides</span>
-<span className="bg-surface-container-lowest/90 text-on-surface text-[10px] font-bold px-2 py-1 rounded uppercase tracking-wide backdrop-blur-sm">Intermediate</span>
+<span className="bg-amber-500/90 text-white text-2xs font-bold px-2 py-1 rounded uppercase tracking-wide backdrop-blur-sm">Slides</span>
+<span className="bg-surface-container-lowest/90 text-on-surface text-2xs font-bold px-2 py-1 rounded uppercase tracking-wide backdrop-blur-sm">Intermediate</span>
 </div>
 </div>
 <div className="p-6 flex-1 flex flex-col">
 <div className="flex items-center gap-2 mb-2">
-<span className="text-[11px] font-bold text-primary uppercase">Mathematics</span>
+<span className="text-xs font-bold text-primary uppercase">Mathematics</span>
 <span className="w-1 h-1 bg-slate-300 rounded-full"/>
-<span className="text-[11px] font-medium text-slate-500">Calculus II</span>
+<span className="text-xs font-medium text-slate-500">Calculus II</span>
 </div>
 <h4 className="font-manrope font-bold text-lg mb-3 leading-tight group-hover:text-primary transition-colors">Integration Techniques: Parts, Trig Sub, and Partial Fractions</h4>
 <div className="mt-auto flex items-center justify-between">
@@ -203,15 +203,15 @@ export default function LearningMaterialsHub() {
 <div className="relative h-48 overflow-hidden">
 <img alt="Web Development material" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" data-alt="Modern high-resolution code editor screen showing clean HTML and CSS structure with dark theme" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAFMfhNboRYR7hV6ZUlMZYf7f71c2f95PercxhFn-hx_YBhMtvYTL6JOkQJjFk590Zsl3nlFdZ1nJAHm0bAL9Tpy7c6p4iWBvMVqeETtAWaXyAu6w9Akhv5yFaTWSOXDnw4d8lL-Fb7cDAD1x2eWlY4fd83X0ltBUyGSKxdSYuzNaSkSWmdaQcFHSJ2tvNgu8Cy5Ys9Q_BxjLjW1Hq2wlJDxdfaxjstwV1zWCTW-qy5Ao8zsdFl6dD8-U8Ih8i6UICr_91YiIXcyA"/>
 <div className="absolute top-3 left-3 flex gap-2">
-<span className="bg-emerald-600/90 text-white text-[10px] font-bold px-2 py-1 rounded uppercase tracking-wide backdrop-blur-sm">Worksheet</span>
-<span className="bg-surface-container-lowest/90 text-on-surface text-[10px] font-bold px-2 py-1 rounded uppercase tracking-wide backdrop-blur-sm">Intermediate</span>
+<span className="bg-emerald-600/90 text-white text-2xs font-bold px-2 py-1 rounded uppercase tracking-wide backdrop-blur-sm">Worksheet</span>
+<span className="bg-surface-container-lowest/90 text-on-surface text-2xs font-bold px-2 py-1 rounded uppercase tracking-wide backdrop-blur-sm">Intermediate</span>
 </div>
 </div>
 <div className="p-6 flex-1 flex flex-col">
 <div className="flex items-center gap-2 mb-2">
-<span className="text-[11px] font-bold text-primary uppercase">Web Dev</span>
+<span className="text-xs font-bold text-primary uppercase">Web Dev</span>
 <span className="w-1 h-1 bg-slate-300 rounded-full"/>
-<span className="text-[11px] font-medium text-slate-500">CSS Architecture</span>
+<span className="text-xs font-medium text-slate-500">CSS Architecture</span>
 </div>
 <h4 className="font-manrope font-bold text-lg mb-3 leading-tight group-hover:text-primary transition-colors">Tailwind CSS vs. BEM: Styling Modern Web Interfaces</h4>
 <div className="mt-auto flex items-center justify-between">

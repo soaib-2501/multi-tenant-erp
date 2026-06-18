@@ -366,7 +366,7 @@ const AIToolWorkspaceWorksheet = () => {
                             <div key={i} className="p-5 bg-surface-container-lowest border border-outline-variant/20 rounded-xl shadow-sm hover:shadow-md transition-shadow relative">
                               <div className="flex justify-between items-center gap-4 mb-3">
                                 <span className="font-bold text-xs font-display text-primary bg-primary/5 px-2 py-0.5 rounded">Question {i + 1}</span>
-                                <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold border uppercase tracking-wider font-display ${badgeColor}`}>{q.difficulty || 'Medium'}</span>
+                                <span className={`px-2 py-0.5 rounded-full text-2xs font-bold border uppercase tracking-wider font-display ${badgeColor}`}>{q.difficulty || 'Medium'}</span>
                               </div>
                               <div className="font-bold text-on-surface text-base sm:text-lg mb-4 font-body leading-relaxed flex gap-2">
                                 <span className="text-primary shrink-0">{i+1}.</span>
@@ -388,7 +388,7 @@ const AIToolWorkspaceWorksheet = () => {
 
                                 {visibleAnswers[i] && (
                                   <div className="mt-3 p-4 bg-primary/5 rounded-lg border border-primary/10 relative transition-all duration-200 font-body">
-                                    <span className="absolute -top-2.5 left-4 bg-surface-container-lowest px-2 text-[10px] font-bold text-primary uppercase tracking-wider font-display">Answer Key & Explanation</span>
+                                    <span className="absolute -top-2.5 left-4 bg-surface-container-lowest px-2 text-2xs font-bold text-primary uppercase tracking-wider font-display">Answer Key & Explanation</span>
                                     <div className="text-on-surface-variant leading-relaxed text-sm mt-1 prose prose-sm max-w-none">
                                       <ReactMarkdown remarkPlugins={[remarkMath, remarkGfm]} rehypePlugins={[rehypeKatex]}>{q.answer_key}</ReactMarkdown>
                                     </div>
@@ -415,7 +415,7 @@ const AIToolWorkspaceWorksheet = () => {
                         <div className="p-5 bg-surface-container-lowest border border-outline-variant/20 rounded-xl shadow-sm relative">
                           <div className="flex justify-between items-center gap-4 mb-3">
                             <span className="font-bold text-xs font-display text-primary bg-primary/5 px-2 py-0.5 rounded">Question 1</span>
-                            <span className="px-2 py-0.5 rounded-full text-[10px] font-bold border uppercase tracking-wider font-display bg-amber-500/10 text-amber-700 border-amber-500/20">Medium</span>
+                            <span className="px-2 py-0.5 rounded-full text-2xs font-bold border uppercase tracking-wider font-display bg-amber-500/10 text-amber-700 border-amber-500/20">Medium</span>
                           </div>
                           <p className="font-bold text-on-surface text-base sm:text-lg mb-4 font-body leading-relaxed">
                             A tangent PQ at a point P of a circle of radius 5 cm meets a line through the centre O at a point Q so that OQ = 12 cm. Find the length PQ.
@@ -427,7 +427,7 @@ const AIToolWorkspaceWorksheet = () => {
                             </button>
                             {visibleAnswers['d1'] && (
                               <div className="mt-3 p-4 bg-primary/5 rounded-lg border border-primary/10 relative font-body">
-                                <span className="absolute -top-2.5 left-4 bg-surface-container-lowest px-2 text-[10px] font-bold text-primary uppercase tracking-wider font-display">Answer Key & Explanation</span>
+                                <span className="absolute -top-2.5 left-4 bg-surface-container-lowest px-2 text-2xs font-bold text-primary uppercase tracking-wider font-display">Answer Key & Explanation</span>
                                 <p className="text-on-surface-variant leading-relaxed text-sm mt-1">
                                   Radius OP is perpendicular to tangent PQ at point of contact P. Thus, Triangle OPQ is a right-angled triangle.
                                   <br/>By Pythagoras theorem: OQ² = OP² + PQ²
@@ -443,7 +443,7 @@ const AIToolWorkspaceWorksheet = () => {
                         <div className="p-5 bg-surface-container-lowest border border-outline-variant/20 rounded-xl shadow-sm relative">
                           <div className="flex justify-between items-center gap-4 mb-3">
                             <span className="font-bold text-xs font-display text-primary bg-primary/5 px-2 py-0.5 rounded">Question 2</span>
-                            <span className="px-2 py-0.5 rounded-full text-[10px] font-bold border uppercase tracking-wider font-display bg-rose-500/10 text-rose-700 border-rose-500/20">Hard</span>
+                            <span className="px-2 py-0.5 rounded-full text-2xs font-bold border uppercase tracking-wider font-display bg-rose-500/10 text-rose-700 border-rose-500/20">Hard</span>
                           </div>
                           <p className="font-bold text-on-surface text-base sm:text-lg mb-4 font-body leading-relaxed">
                             Prove that the tangents drawn at the ends of a diameter of a circle are parallel to each other.
@@ -455,7 +455,7 @@ const AIToolWorkspaceWorksheet = () => {
                             </button>
                             {visibleAnswers['d2'] && (
                               <div className="mt-3 p-4 bg-primary/5 rounded-lg border border-primary/10 relative font-body">
-                                <span className="absolute -top-2.5 left-4 bg-surface-container-lowest px-2 text-[10px] font-bold text-primary uppercase tracking-wider font-display">Answer Key & Explanation</span>
+                                <span className="absolute -top-2.5 left-4 bg-surface-container-lowest px-2 text-2xs font-bold text-primary uppercase tracking-wider font-display">Answer Key & Explanation</span>
                                 <p className="text-on-surface-variant leading-relaxed text-sm mt-1">
                                   Let AB be a diameter of the circle with centre O. Let PQ and RS be tangents drawn at ends A and B respectively.
                                   <br/>Since radius is perpendicular to the tangent at point of contact:

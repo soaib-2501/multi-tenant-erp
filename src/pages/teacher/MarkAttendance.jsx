@@ -336,15 +336,15 @@ const MarkAttendance = () => {
               <div className={`grid grid-cols-3 gap-4 pt-6 border-t ${darkMode ? 'border-white/10' : 'border-outline-variant/10'}`}>
                 <div>
                   {rosterLoading ? <SkeletonBlock className={`h-7 w-8 ${darkMode ? 'bg-white/25' : ''}`} /> : <p className="text-xl font-bold">{presentCount}</p>}
-                  <p className={`text-[10px] uppercase tracking-wider ${darkMode ? 'text-blue-200' : 'text-on-surface-variant'}`}>Present</p>
+                  <p className={`text-2xs uppercase tracking-wider ${darkMode ? 'text-blue-200' : 'text-on-surface-variant'}`}>Present</p>
                 </div>
                 <div>
                   {rosterLoading ? <SkeletonBlock className={`h-7 w-8 ${darkMode ? 'bg-white/25' : ''}`} /> : <p className={`text-xl font-bold ${darkMode ? 'text-red-300' : 'text-red-600'}`}>{absentCount}</p>}
-                  <p className={`text-[10px] uppercase tracking-wider ${darkMode ? 'text-red-200/70' : 'text-red-600/80'}`}>Absent</p>
+                  <p className={`text-2xs uppercase tracking-wider ${darkMode ? 'text-red-200/70' : 'text-red-600/80'}`}>Absent</p>
                 </div>
                 <div>
                   {rosterLoading ? <SkeletonBlock className={`h-7 w-8 ${darkMode ? 'bg-white/25' : ''}`} /> : <p className={`text-xl font-bold ${darkMode ? 'text-orange-300' : 'text-orange-600'}`}>{lateCount}</p>}
-                  <p className={`text-[10px] uppercase tracking-wider ${darkMode ? 'text-orange-200/70' : 'text-orange-600/80'}`}>Late</p>
+                  <p className={`text-2xs uppercase tracking-wider ${darkMode ? 'text-orange-200/70' : 'text-orange-600/80'}`}>Late</p>
                 </div>
               </div>
             </div>
@@ -441,10 +441,10 @@ const MarkAttendance = () => {
               <table className="w-full min-w-[600px]">
                 <thead>
                   <tr className="text-left text-on-surface-variant border-b border-outline-variant/10 bg-surface-container-lowest">
-                    <th className="px-8 py-4 text-[11px] font-bold uppercase tracking-widest">Student Identity</th>
-                    <th className="px-4 py-4 text-[11px] font-bold uppercase tracking-widest">Enrollment No.</th>
-                    <th className="px-4 py-4 text-[11px] font-bold uppercase tracking-widest text-center">Record Status</th>
-                    <th className="px-8 py-4 text-[11px] font-bold uppercase tracking-widest text-right">Remarks</th>
+                    <th className="px-8 py-4 text-xs font-bold uppercase tracking-widest">Student Identity</th>
+                    <th className="px-4 py-4 text-xs font-bold uppercase tracking-widest">Enrollment No.</th>
+                    <th className="px-4 py-4 text-xs font-bold uppercase tracking-widest text-center">Record Status</th>
+                    <th className="px-8 py-4 text-xs font-bold uppercase tracking-widest text-right">Remarks</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-surface-container/50">
@@ -493,7 +493,7 @@ const MarkAttendance = () => {
                           {student.remark ? (
                             <button
                               onClick={() => handleRemarkClick(student)} 
-                              className="text-[10px] bg-red-500/10 text-red-600 dark:text-red-400 px-2 py-1 rounded-md font-bold uppercase tracking-tighter inline-block text-left max-w-[120px] truncate"
+                              className="text-2xs bg-red-500/10 text-red-600 dark:text-red-400 px-2 py-1 rounded-md font-bold uppercase tracking-tighter inline-block text-left max-w-[120px] truncate"
                               title={student.remark}
                             >
                               {student.remark}

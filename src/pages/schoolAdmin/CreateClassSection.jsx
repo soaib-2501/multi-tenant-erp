@@ -200,7 +200,7 @@ export default function CreateClassSection() {
                     disabled={loading} 
                     className="px-8 py-3.5 bg-gradient-to-r from-[#0058be] to-[#2170e4] text-white text-sm rounded-lg font-bold shadow-[0_4px_14px_rgba(0,88,190,0.3)] hover:shadow-[0_6px_20px_rgba(0,88,190,0.4)] hover:-translate-y-0.5 transition-all flex items-center gap-2 disabled:opacity-70 outline-none"
                   >
-                    {loading ? <span className="material-symbols-outlined animate-spin text-[18px]">progress_activity</span> : <span className="material-symbols-outlined text-[18px]">rocket_launch</span>}
+                    {loading ? <span className="material-symbols-outlined animate-spin text-lg">progress_activity</span> : <span className="material-symbols-outlined text-lg">rocket_launch</span>}
                     Deploy Academic Structure
                   </button>
                 </div>

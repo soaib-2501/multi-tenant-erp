@@ -540,7 +540,7 @@ const GradesAssessmentHub = () => {
             disabled={downloading}
             className="flex items-center gap-2 bg-gradient-to-br from-primary to-primary-container text-white px-6 py-3 rounded-xl font-bold shadow-lg shadow-primary/20 hover:scale-[1.02] transition-transform active:scale-95 disabled:opacity-60 disabled:cursor-not-allowed disabled:scale-100"
           >
-            <span className="material-symbols-outlined text-[20px]">
+            <span className="material-symbols-outlined text-xl">
               {downloading ? "hourglass_top" : "download"}
             </span>
             {downloading ? "Preparing PDF…" : "Download Full Report Card (PDF)"}
@@ -715,7 +715,7 @@ const GradesAssessmentHub = () => {
                     <th className="px-8 py-4 text-xs font-bold text-on-surface-variant uppercase tracking-wider text-right">
                       Progress
                       {activeTab === "final" && hasMidtermData && (
-                        <span className="block text-[10px] font-normal normal-case text-on-surface-variant/60">
+                        <span className="block text-2xs font-normal normal-case text-on-surface-variant/60">
                           vs Midterm
                         </span>
                       )}
@@ -744,7 +744,7 @@ const GradesAssessmentHub = () => {
                             <div>
                               <span className="font-bold text-on-surface block">{row.subjectName}</span>
                               {row.examLabel && (
-                                <span className="text-[11px] text-on-surface-variant">{row.examLabel}</span>
+                                <span className="text-xs text-on-surface-variant">{row.examLabel}</span>
                               )}
                             </div>
                           </div>

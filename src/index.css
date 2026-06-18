@@ -6,6 +6,19 @@
 /*   LIGHT MODE – CSS Custom Properties (Default)   */
 /* ================================================ */
 :root {
+  /* ── Type Scale ───────────────────────────────── */
+  --font-size-3xs: 0.5625rem;  /*  9px — fine print, sub-badges    */
+  --font-size-2xs: 0.625rem;   /* 10px — badges, labels, timestamps */
+  --font-size-xs:  0.75rem;    /* 12px — captions, helper text      */
+  --font-size-sm:  0.875rem;   /* 14px — body text, table rows      */
+  --font-size-base:1rem;       /* 16px — default body               */
+  --font-size-lg:  1.125rem;   /* 18px — card headings              */
+  --font-size-xl:  1.25rem;    /* 20px — section headings           */
+  --font-size-2xl: 1.5rem;     /* 24px — page titles                */
+  --font-size-3xl: 1.875rem;   /* 30px — stat numbers               */
+  --font-size-4xl: 2.25rem;    /* 36px — hero numbers               */
+  --font-size-5xl: 3rem;       /* 48px — display                    */
+
   --color-primary: #0058be;
   --color-primary-container: #2170e4;
   --color-primary-fixed: #d6e4ff;

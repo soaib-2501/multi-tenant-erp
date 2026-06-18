@@ -152,7 +152,7 @@ export default function Subjects() {
                 <th className="px-6 py-4 text-xs font-bold text-outline uppercase tracking-wider">Marks</th>
                 <th className="px-6 py-4 text-xs font-bold text-outline uppercase tracking-wider">
                   Performance
-                  <span className="ml-1 text-[9px] normal-case font-medium text-outline/60 tracking-normal">(% of max marks)</span>
+                  <span className="ml-1 text-3xs normal-case font-medium text-outline/60 tracking-normal">(% of max marks)</span>
                 </th>
                 <th className="px-6 py-4 text-xs font-bold text-outline uppercase tracking-wider">Status</th>
               </tr>
@@ -195,7 +195,7 @@ export default function Subjects() {
                       </div>
                     </td>
                     <td className="px-6 py-5">
-                      <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-[11px] font-bold ${labelColor}`}>
+                      <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold ${labelColor}`}>
                         {label}
                       </span>
                     </td>
@@ -227,7 +227,7 @@ export default function Subjects() {
                   <div className="bg-white/20 backdrop-blur-md rounded-lg px-4 py-2.5 flex items-center gap-2">
                     <span className="material-symbols-outlined text-base">star</span>
                     <div>
-                      <p className="text-[10px] opacity-75 uppercase tracking-wider font-bold">Top Subject</p>
+                      <p className="text-2xs opacity-75 uppercase tracking-wider font-bold">Top Subject</p>
                       <p className="text-sm font-extrabold">{topSubject.name} — {topSubject.pct}%</p>
                     </div>
                   </div>
@@ -236,7 +236,7 @@ export default function Subjects() {
                   <div className="bg-white/20 backdrop-blur-md rounded-lg px-4 py-2.5 flex items-center gap-2">
                     <span className="material-symbols-outlined text-base">priority_high</span>
                     <div>
-                      <p className="text-[10px] opacity-75 uppercase tracking-wider font-bold">Focus On</p>
+                      <p className="text-2xs opacity-75 uppercase tracking-wider font-bold">Focus On</p>
                       <p className="text-sm font-extrabold">{weakSubject.name} — {weakSubject.pct}%</p>
                     </div>
                   </div>
@@ -245,7 +245,7 @@ export default function Subjects() {
                   <div className="bg-white/20 backdrop-blur-md rounded-lg px-4 py-2.5 flex items-center gap-2">
                     <span className="material-symbols-outlined text-base">verified</span>
                     <div>
-                      <p className="text-[10px] opacity-75 uppercase tracking-wider font-bold">Excellent in</p>
+                      <p className="text-2xs opacity-75 uppercase tracking-wider font-bold">Excellent in</p>
                       <p className="text-sm font-extrabold">{excellentCount} Subject{excellentCount > 1 ? "s" : ""}</p>
                     </div>
                   </div>
@@ -271,7 +271,7 @@ export default function Subjects() {
                 </div>
                 <div>
                   <p className="text-xs font-bold text-on-surface">Physics Lab Report</p>
-                  <p className="text-[10px] text-outline">Due in 2 days</p>
+                  <p className="text-2xs text-outline">Due in 2 days</p>
                 </div>
               </li>
               <li className="flex gap-4">
@@ -280,7 +280,7 @@ export default function Subjects() {
                 </div>
                 <div>
                   <p className="text-xs font-bold text-on-surface">Chem Quiz 4 Prep</p>
-                  <p className="text-[10px] text-outline">Due tomorrow</p>
+                  <p className="text-2xs text-outline">Due tomorrow</p>
                 </div>
               </li>
             </ul>

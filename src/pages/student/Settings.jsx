@@ -179,7 +179,7 @@ export default function Settings() {
                       <span className="material-symbols-outlined text-base text-on-surface-variant">expand_more</span>
                     </div>
                   </div>
-                  <p className="text-[11px] text-on-surface-variant/70 mt-1.5">
+                  <p className="text-xs text-on-surface-variant/70 mt-1.5">
                     Changes language of navigation and labels
                   </p>
                 </div>
@@ -300,7 +300,7 @@ export default function Settings() {
             </div>
 
             <div className="text-center pb-2">
-              <p className="text-[10px] text-on-surface-variant/50">ScholarFlow Student Portal v4.2</p>
+              <p className="text-2xs text-on-surface-variant/50">ScholarFlow Student Portal v4.2</p>
             </div>
           </div>
         </div>

@@ -48,7 +48,7 @@ const Sidebar = () => {
               ? 'text-white group-hover:text-blue-300' 
               : 'text-slate-800 group-hover:text-primary'
           }`}>{fullName}</h3>
-          <p className="text-[10px] font-medium text-slate-400">{subtitle}</p>
+          <p className="text-2xs font-medium text-slate-400">{subtitle}</p>
         </div>
       </div>
       <nav className="flex flex-col gap-0.5 overflow-hidden pr-2 flex-1">
@@ -69,14 +69,14 @@ const Sidebar = () => {
               to={item.path}
             >
               <span className={`material-symbols-outlined text-lg transition-transform duration-300 ${!isActive && 'group-hover:scale-110'}`} style={{ fontVariationSettings: isActive ? "'FILL' 1" : "'FILL' 0" }}>{item.icon}</span>
-              <span className="font-body text-[11px] font-bold tracking-tight">{item.label}</span>
+              <span className="font-body text-sm font-bold tracking-tight">{item.label}</span>
             </Link>
           );
         })}
         <div className={`mt-4 pt-3 flex flex-col gap-0.5 border-t flex-shrink-0 ${
           darkMode ? 'border-slate-700' : 'border-slate-200'
         }`}>
-          <p className={`px-3 text-[9px] font-bold uppercase tracking-[0.2em] mb-1 ${
+          <p className={`px-3 text-3xs font-bold uppercase tracking-[0.2em] mb-1 ${
             darkMode ? 'text-slate-500' : 'text-slate-400'
           }`}>Account</p>
           {secondaryNavItems.map((item) => {
@@ -96,7 +96,7 @@ const Sidebar = () => {
                 to={item.path}
               >
               <span className="material-symbols-outlined text-lg" style={{ fontVariationSettings: isActive ? "'FILL' 1" : "'FILL' 0" }}>{item.icon}</span>
-                <span className="font-body text-[11px] font-semibold tracking-wide">{item.label}</span>
+                <span className="font-body text-xs font-semibold tracking-wide">{item.label}</span>
               </Link>
             );
           })}
@@ -109,7 +109,7 @@ const Sidebar = () => {
             }`}
           >
             <span className="material-symbols-outlined text-lg">logout</span>
-            <span className="font-body text-[11px] font-semibold tracking-wide">Log Out</span>
+            <span className="font-body text-xs font-semibold tracking-wide">Log Out</span>
           </button>
         </div>
       </nav>

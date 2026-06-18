@@ -31,7 +31,7 @@ Back to Student Analytics
           <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-bl-full -mr-8 -mt-8"></div>
           <div className="relative">
             <img alt="Aditya Sharma" className="w-24 h-24 md:w-32 md:h-32 rounded-xl object-cover shadow-sm" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCmGY6ygG3NYYUIoAzhwOsGf2BKd_ry0AyPAgQsxe8IqSSM5Y83Ka4kRuaWZ2Uo6_5UPuCiusk8RvZcYbb-x_ZNswamEMohWJF1jNxF7Bef8-2Y1hTnXwJ5R6RQYNZNI2Nky2saSNAze6XO9vQW7DmBRUV4SOOgduSZM0kpAi5GOYJox6MbyLkXF5UtlEV6DVSTPGmIhHa6lRbtkfpsV586bEmuuZMGThDDrynVNEAHk0m1K1aycCQic8UMU6R13UnaK0QwHHGdtA" />
-            <div className="absolute -bottom-2 -right-2 bg-primary text-white text-[10px] font-bold px-2 py-1 rounded-full uppercase tracking-widest">Active</div>
+            <div className="absolute -bottom-2 -right-2 bg-primary text-white text-2xs font-bold px-2 py-1 rounded-full uppercase tracking-widest">Active</div>
           </div>
           <div className="flex-1 text-center md:text-left">
             <h1 className="font-display text-3xl font-extrabold tracking-tight text-on-surface">Aditya Sharma</h1>
@@ -42,19 +42,19 @@ Back to Student Analytics
             </div>
             <div className="mt-6 grid grid-cols-2 md:grid-cols-4 gap-4">
               <div className="bg-surface-container-low p-3 rounded-md">
-                <p className="text-[10px] uppercase font-bold text-slate-500 tracking-wider">Avg Score</p>
+                <p className="text-2xs uppercase font-bold text-slate-500 tracking-wider">Avg Score</p>
                 <p className="text-xl font-extrabold font-display text-primary">88.4%</p>
               </div>
               <div className="bg-surface-container-low p-3 rounded-md">
-                <p className="text-[10px] uppercase font-bold text-slate-500 tracking-wider">Attendance</p>
+                <p className="text-2xs uppercase font-bold text-slate-500 tracking-wider">Attendance</p>
                 <p className="text-xl font-extrabold font-display text-on-surface">94%</p>
               </div>
               <div className="bg-surface-container-low p-3 rounded-md">
-                <p className="text-[10px] uppercase font-bold text-slate-500 tracking-wider">Rank</p>
+                <p className="text-2xs uppercase font-bold text-slate-500 tracking-wider">Rank</p>
                 <p className="text-xl font-extrabold font-display text-[#6b38d4]">04/45</p>
               </div>
               <div className="bg-surface-container-low p-3 rounded-md">
-                <p className="text-[10px] uppercase font-bold text-slate-500 tracking-wider">Assessments</p>
+                <p className="text-2xs uppercase font-bold text-slate-500 tracking-wider">Assessments</p>
                 <p className="text-xl font-extrabold font-display text-on-surface">12/12</p>
               </div>
             </div>
@@ -85,27 +85,27 @@ Back to Student Analytics
                 {/* Simulated Bar/Line Hybrid */}
                 <div className="flex-1 group flex flex-col items-center gap-2">
                   <div className="w-full bg-primary/20 rounded-t-lg transition-all h-[60%] hover:bg-primary"></div>
-                  <span className="text-[10px] font-bold text-slate-400">JUL</span>
+                  <span className="text-2xs font-bold text-slate-400">JUL</span>
                 </div>
                 <div className="flex-1 group flex flex-col items-center gap-2">
                   <div className="w-full bg-primary/20 rounded-t-lg transition-all h-[75%] hover:bg-primary"></div>
-                  <span className="text-[10px] font-bold text-slate-400">AUG</span>
+                  <span className="text-2xs font-bold text-slate-400">AUG</span>
                 </div>
                 <div className="flex-1 group flex flex-col items-center gap-2">
                   <div className="w-full bg-primary/20 rounded-t-lg transition-all h-[70%] hover:bg-primary"></div>
-                  <span className="text-[10px] font-bold text-slate-400">SEP</span>
+                  <span className="text-2xs font-bold text-slate-400">SEP</span>
                 </div>
                 <div className="flex-1 group flex flex-col items-center gap-2">
                   <div className="w-full bg-primary/40 rounded-t-lg transition-all h-[88%] hover:bg-primary"></div>
-                  <span className="text-[10px] font-bold text-primary">OCT</span>
+                  <span className="text-2xs font-bold text-primary">OCT</span>
                 </div>
                 <div className="flex-1 group flex flex-col items-center gap-2">
                   <div className="w-full bg-primary/20 rounded-t-lg transition-all h-[82%] hover:bg-primary"></div>
-                  <span className="text-[10px] font-bold text-slate-400">NOV</span>
+                  <span className="text-2xs font-bold text-slate-400">NOV</span>
                 </div>
                 <div className="flex-1 group flex flex-col items-center gap-2">
                   <div className="w-full bg-primary/20 rounded-t-lg transition-all h-[92%] hover:bg-primary"></div>
-                  <span className="text-[10px] font-bold text-slate-400">DEC</span>
+                  <span className="text-2xs font-bold text-slate-400">DEC</span>
                 </div>
               </div>
             </div>
@@ -116,7 +116,7 @@ Back to Student Analytics
               <div className="overflow-x-auto">
                 <table className="w-full text-left min-w-[500px]">
                   <thead>
-                    <tr className="text-[10px] uppercase tracking-widest text-slate-400 border-b border-surface-container">
+                    <tr className="text-2xs uppercase tracking-widest text-slate-400 border-b border-surface-container">
                       <th className="pb-4 font-bold">Subject</th>
                       <th className="pb-4 font-bold">Assignments</th>
                       <th className="pb-4 font-bold">Exams</th>
@@ -170,14 +170,14 @@ Back to Student Analytics
                   <div className="mt-2 h-1 w-full bg-slate-200 rounded-full overflow-hidden">
                     <div className="bg-[#924700] h-full w-[45%]"></div>
                   </div>
-                  <p className="text-[10px] mt-1 text-slate-500">Mastery: 45%</p>
+                  <p className="text-2xs mt-1 text-slate-500">Mastery: 45%</p>
                 </div>
                 <div className="bg-white/60 p-3 rounded-md">
                   <p className="text-sm font-bold text-on-surface">Fluid Dynamics</p>
                   <div className="mt-2 h-1 w-full bg-slate-200 rounded-full overflow-hidden">
                     <div className="bg-[#924700] h-full w-[58%]"></div>
                   </div>
-                  <p className="text-[10px] mt-1 text-slate-500">Mastery: 58%</p>
+                  <p className="text-2xs mt-1 text-slate-500">Mastery: 58%</p>
                 </div>
               </div>
               <button className="w-full mt-6 bg-[#924700] text-white py-3 rounded-md text-sm font-bold shadow-sm hover:opacity-90 transition-opacity flex items-center justify-center gap-2 outline-none border-none cursor-pointer">

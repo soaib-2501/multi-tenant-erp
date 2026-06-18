@@ -458,11 +458,11 @@ const MyClassesHub = () => {
                     <span className={`material-symbols-outlined ${aes.colorClass} text-3xl`}>{aes.icon}</span>
                   </div>
                   <div className="flex flex-col items-end gap-2">
-                    <div className={`px-3 py-1 rounded-full text-[10px] font-bold tracking-widest uppercase border ${aes.borderClass} ${aes.colorClass} bg-white dark:bg-slate-800 shadow-sm`}>
+                    <div className={`px-3 py-1 rounded-full text-2xs font-bold tracking-widest uppercase border ${aes.borderClass} ${aes.colorClass} bg-white dark:bg-slate-800 shadow-sm`}>
                       Active
                     </div>
                     {cls.is_class_teacher && (
-                      <span className={`text-[10px] font-bold px-2 py-0.5 rounded border flex items-center gap-1 ${darkMode ? 'text-amber-400 bg-amber-900/30 border-amber-600/30' : 'text-blue-700 bg-blue-50 border-blue-200'}`}>
+                      <span className={`text-2xs font-bold px-2 py-0.5 rounded border flex items-center gap-1 ${darkMode ? 'text-amber-400 bg-amber-900/30 border-amber-600/30' : 'text-blue-700 bg-blue-50 border-blue-200'}`}>
                         <span className="material-symbols-outlined text-[12px]">star</span>
                         Class Teacher
                       </span>
@@ -475,7 +475,7 @@ const MyClassesHub = () => {
                 </div>
                 <div className="grid grid-cols-2 gap-4 mb-8">
                   <div className={`p-4 rounded-md border transition-colors ${darkMode ? 'bg-slate-700/50 border-slate-600' : 'bg-surface-container/50 border-outline-variant/20'}`}>
-                    <p className={`text-[10px] uppercase font-bold tracking-wider mb-1 ${darkMode ? 'text-slate-400' : 'text-on-surface-variant'}`}>Students</p>
+                    <p className={`text-2xs uppercase font-bold tracking-wider mb-1 ${darkMode ? 'text-slate-400' : 'text-on-surface-variant'}`}>Students</p>
                     <div className="flex items-center gap-2">
                       <span className="material-symbols-outlined text-sm text-primary dark:text-blue-400">groups</span>
                       {showMetricSkeletons ? (
@@ -486,7 +486,7 @@ const MyClassesHub = () => {
                     </div>
                   </div>
                   <div className={`p-4 rounded-md border transition-colors ${darkMode ? 'bg-slate-700/50 border-slate-600' : 'bg-surface-container/50 border-outline-variant/20'}`}>
-                    <p className={`text-[10px] uppercase font-bold tracking-wider mb-1 ${darkMode ? 'text-slate-400' : 'text-on-surface-variant'}`}>Avg. Performance</p>
+                    <p className={`text-2xs uppercase font-bold tracking-wider mb-1 ${darkMode ? 'text-slate-400' : 'text-on-surface-variant'}`}>Avg. Performance</p>
                     <div className="flex items-center gap-2">
                       <span className="material-symbols-outlined text-sm text-primary dark:text-white">horizontal_rule</span>
                       {showMetricSkeletons ? (
@@ -527,12 +527,12 @@ const MyClassesHub = () => {
                 onClick={handleReset}
                 className="bg-white border border-gray-200 text-slate-700 font-semibold px-8 py-3 rounded-md hover:bg-gray-50 transition-all shadow-sm flex items-center gap-2"
               >
-                <span className="material-symbols-outlined text-[18px]">restart_alt</span>
+                <span className="material-symbols-outlined text-lg">restart_alt</span>
                 Reset Filters
               </button>
             ) : (
               <button className="bg-white border border-gray-200 text-slate-700 font-semibold px-8 py-3 rounded-md hover:bg-gray-50 transition-all shadow-sm flex items-center gap-2">
-                <span className="material-symbols-outlined text-[18px]">mail</span>
+                <span className="material-symbols-outlined text-lg">mail</span>
                 Contact Administrator
               </button>
             )}
@@ -547,7 +547,7 @@ const MyClassesHub = () => {
               <div className="bg-white/10 p-3 rounded-xl border border-white/20">
                 <span className="material-symbols-outlined text-blue-300 text-3xl">psychology</span>
               </div>
-              <div className="bg-purple-500/20 px-3 py-1 rounded-full text-[10px] font-bold text-purple-200 tracking-widest uppercase flex items-center gap-1 border border-purple-400/30">
+              <div className="bg-purple-500/20 px-3 py-1 rounded-full text-2xs font-bold text-purple-200 tracking-widest uppercase flex items-center gap-1 border border-purple-400/30">
                 <span className="material-symbols-outlined text-[12px]" style={{ fontVariationSettings: "'FILL' 1" }}>auto_awesome</span>
                 AI Insight Generated
               </div>

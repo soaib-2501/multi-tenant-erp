@@ -4,7 +4,7 @@ import MainLayout from '../../layouts/MainLayout';
 
 export default function ActiveQuiz() {
   return (
-    <MainLayout title={<Link to="/student/quiz" className="flex items-center gap-2 text-primary hover:text-primary-container transition-colors border border-primary/30 bg-primary/5 px-4 py-1.5 rounded-full"><span className="material-symbols-outlined text-[18px]">arrow_back</span> <span className="text-sm font-bold">Back to Practice &amp; Quiz</span></Link>}>
+    <MainLayout title={<Link to="/student/quiz" className="flex items-center gap-2 text-primary hover:text-primary-container transition-colors border border-primary/30 bg-primary/5 px-4 py-1.5 rounded-full"><span className="material-symbols-outlined text-lg">arrow_back</span> <span className="text-sm font-bold">Back to Practice &amp; Quiz</span></Link>}>
       <div className="px-6 py-4 max-w-4xl mx-auto">
 
 {/* Header */}
@@ -41,7 +41,7 @@ export default function ActiveQuiz() {
 <label className="group relative flex items-center p-3.5 rounded-lg border border-transparent bg-surface-container-low hover:bg-surface-container hover:shadow-sm cursor-pointer transition-all active:scale-[0.99]">
 <input className="w-4 h-4 text-primary border-outline-variant focus:ring-primary focus:ring-offset-0 bg-white" name="quiz_option" type="radio"/>
 <div className="ml-3 flex-1">
-<span className="block text-[11px] font-bold text-on-surface-variant mb-0.5 uppercase tracking-tight">Option A</span>
+<span className="block text-xs font-bold text-on-surface-variant mb-0.5 uppercase tracking-tight">Option A</span>
 <span className="text-base font-medium font-body text-on-surface">2x</span>
 </div>
 <span className="material-symbols-outlined text-outline-variant text-xl opacity-0 group-hover:opacity-100 transition-opacity">check_circle</span>
@@ -50,7 +50,7 @@ export default function ActiveQuiz() {
 <label className="group relative flex items-center p-3.5 rounded-lg border-2 border-primary bg-white shadow-md cursor-pointer transition-all active:scale-[0.99]">
 <input defaultChecked className="w-4 h-4 text-primary border-primary focus:ring-primary focus:ring-offset-0" name="quiz_option" type="radio"/>
 <div className="ml-3 flex-1">
-<span className="block text-[11px] font-bold text-primary mb-0.5 uppercase tracking-tight">Option B</span>
+<span className="block text-xs font-bold text-primary mb-0.5 uppercase tracking-tight">Option B</span>
 <span className="text-base font-bold font-body text-on-surface">x</span>
 </div>
 <span className="material-symbols-outlined text-primary text-xl" data-weight="fill">check_circle</span>
@@ -59,7 +59,7 @@ export default function ActiveQuiz() {
 <label className="group relative flex items-center p-3.5 rounded-lg border border-transparent bg-surface-container-low hover:bg-surface-container hover:shadow-sm cursor-pointer transition-all active:scale-[0.99]">
 <input className="w-4 h-4 text-primary border-outline-variant focus:ring-primary focus:ring-offset-0 bg-white" name="quiz_option" type="radio"/>
 <div className="ml-3 flex-1">
-<span className="block text-[11px] font-bold text-on-surface-variant mb-0.5 uppercase tracking-tight">Option C</span>
+<span className="block text-xs font-bold text-on-surface-variant mb-0.5 uppercase tracking-tight">Option C</span>
 <span className="text-base font-medium font-body text-on-surface">x<sup>2</sup></span>
 </div>
 <span className="material-symbols-outlined text-outline-variant text-xl opacity-0 group-hover:opacity-100 transition-opacity">check_circle</span>
@@ -68,7 +68,7 @@ export default function ActiveQuiz() {
 <label className="group relative flex items-center p-3.5 rounded-lg border border-transparent bg-surface-container-low hover:bg-surface-container hover:shadow-sm cursor-pointer transition-all active:scale-[0.99]">
 <input className="w-4 h-4 text-primary border-outline-variant focus:ring-primary focus:ring-offset-0 bg-white" name="quiz_option" type="radio"/>
 <div className="ml-3 flex-1">
-<span className="block text-[11px] font-bold text-on-surface-variant mb-0.5 uppercase tracking-tight">Option D</span>
+<span className="block text-xs font-bold text-on-surface-variant mb-0.5 uppercase tracking-tight">Option D</span>
 <span className="text-base font-medium font-body text-on-surface">1</span>
 </div>
 <span className="material-symbols-outlined text-outline-variant text-xl opacity-0 group-hover:opacity-100 transition-opacity">check_circle</span>
@@ -85,25 +85,25 @@ export default function ActiveQuiz() {
 <h4 className="font-headline font-bold text-sm text-on-tertiary-fixed-variant leading-tight">AI Hint Available</h4>
 <p className="text-xs text-on-tertiary-fixed-variant/80 font-body mt-0.5">Remember the power rule: d/dx [x<sup>n</sup>] = nx<sup>n-1</sup>. This might help you solve the current question faster.</p>
 </div>
-<button className="ml-auto text-[10px] font-bold bg-tertiary-container text-white px-3 py-1.5 rounded-md hover:opacity-90 transition-opacity uppercase tracking-wider whitespace-nowrap">Use Hint</button>
+<button className="ml-auto text-2xs font-bold bg-tertiary-container text-white px-3 py-1.5 rounded-md hover:opacity-90 transition-opacity uppercase tracking-wider whitespace-nowrap">Use Hint</button>
 </div>
 
 {/* Footer Navigation */}
 <footer className="flex flex-col md:flex-row items-center justify-between gap-4 pt-4 border-t border-outline-variant/10">
 <div className="flex gap-3 w-full md:w-auto">
 <button className="flex-1 md:flex-none flex items-center justify-center gap-1.5 px-5 py-2.5 rounded-lg font-bold text-sm font-label bg-surface-container-high text-primary hover:bg-surface-container-highest transition-all active:scale-95">
-<span className="material-symbols-outlined text-[18px]">chevron_left</span>
+<span className="material-symbols-outlined text-lg">chevron_left</span>
                         Previous question
                     </button>
 <button className="flex-1 md:flex-none flex items-center justify-center gap-1.5 px-5 py-2.5 rounded-lg font-bold text-sm font-label bg-surface-container-high text-primary hover:bg-surface-container-highest transition-all active:scale-95">
                         Next question
-                        <span className="material-symbols-outlined text-[18px]">chevron_right</span>
+                        <span className="material-symbols-outlined text-lg">chevron_right</span>
 </button>
 </div>
 <div className="flex items-center gap-3 w-full md:w-auto">
 <Link to="/student/quiz/result" className="w-full md:w-auto px-6 py-2.5 rounded-lg font-bold text-sm font-label primary-gradient text-white shadow-lg hover:shadow-primary/25 hover:opacity-95 transition-all active:scale-95 flex items-center justify-center gap-2">
                         Submit Quiz
-                        <span className="material-symbols-outlined text-[18px]">task_alt</span>
+                        <span className="material-symbols-outlined text-lg">task_alt</span>
 </Link>
 </div>
 </footer>

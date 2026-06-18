@@ -151,7 +151,7 @@ export default function ToolActionButtons({
         disabled={isSaving || !contentData}
         className="flex items-center gap-2 px-6 py-2.5 bg-[#0058be] text-white text-sm font-bold rounded-lg shadow-sm hover:bg-blue-700 transition-all disabled:opacity-50"
       >
-        <span className="material-symbols-outlined text-[18px]">
+        <span className="material-symbols-outlined text-lg">
           {isSaving ? 'sync' : 'save'}
         </span>
         {isSaving ? 'Saving...' : `Save ${toolName.split(' ')[0]}`}
@@ -162,7 +162,7 @@ export default function ToolActionButtons({
         disabled={isExporting || !contentData}
         className="flex items-center gap-2 px-6 py-2.5 bg-[#eff4ff] text-[#0058be] text-sm font-bold rounded-lg hover:bg-[#dce9ff] transition-all disabled:opacity-50"
       >
-        <span className="material-symbols-outlined text-[18px]">
+        <span className="material-symbols-outlined text-lg">
           {isExporting ? 'hourglass_empty' : 'download'}
         </span>
         {isExporting ? 'Exporting...' : `Export ${exportType}`}
@@ -174,7 +174,7 @@ export default function ToolActionButtons({
           onClick={() => setIsShareOpen(!isShareOpen)}
           className="flex items-center gap-2 px-6 py-2.5 bg-[#eff4ff] text-[#0058be] text-sm font-bold rounded-lg hover:bg-[#dce9ff] transition-all"
         >
-          <span className="material-symbols-outlined text-[18px]">share</span>
+          <span className="material-symbols-outlined text-lg">share</span>
           Share
         </button>
 
@@ -184,14 +184,14 @@ export default function ToolActionButtons({
               onClick={() => handleNativeShare('link')}
               className="w-full text-left px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-2 border-b border-gray-100 transition-colors"
             >
-              <span className="material-symbols-outlined text-[16px] text-gray-500">link</span>
+              <span className="material-symbols-outlined text-sm text-gray-500">link</span>
               Share Link
             </button>
             <button 
               onClick={() => handleNativeShare('pdf')}
               className="w-full text-left px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-2 transition-colors"
             >
-              <span className="material-symbols-outlined text-[16px] text-red-500">picture_as_pdf</span>
+              <span className="material-symbols-outlined text-sm text-red-500">picture_as_pdf</span>
               Share as PDF
             </button>
           </div>
@@ -199,7 +199,7 @@ export default function ToolActionButtons({
       </div>
 
       <button className="flex items-center gap-2 px-6 py-2.5 bg-[#6b38d4] text-white text-sm font-bold rounded-lg shadow-sm hover:bg-purple-700 transition-all ml-auto">
-        <span className="material-symbols-outlined text-[18px]">assignment_add</span>
+        <span className="material-symbols-outlined text-lg">assignment_add</span>
         Assign
       </button>
     </div>

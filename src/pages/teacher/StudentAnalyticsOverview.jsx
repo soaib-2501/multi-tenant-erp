@@ -23,7 +23,7 @@ const StudentAnalyticsOverview = () => {
           </div>
           <div className="flex gap-3">
             <button className="flex items-center gap-2 px-5 py-2.5 bg-surface-container-high text-primary font-semibold rounded-md transition-all active:scale-95 outline-none border-none cursor-pointer">
-              <span className="material-symbols-outlined text-[20px]">file_download</span> Export
+              <span className="material-symbols-outlined text-xl">file_download</span> Export
             </button>
             <button
 
@@ -41,21 +41,21 @@ View Detail
         {/* Filters Section */}
         <section className="bg-surface-container-low p-4 rounded-xl flex flex-wrap gap-4 items-center">
           <div className="flex-1 min-w-[140px]">
-            <label className="block text-[10px] uppercase tracking-wider font-bold text-on-surface-variant mb-1 ml-1">Class</label>
+            <label className="block text-2xs uppercase tracking-wider font-bold text-on-surface-variant mb-1 ml-1">Class</label>
             <select className="w-full bg-surface-container-lowest border-none rounded-md text-sm font-medium focus:ring-2 focus:ring-primary/40 outline-none cursor-pointer py-2 px-3">
               <option>Class 12</option>
               <option>Class 11</option>
             </select>
           </div>
           <div className="flex-1 min-w-[100px]">
-            <label className="block text-[10px] uppercase tracking-wider font-bold text-on-surface-variant mb-1 ml-1">Section</label>
+            <label className="block text-2xs uppercase tracking-wider font-bold text-on-surface-variant mb-1 ml-1">Section</label>
             <select className="w-full bg-surface-container-lowest border-none rounded-md text-sm font-medium focus:ring-2 focus:ring-primary/40 outline-none cursor-pointer py-2 px-3">
               <option>Section B</option>
               <option>Section A</option>
             </select>
           </div>
           <div className="flex-1 min-w-[160px]">
-            <label className="block text-[10px] uppercase tracking-wider font-bold text-on-surface-variant mb-1 ml-1">Subject</label>
+            <label className="block text-2xs uppercase tracking-wider font-bold text-on-surface-variant mb-1 ml-1">Subject</label>
             <select className="w-full bg-surface-container-lowest border-none rounded-md text-sm font-medium focus:ring-2 focus:ring-primary/40 outline-none cursor-pointer py-2 px-3">
               <option>Advanced Physics</option>
               <option>Calculus III</option>
@@ -63,7 +63,7 @@ View Detail
             </select>
           </div>
           <div className="flex-1 min-w-[180px]">
-            <label className="block text-[10px] uppercase tracking-wider font-bold text-on-surface-variant mb-1 ml-1">Time Range</label>
+            <label className="block text-2xs uppercase tracking-wider font-bold text-on-surface-variant mb-1 ml-1">Time Range</label>
             <select className="w-full bg-surface-container-lowest border-none rounded-md text-sm font-medium focus:ring-2 focus:ring-primary/40 outline-none cursor-pointer py-2 px-3">
               <option>Last 30 Days</option>
               <option>Last Quarter</option>
@@ -81,7 +81,7 @@ View Detail
               <h2 className="text-3xl font-extrabold font-display">78.4<span className="text-lg font-bold text-slate-400">%</span></h2>
               <span className="text-xs font-bold text-green-600 flex items-center bg-green-50 px-1.5 py-0.5 rounded">+2.4%</span>
             </div>
-            <p className="text-[11px] text-slate-400 mt-1">vs Last Month</p>
+            <p className="text-xs text-slate-400 mt-1">vs Last Month</p>
           </div>
           <div className="bg-surface-container-lowest p-6 rounded-lg relative overflow-hidden group shadow-sm">
             <div className="absolute top-0 right-0 w-24 h-24 bg-[#6b38d4]/5 rounded-full -mr-8 -mt-8 transition-transform group-hover:scale-110"></div>
@@ -90,7 +90,7 @@ View Detail
               <h2 className="text-3xl font-extrabold font-display">92.1<span className="text-lg font-bold text-slate-400">%</span></h2>
               <span className="text-xs font-bold text-red-600 flex items-center bg-red-50 px-1.5 py-0.5 rounded">-0.8%</span>
             </div>
-            <p className="text-[11px] text-slate-400 mt-1">vs School Average</p>
+            <p className="text-xs text-slate-400 mt-1">vs School Average</p>
           </div>
           <div className="bg-surface-container-lowest p-6 rounded-lg relative overflow-hidden group shadow-sm">
             <div className="absolute top-0 right-0 w-24 h-24 bg-[#924700]/5 rounded-full -mr-8 -mt-8 transition-transform group-hover:scale-110"></div>
@@ -108,7 +108,7 @@ View Detail
               <h2 className="text-3xl font-extrabold font-display">06</h2>
               <span className="text-sm font-bold text-on-surface-variant">Students</span>
             </div>
-            <p className="text-[11px] text-slate-400 mt-1">High risk of grade drop</p>
+            <p className="text-xs text-slate-400 mt-1">High risk of grade drop</p>
           </div>
         </section>
 
@@ -149,7 +149,7 @@ View Detail
               <div className="flex items-center justify-between group">
                 <div className="flex flex-col">
                   <span className="text-sm font-bold text-on-surface">Wave Optics</span>
-                  <span className="text-[11px] text-on-surface-variant">42% Understanding</span>
+                  <span className="text-xs text-on-surface-variant">42% Understanding</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <div className="w-20 bg-surface-container-low h-2 rounded-full overflow-hidden">
@@ -160,7 +160,7 @@ View Detail
               <div class="flex items-center justify-between">
                 <div class="flex flex-col">
                   <span class="text-sm font-bold text-on-surface">Electromagnetism</span>
-                  <span class="text-[11px] text-on-surface-variant">58% Understanding</span>
+                  <span class="text-xs text-on-surface-variant">58% Understanding</span>
                 </div>
                 <div class="flex items-center gap-2">
                   <div class="w-20 bg-surface-container-low h-2 rounded-full overflow-hidden">
@@ -171,7 +171,7 @@ View Detail
               <div class="flex items-center justify-between">
                 <div class="flex flex-col">
                   <span class="text-sm font-bold text-on-surface">Quantum Mechanics</span>
-                  <span class="text-[11px] text-on-surface-variant">61% Understanding</span>
+                  <span class="text-xs text-on-surface-variant">61% Understanding</span>
                 </div>
                 <div class="flex items-center gap-2">
                   <div class="w-20 bg-surface-container-low h-2 rounded-full overflow-hidden">
@@ -182,7 +182,7 @@ View Detail
             </div>
             
             <div className="mt-8 p-4 bg-[#ffdcc6]/30 rounded-lg border border-[#924700]/10">
-              <p className="text-[11px] font-bold text-[#723600] uppercase tracking-tighter mb-1">Teacher Recommendation</p>
+              <p className="text-xs font-bold text-[#723600] uppercase tracking-tighter mb-1">Teacher Recommendation</p>
               <p className="text-xs font-medium text-[#b75b00] italic">"Focus on visual simulations for Wave Optics to improve conceptual retention."</p>
             </div>
           </div>
@@ -194,7 +194,7 @@ View Detail
           <div className="bg-surface-container-lowest p-6 rounded-xl h-80 flex flex-col shadow-sm border border-outline-variant/10">
             <div className="flex justify-between items-start mb-6">
               <h3 className="text-lg font-bold font-display">Performance Trends</h3>
-              <div className="flex items-center gap-4 text-[10px] font-bold uppercase text-slate-400">
+              <div className="flex items-center gap-4 text-2xs font-bold uppercase text-slate-400">
                 <span className="flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-primary"></span> This Year</span>
                 <span className="flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-slate-300"></span> Prev Year</span>
               </div>
@@ -218,11 +218,11 @@ View Detail
               </svg>
             </div>
             <div className="flex justify-between mt-4 px-2">
-              <span className="text-[10px] font-bold text-slate-400">SEP</span>
-              <span className="text-[10px] font-bold text-slate-400">NOV</span>
-              <span className="text-[10px] font-bold text-slate-400">JAN</span>
-              <span className="text-[10px] font-bold text-slate-400">MAR</span>
-              <span className="text-[10px] font-bold text-slate-400">MAY</span>
+              <span className="text-2xs font-bold text-slate-400">SEP</span>
+              <span className="text-2xs font-bold text-slate-400">NOV</span>
+              <span className="text-2xs font-bold text-slate-400">JAN</span>
+              <span className="text-2xs font-bold text-slate-400">MAR</span>
+              <span className="text-2xs font-bold text-slate-400">MAY</span>
             </div>
           </div>
           
@@ -235,28 +235,28 @@ View Detail
                   <div className="absolute inset-0 bg-primary rounded-t-lg scale-y-0 group-hover:scale-y-100 origin-bottom transition-transform duration-300"></div>
                   <span className="absolute -top-6 left-1/2 -translate-x-1/2 text-xs font-bold text-primary">65%</span>
                 </div>
-                <span className="text-[10px] font-bold text-on-surface-variant">MATH</span>
+                <span className="text-2xs font-bold text-on-surface-variant">MATH</span>
               </div>
               <div className="flex-1 flex flex-col items-center gap-2">
                 <div className="w-full bg-primary/10 rounded-t-lg h-[88%] relative group">
                   <div className="absolute inset-0 bg-primary rounded-t-lg scale-y-0 group-hover:scale-y-100 origin-bottom transition-transform duration-300"></div>
                   <span className="absolute -top-6 left-1/2 -translate-x-1/2 text-xs font-bold text-primary">88%</span>
                 </div>
-                <span className="text-[10px] font-bold text-on-surface-variant">PHYS</span>
+                <span className="text-2xs font-bold text-on-surface-variant">PHYS</span>
               </div>
               <div className="flex-1 flex flex-col items-center gap-2">
                 <div className="w-full bg-primary/10 rounded-t-lg h-[45%] relative group">
                   <div className="absolute inset-0 bg-red-500 rounded-t-lg scale-y-0 group-hover:scale-y-100 origin-bottom transition-transform duration-300"></div>
                   <span className="absolute -top-6 left-1/2 -translate-x-1/2 text-xs font-bold text-red-500">45%</span>
                 </div>
-                <span className="text-[10px] font-bold text-on-surface-variant">CHEM</span>
+                <span className="text-2xs font-bold text-on-surface-variant">CHEM</span>
               </div>
               <div className="flex-1 flex flex-col items-center gap-2">
                 <div className="w-full bg-primary/10 rounded-t-lg h-[72%] relative group">
                   <div className="absolute inset-0 bg-primary rounded-t-lg scale-y-0 group-hover:scale-y-100 origin-bottom transition-transform duration-300"></div>
                   <span className="absolute -top-6 left-1/2 -translate-x-1/2 text-xs font-bold text-primary">72%</span>
                 </div>
-                <span className="text-[10px] font-bold text-on-surface-variant">BIO</span>
+                <span className="text-2xs font-bold text-on-surface-variant">BIO</span>
               </div>
             </div>
           </div>
@@ -268,7 +268,7 @@ View Detail
             <h3 className="text-xl font-bold font-display">Student Performance Roster</h3>
             <div className="flex gap-2">
               <button className="p-2 hover:bg-surface-container rounded-md transition-colors border-none outline-none cursor-pointer bg-transparent text-slate-400">
-                <span className="material-symbols-outlined text-[20px] block">filter_list</span>
+                <span className="material-symbols-outlined text-xl block">filter_list</span>
               </button>
             </div>
           </div>
@@ -276,11 +276,11 @@ View Detail
             <table className="w-full text-left border-collapse min-w-[700px]">
               <thead className="bg-surface-container-low/50">
                 <tr>
-                  <th className="px-6 py-4 text-[10px] font-bold uppercase tracking-widest text-slate-500">Name</th>
-                  <th className="px-6 py-4 text-[10px] font-bold uppercase tracking-widest text-slate-500">Avg Score</th>
-                  <th className="px-6 py-4 text-[10px] font-bold uppercase tracking-widest text-slate-500">Attendance %</th>
-                  <th className="px-6 py-4 text-[10px] font-bold uppercase tracking-widest text-slate-500">Level</th>
-                  <th className="px-6 py-4 text-[10px] font-bold uppercase tracking-widest text-slate-500">Actions</th>
+                  <th className="px-6 py-4 text-2xs font-bold uppercase tracking-widest text-slate-500">Name</th>
+                  <th className="px-6 py-4 text-2xs font-bold uppercase tracking-widest text-slate-500">Avg Score</th>
+                  <th className="px-6 py-4 text-2xs font-bold uppercase tracking-widest text-slate-500">Attendance %</th>
+                  <th className="px-6 py-4 text-2xs font-bold uppercase tracking-widest text-slate-500">Level</th>
+                  <th className="px-6 py-4 text-2xs font-bold uppercase tracking-widest text-slate-500">Actions</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-surface-container/50">
@@ -295,7 +295,7 @@ View Detail
                      <td className="px-6 py-4 text-sm font-medium">{student.score}</td>
                      <td className="px-6 py-4 text-sm font-medium">{student.attendance}</td>
                      <td className="px-6 py-4">
-                       <span className={`px-3 py-1 text-[10px] font-extrabold rounded-full uppercase ${student.levelColor}`}>{student.level}</span>
+                       <span className={`px-3 py-1 text-2xs font-extrabold rounded-full uppercase ${student.levelColor}`}>{student.level}</span>
                      </td>
                      <td className="px-6 py-4">
                        <button onClick={() => navigate('/analytics/student/1')} className="text-primary hover:underline text-xs font-bold border-none outline-none cursor-pointer bg-transparent">Details</button>

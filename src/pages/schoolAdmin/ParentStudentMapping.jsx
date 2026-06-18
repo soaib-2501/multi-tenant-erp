@@ -152,7 +152,7 @@ export default function ParentStudentMapping() {
                           <div>
                             <p className="font-semibold text-on-surface font-body">{m.parent_name || "Unknown Parent"}</p>
                             {m.is_primary_contact && (
-                              <span className="text-[10px] uppercase font-bold text-primary bg-primary/10 px-1.5 py-0.5 rounded">Primary Contact</span>
+                              <span className="text-2xs uppercase font-bold text-primary bg-primary/10 px-1.5 py-0.5 rounded">Primary Contact</span>
                             )}
                           </div>
                         </div>
@@ -174,13 +174,13 @@ export default function ParentStudentMapping() {
                         <div className="flex justify-center gap-2">
                           <span 
                             title="Academics Access" 
-                            className={`material-symbols-outlined text-[18px] ${m.can_view_academics ? 'text-success' : 'text-outline/40'}`}
+                            className={`material-symbols-outlined text-lg ${m.can_view_academics ? 'text-success' : 'text-outline/40'}`}
                           >
                             menu_book
                           </span>
                           <span 
                             title="Fee Payment Access" 
-                            className={`material-symbols-outlined text-[18px] ${m.can_pay_fees ? 'text-primary' : 'text-outline/40'}`}
+                            className={`material-symbols-outlined text-lg ${m.can_pay_fees ? 'text-primary' : 'text-outline/40'}`}
                           >
                             payments
                           </span>

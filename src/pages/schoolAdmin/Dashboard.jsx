@@ -86,9 +86,9 @@ export default function Dashboard() {
           <div className="bg-surface-container-lowest p-4 rounded-lg shadow-sm border-l-4 border-primary">
             <div className="flex justify-between mb-2">
               <div className="p-1.5 bg-primary/10 rounded flex items-center justify-center">
-                <span className="material-symbols-outlined text-primary text-[20px]">school</span>
+                <span className="material-symbols-outlined text-primary text-xl">school</span>
               </div>
-              <span className="text-[10px] font-semibold bg-primary/10 text-primary px-1.5 py-0.5 rounded-full">+4%</span>
+              <span className="text-2xs font-semibold bg-primary/10 text-primary px-1.5 py-0.5 rounded-full">+4%</span>
             </div>
             <p className="text-xs text-on-surface-variant font-body">Total Enrolled</p>
             <h3 className="text-2xl font-headline font-bold text-on-surface">1,284</h3>
@@ -96,23 +96,23 @@ export default function Dashboard() {
           <div className="bg-surface-container-lowest p-4 rounded-lg shadow-sm border-l-4 border-secondary">
             <div className="flex justify-between mb-2">
               <div className="p-1.5 bg-secondary/10 rounded flex items-center justify-center">
-                <span className="material-symbols-outlined text-secondary text-[20px]">supervisor_account</span>
+                <span className="material-symbols-outlined text-secondary text-xl">supervisor_account</span>
               </div>
-              <span className="text-[10px] font-semibold bg-secondary/10 text-secondary px-1.5 py-0.5 rounded-full">Stable</span>
+              <span className="text-2xs font-semibold bg-secondary/10 text-secondary px-1.5 py-0.5 rounded-full">Stable</span>
             </div>
             <p className="text-xs text-on-surface-variant font-body">Total Teachers</p>
             <h3 className="text-2xl font-headline font-bold text-on-surface">86</h3>
           </div>
           <div className="bg-surface-container-lowest p-4 rounded-lg shadow-sm border-l-4 border-tertiary">
             <div className="p-1.5 bg-tertiary/10 rounded mb-2 w-fit flex items-center justify-center">
-              <span className="material-symbols-outlined text-tertiary text-[20px]">meeting_room</span>
+              <span className="material-symbols-outlined text-tertiary text-xl">meeting_room</span>
             </div>
             <p className="text-xs text-on-surface-variant font-body">Class Levels</p>
             <h3 className="text-2xl font-headline font-bold text-on-surface">{loading ? "..." : classLevelsCount}</h3>
           </div>
           <div className="bg-surface-container-lowest p-4 rounded-lg shadow-sm border-l-4 border-green-600">
             <div className="p-1.5 bg-green-100 dark:bg-green-900/30 rounded mb-2 w-fit flex items-center justify-center">
-              <span className="material-symbols-outlined text-green-700 dark:text-green-400 text-[20px]">groups</span>
+              <span className="material-symbols-outlined text-green-700 dark:text-green-400 text-xl">groups</span>
             </div>
             <p className="text-xs text-on-surface-variant font-body">Active Sections</p>
             <h3 className="text-2xl font-headline font-bold text-on-surface">{loading ? "..." : sectionsCount}</h3>
@@ -120,9 +120,9 @@ export default function Dashboard() {
           <div className="bg-surface-container-lowest p-4 rounded-lg shadow-sm border-l-4 border-error">
             <div className="flex justify-between mb-2">
               <div className="p-1.5 bg-error/10 rounded flex items-center justify-center">
-                <span className="material-symbols-outlined text-error text-[20px]">how_to_reg</span>
+                <span className="material-symbols-outlined text-error text-xl">how_to_reg</span>
               </div>
-              <span className="text-[10px] font-semibold bg-error/10 text-error px-1.5 py-0.5 rounded-full">-0.2%</span>
+              <span className="text-2xs font-semibold bg-error/10 text-error px-1.5 py-0.5 rounded-full">-0.2%</span>
             </div>
             <p className="text-xs text-on-surface-variant font-body">Engagement</p>
             <h3 className="text-2xl font-headline font-bold text-on-surface">94.8%</h3>
@@ -137,7 +137,7 @@ export default function Dashboard() {
                 <h3 className="text-lg font-headline font-bold text-on-surface">Enrollment Growth</h3>
                 <p className="text-xs text-on-surface-variant font-body">Annual student registration trends</p>
               </div>
-              <span className="text-[10px] font-semibold bg-primary/10 text-primary px-2 py-1 rounded-full">Last 6 Months</span>
+              <span className="text-2xs font-semibold bg-primary/10 text-primary px-2 py-1 rounded-full">Last 6 Months</span>
             </div>
             <div className="flex items-end gap-4 h-32 px-2">
               {[
@@ -150,7 +150,7 @@ export default function Dashboard() {
               ].map((b, i) => (
                 <div key={i} className="flex flex-col items-center gap-1.5 w-full">
                   <div className={`${b.active ? "bg-primary shadow-md shadow-primary/20" : "bg-surface-container-high hover:bg-primary"} w-full ${b.h} rounded-t-sm transition`}></div>
-                  <span className={`text-[9px] font-bold ${b.active ? "text-primary" : "text-outline"} font-body`}>{b.m}</span>
+                  <span className={`text-3xs font-bold ${b.active ? "text-primary" : "text-outline"} font-body`}>{b.m}</span>
                 </div>
               ))}
             </div>
@@ -196,10 +196,10 @@ export default function Dashboard() {
                 </div>
                 <div>
                   <p className="text-xs font-semibold text-on-surface font-body"><span className="text-primary">Sarah Jenkins </span>was added as a new Student</p>
-                  <p className="text-[10px] text-on-surface-variant font-body">Class 10-B • 2 hours ago</p>
+                  <p className="text-2xs text-on-surface-variant font-body">Class 10-B • 2 hours ago</p>
                 </div>
               </div>
-              <span className="text-[10px] text-outline font-mono">#ST-9024</span>
+              <span className="text-2xs text-outline font-mono">#ST-9024</span>
             </div>
             <div className="px-5 py-2.5 flex justify-between items-center hover:bg-surface-container-high/30 transition-colors">
               <div className="flex gap-3 items-center">
@@ -208,10 +208,10 @@ export default function Dashboard() {
                 </div>
                 <div>
                   <p className="text-xs font-semibold text-on-surface font-body"><span className="text-secondary">Dr. Robert Miller </span>was assigned to Physics Dept.</p>
-                  <p className="text-[10px] text-on-surface-variant font-body">Senior Faculty • 5 hours ago</p>
+                  <p className="text-2xs text-on-surface-variant font-body">Senior Faculty • 5 hours ago</p>
                 </div>
               </div>
-              <span className="text-[10px] text-outline font-mono">#TR-4412</span>
+              <span className="text-2xs text-outline font-mono">#TR-4412</span>
             </div>
           </div>
         </div>

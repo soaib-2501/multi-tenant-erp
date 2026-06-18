@@ -104,14 +104,14 @@ export default function CreateAcademicYear() {
         <div className="bg-surface-container-lowest rounded-lg p-6 md:p-8 shadow-sm border border-outline-variant/10">
           {error && (
             <div className="mb-6 p-3 bg-error/10 text-error rounded-md border border-error/20 text-sm font-medium flex gap-2 font-body">
-              <span className="material-symbols-outlined text-[20px]">error</span>
+              <span className="material-symbols-outlined text-xl">error</span>
               {error}
             </div>
           )}
 
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
-              <label className="text-[10px] font-bold uppercase tracking-wider text-on-surface-variant block mb-1.5 font-body">
+              <label className="text-2xs font-bold uppercase tracking-wider text-on-surface-variant block mb-1.5 font-body">
                 Year Name
               </label>
               <input
@@ -126,7 +126,7 @@ export default function CreateAcademicYear() {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
               <div>
-                <label className="text-[10px] font-bold uppercase tracking-wider text-on-surface-variant block mb-1.5 font-body">
+                <label className="text-2xs font-bold uppercase tracking-wider text-on-surface-variant block mb-1.5 font-body">
                   Start Date
                 </label>
                 <input
@@ -138,7 +138,7 @@ export default function CreateAcademicYear() {
                 />
               </div>
               <div>
-                <label className="text-[10px] font-bold uppercase tracking-wider text-on-surface-variant block mb-1.5 font-body">
+                <label className="text-2xs font-bold uppercase tracking-wider text-on-surface-variant block mb-1.5 font-body">
                   End Date
                 </label>
                 <input

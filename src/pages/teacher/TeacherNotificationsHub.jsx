@@ -158,7 +158,7 @@ const TeacherNotificationsHub = () => {
             <div className="bg-surface-container-lowest p-5 rounded-2xl shadow-sm space-y-4">
               <div className="flex items-center justify-between">
                 <span className="text-sm font-medium text-on-surface-variant">Unread Alerts</span>
-                <span className="px-2.5 py-1 bg-primary text-white text-[10px] font-black rounded-full">03</span>
+                <span className="px-2.5 py-1 bg-primary text-white text-2xs font-black rounded-full">03</span>
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-sm font-medium text-on-surface-variant">Avg. Response Time</span>

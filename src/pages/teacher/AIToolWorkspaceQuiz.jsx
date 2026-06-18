@@ -398,7 +398,7 @@ const AIToolWorkspaceQuiz = () => {
                                               : 'bg-surface-container-low text-on-surface-variant border-transparent'
                                           }`}
                                         >
-                                          <span className={`font-semibold mr-1 text-[11px] px-1.5 py-0.5 rounded shrink-0 ${showCorrect ? 'bg-emerald-200 text-emerald-950' : 'bg-surface-container-high'}`}>
+                                          <span className={`font-semibold mr-1 text-xs px-1.5 py-0.5 rounded shrink-0 ${showCorrect ? 'bg-emerald-200 text-emerald-950' : 'bg-surface-container-high'}`}>
                                             {String.fromCharCode(65 + oi)}
                                           </span>
                                           <span className="flex-1">{opt}</span>
@@ -456,7 +456,7 @@ const AIToolWorkspaceQuiz = () => {
 
                                   {visibleAnswers[i] && (
                                     <div className="mt-2 p-4 bg-primary/5 rounded-lg border border-primary/10 relative font-body transition-all">
-                                      <span className="absolute -top-2.5 left-4 bg-surface-container-lowest px-2 text-[10px] font-bold text-primary uppercase tracking-wider font-display">Ideal Answer Key</span>
+                                      <span className="absolute -top-2.5 left-4 bg-surface-container-lowest px-2 text-2xs font-bold text-primary uppercase tracking-wider font-display">Ideal Answer Key</span>
                                       <div className="text-on-surface-variant leading-relaxed text-sm mt-1 prose prose-sm max-w-none">
                                         <ReactMarkdown remarkPlugins={[remarkMath, remarkGfm]} rehypePlugins={[rehypeKatex]}>{s.answer_key}</ReactMarkdown>
                                       </div>
@@ -494,7 +494,7 @@ const AIToolWorkspaceQuiz = () => {
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:ml-6 font-body">
                               {['Nucleus','Ribosome','Mitochondria','Lysosome'].map((opt, oi) => (
                                 <div key={oi} className="flex items-center gap-2 p-3 rounded-xl border text-sm bg-surface-container-low text-on-surface-variant border-transparent">
-                                  <span className="font-semibold mr-1 text-[11px] px-1.5 py-0.5 rounded bg-surface-container-high">{String.fromCharCode(65+oi)}</span>
+                                  <span className="font-semibold mr-1 text-xs px-1.5 py-0.5 rounded bg-surface-container-high">{String.fromCharCode(65+oi)}</span>
                                   <span className="flex-1">{opt}</span>
                                 </div>
                               ))}
@@ -527,7 +527,7 @@ const AIToolWorkspaceQuiz = () => {
                               </button>
                               {visibleAnswers['d_sa1'] && (
                                 <div className="mt-2 p-4 bg-primary/5 rounded-lg border border-primary/10 relative font-body transition-all">
-                                  <span className="absolute -top-2.5 left-4 bg-surface-container-lowest px-2 text-[10px] font-bold text-primary uppercase tracking-wider font-display">Ideal Answer Key</span>
+                                  <span className="absolute -top-2.5 left-4 bg-surface-container-lowest px-2 text-2xs font-bold text-primary uppercase tracking-wider font-display">Ideal Answer Key</span>
                                   <p className="text-on-surface-variant leading-relaxed text-sm mt-1">
                                     The cell wall is a rigid, outer layer found only in plants, fungi, and bacteria. The cell membrane is a flexible, semi-permeable bilayer found in all cells.
                                   </p>

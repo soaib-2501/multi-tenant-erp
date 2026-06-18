@@ -46,7 +46,7 @@ export default function TeacherDetails() {
     <SchoolLayout title="Teacher Details">
       <div className="max-w-4xl mx-auto px-8 py-8">
         <button onClick={() => navigate("/school-admin/teachers")} className="flex items-center gap-1.5 text-[#0058be] text-sm font-semibold hover:underline mb-6">
-          <span className="material-symbols-outlined text-[18px]">arrow_back</span> Back to Directory
+          <span className="material-symbols-outlined text-lg">arrow_back</span> Back to Directory
         </button>
 
         <h1 className="text-2xl font-bold text-slate-800 mb-6">Faculty Profile</h1>
@@ -64,23 +64,23 @@ export default function TeacherDetails() {
 
           <div className="grid md:grid-cols-2 gap-y-8 gap-x-12">
             <div>
-              <p className="text-[10px] font-bold uppercase tracking-wider text-gray-400 mb-1.5">Employee ID</p>
+              <p className="text-2xs font-bold uppercase tracking-wider text-gray-400 mb-1.5">Employee ID</p>
               <p className="text-base font-bold text-slate-800 bg-[#f8f9ff] px-4 py-2.5 rounded-md border border-gray-100">{teacher.employee_id || "N/A"}</p>
             </div>
             <div>
-              <p className="text-[10px] font-bold uppercase tracking-wider text-gray-400 mb-1.5">Email Address</p>
+              <p className="text-2xs font-bold uppercase tracking-wider text-gray-400 mb-1.5">Email Address</p>
               <p className="text-base font-bold text-slate-800 bg-[#f8f9ff] px-4 py-2.5 rounded-md border border-gray-100">{emailAddr}</p>
             </div>
             <div>
-              <p className="text-[10px] font-bold uppercase tracking-wider text-gray-400 mb-1.5">Qualification</p>
+              <p className="text-2xs font-bold uppercase tracking-wider text-gray-400 mb-1.5">Qualification</p>
               <p className="text-base font-bold text-slate-800 bg-[#f8f9ff] px-4 py-2.5 rounded-md border border-gray-100">{teacher.qualification || "Unspecified"}</p>
             </div>
             <div>
-              <p className="text-[10px] font-bold uppercase tracking-wider text-gray-400 mb-1.5">Joining Date</p>
+              <p className="text-2xs font-bold uppercase tracking-wider text-gray-400 mb-1.5">Joining Date</p>
               <p className="text-base font-bold text-slate-800 bg-[#f8f9ff] px-4 py-2.5 rounded-md border border-gray-100">{teacher.joining_date || "Unknown"}</p>
             </div>
             <div>
-              <p className="text-[10px] font-bold uppercase tracking-wider text-gray-400 mb-1.5">Phone Number</p>
+              <p className="text-2xs font-bold uppercase tracking-wider text-gray-400 mb-1.5">Phone Number</p>
               <p className="text-base font-bold text-slate-800 bg-[#f8f9ff] px-4 py-2.5 rounded-md border border-gray-100">{teacher.phone_number || "No Phone"}</p>
             </div>
           </div>

@@ -261,7 +261,7 @@ export default function Notifications() {
             Recent Activity
           </span>
           {unreadCount > 0 && (
-            <span className="bg-primary text-white px-2 py-0.5 rounded-full text-[10px] font-bold">
+            <span className="bg-primary text-white px-2 py-0.5 rounded-full text-2xs font-bold">
               {unreadCount} New
             </span>
           )}
@@ -305,7 +305,7 @@ export default function Notifications() {
                             <span className="ml-2 inline-block w-2 h-2 rounded-full bg-primary align-middle" />
                           )}
                         </h3>
-                        <span className="text-[10px] text-on-surface-variant/60 shrink-0 whitespace-nowrap">
+                        <span className="text-2xs text-on-surface-variant/60 shrink-0 whitespace-nowrap">
                           {n.timeLabel}
                         </span>
                       </div>
@@ -350,7 +350,7 @@ export default function Notifications() {
                       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2 sm:gap-3">
                         {Object.entries(n.details).map(([key, value]) => (
                           <div key={key} className="bg-white p-2.5 rounded-lg border border-outline-variant/10 shadow-sm">
-                            <span className="block text-[10px] text-on-surface-variant capitalize mb-0.5">
+                            <span className="block text-2xs text-on-surface-variant capitalize mb-0.5">
                               {key.replace(/([A-Z])/g, ' $1')}
                             </span>
                             <span className="text-xs font-bold text-on-surface truncate block">{value}</span>

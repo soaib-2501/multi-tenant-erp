@@ -148,14 +148,14 @@ const AttendanceOverview = () => {
         {/* Commented out bulk marking and export report
         <div className="flex space-x-3">
           <button className="flex items-center justify-center space-x-2 px-5 py-2.5 rounded-xl text-[#0058be] font-semibold bg-[#eff4ff] hover:bg-[#d8e2ff] transition-colors text-sm">
-            <span className="material-symbols-outlined text-[20px]">file_download</span>
+            <span className="material-symbols-outlined text-xl">file_download</span>
             <span>Export Report</span>
           </button>
           <button 
             onClick={() => navigate("/teacher/attendance/mark")}
             className="flex items-center justify-center space-x-2 px-6 py-2.5 rounded-xl text-white font-semibold bg-gradient-to-r from-[#0058be] to-[#2170e4] shadow-md active:scale-95 duration-150 transition-all text-sm"
           >
-            <span className="material-symbols-outlined text-[20px]">fact_check</span>
+            <span className="material-symbols-outlined text-xl">fact_check</span>
             <span>Mark Attendance</span>
           </button>
         </div>
@@ -344,7 +344,7 @@ const AttendanceOverview = () => {
                     </defs>
                   </svg>
                 </div>
-                <div className="flex justify-between text-[9px] font-bold text-slate-400 mt-2 px-1">
+                <div className="flex justify-between text-3xs font-bold text-slate-400 mt-2 px-1">
                   {trendData.map((d, idx) => {
                     const dateObj = new Date(d.date);
                     const label = dateObj.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });

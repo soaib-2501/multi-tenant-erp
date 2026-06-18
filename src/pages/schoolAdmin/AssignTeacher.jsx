@@ -124,24 +124,24 @@ export default function AssignTeacher() {
 
         {error && (
           <div className="mb-6 p-3 bg-error/10 text-error rounded-md border border-error/20 flex gap-2 shadow-sm items-center">
-            <span className="material-symbols-outlined text-[20px]">error</span>
+            <span className="material-symbols-outlined text-xl">error</span>
             <p className="text-sm font-medium font-body">{error}</p>
           </div>
         )}
 
         <div className="bg-surface-container-lowest p-6 rounded-lg shadow-sm border border-outline-variant/10">
           <h2 className="text-lg font-headline font-bold text-on-surface mb-5 flex items-center gap-2 border-b border-outline-variant/10 pb-3">
-            <span className="material-symbols-outlined text-primary text-[20px]">engineering</span>
+            <span className="material-symbols-outlined text-primary text-xl">engineering</span>
             Configuration Matrix
           </h2>
 
           <form onSubmit={submit} className="space-y-5">
             <div>
-              <label className="block text-[10px] font-bold uppercase tracking-wider text-on-surface-variant mb-1.5 font-body">
+              <label className="block text-2xs font-bold uppercase tracking-wider text-on-surface-variant mb-1.5 font-body">
                 Select Educator
               </label>
               <div className="relative">
-                <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-[18px]">
+                <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-lg">
                   person_search
                 </span>
                 <select
@@ -164,7 +164,7 @@ export default function AssignTeacher() {
                     ))
                   )}
                 </select>
-                <span className="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-outline pointer-events-none text-[18px]">
+                <span className="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-outline pointer-events-none text-lg">
                   expand_more
                 </span>
               </div>
@@ -172,11 +172,11 @@ export default function AssignTeacher() {
 
             <div className="grid md:grid-cols-2 gap-4">
               <div>
-                <label className="block text-[10px] font-bold uppercase tracking-wider text-on-surface-variant mb-1.5 font-body">
+                <label className="block text-2xs font-bold uppercase tracking-wider text-on-surface-variant mb-1.5 font-body">
                   Academic Year
                 </label>
                 <div className="relative">
-                  <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-[18px]">
+                  <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-lg">
                     calendar_month
                   </span>
                   <select
@@ -196,17 +196,17 @@ export default function AssignTeacher() {
                       ))
                     )}
                   </select>
-                  <span className="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-outline pointer-events-none text-[18px]">
+                  <span className="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-outline pointer-events-none text-lg">
                     expand_more
                   </span>
                 </div>
               </div>
               <div>
-                <label className="block text-[10px] font-bold uppercase tracking-wider text-on-surface-variant mb-1.5 font-body">
+                <label className="block text-2xs font-bold uppercase tracking-wider text-on-surface-variant mb-1.5 font-body">
                   Subject Selection
                 </label>
                 <div className="relative">
-                  <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-[18px]">
+                  <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-lg">
                     menu_book
                   </span>
                   <select
@@ -226,7 +226,7 @@ export default function AssignTeacher() {
                       ))
                     )}
                   </select>
-                  <span className="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-outline pointer-events-none text-[18px]">
+                  <span className="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-outline pointer-events-none text-lg">
                     expand_more
                   </span>
                 </div>
@@ -235,11 +235,11 @@ export default function AssignTeacher() {
 
             <div className="grid md:grid-cols-2 gap-4">
               <div>
-                <label className="block text-[10px] font-bold uppercase tracking-wider text-on-surface-variant mb-1.5 font-body">
+                <label className="block text-2xs font-bold uppercase tracking-wider text-on-surface-variant mb-1.5 font-body">
                   Class Level
                 </label>
                 <div className="relative">
-                  <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-[18px]">
+                  <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-lg">
                     school
                   </span>
                   <select
@@ -259,17 +259,17 @@ export default function AssignTeacher() {
                       ))
                     )}
                   </select>
-                  <span className="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-outline pointer-events-none text-[18px]">
+                  <span className="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-outline pointer-events-none text-lg">
                     expand_more
                   </span>
                 </div>
               </div>
               <div>
-                <label className="block text-[10px] font-bold uppercase tracking-wider text-on-surface-variant mb-1.5 font-body">
+                <label className="block text-2xs font-bold uppercase tracking-wider text-on-surface-variant mb-1.5 font-body">
                   Section / Batch
                 </label>
                 <div className="relative">
-                  <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-[18px]">
+                  <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-lg">
                     groups
                   </span>
                   <select
@@ -289,7 +289,7 @@ export default function AssignTeacher() {
                       ))
                     )}
                   </select>
-                  <span className="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-outline pointer-events-none text-[18px]">
+                  <span className="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-outline pointer-events-none text-lg">
                     expand_more
                   </span>
                 </div>

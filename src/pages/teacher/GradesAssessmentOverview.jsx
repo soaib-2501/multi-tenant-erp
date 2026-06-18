@@ -93,19 +93,10 @@ const GradesAssessmentOverview = () => {
           <div>
             <nav className="flex text-xs text-slate-500 mb-2 gap-2 items-center font-medium">
               <span>Academic Portal</span>
-              <span className="material-symbols-outlined text-[10px]">chevron_right</span>
+              <span className="material-symbols-outlined text-2xs">chevron_right</span>
               <span className="text-primary">Grades & Assessment</span>
             </nav>
             <h1 className="text-4xl font-extrabold text-on-surface tracking-tight leading-tight font-display">Grades & Assessment</h1>
-          </div>
-          <div className="flex flex-wrap gap-3">
-            <Link 
-              to="/teacher/grades/enter"
-              className="px-5 py-2.5 rounded-md bg-gradient-to-br from-primary to-primary-container text-white font-semibold text-sm shadow-md hover:shadow-lg transition-all flex items-center gap-2 active:scale-95 outline-none border-none cursor-pointer"
-            >
-              <span className="material-symbols-outlined text-lg">edit_document</span>
-              Enter New Grades
-            </Link>
           </div>
         </div>
 
@@ -120,12 +111,13 @@ const GradesAssessmentOverview = () => {
         )}
 
         {/* Bento Layout: Insights & Filters */}
+        {false && (
         <div className="grid grid-cols-12 gap-6">
           
           {/* AI Insight Card (Asymmetric) */}
           <div className="col-span-12 lg:col-span-7 bg-gradient-to-r from-on-surface to-on-surface-variant rounded-xl p-8 relative overflow-hidden shadow-xl text-white">
             <div className="relative z-10 space-y-4">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#b75b00] text-[10px] font-bold uppercase tracking-widest text-white shadow-sm">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#b75b00] text-2xs font-bold uppercase tracking-widest text-white shadow-sm">
                 <span className="material-symbols-outlined text-sm" style={{fontVariationSettings: "'FILL' 1"}}>auto_awesome</span>
                 AI Performance Insight
               </div>
@@ -152,13 +144,13 @@ const GradesAssessmentOverview = () => {
               </h3>
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-1.5">
-                  <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Subject</label>
+                  <label className="text-2xs font-bold text-slate-400 uppercase tracking-wider block">Subject</label>
                   <select className="w-full bg-surface-container-low border-none rounded-sm text-xs py-2.5 font-medium focus:ring-primary/20 cursor-pointer outline-none pl-2">
                     <option>All Subjects</option>
                   </select>
                 </div>
                 <div className="space-y-1.5">
-                  <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Status</label>
+                  <label className="text-2xs font-bold text-slate-400 uppercase tracking-wider block">Status</label>
                   <select className="w-full bg-surface-container-low border-none rounded-sm text-xs py-2.5 font-medium focus:ring-primary/20 cursor-pointer outline-none pl-2">
                     <option>All</option>
                     <option>Completed</option>
@@ -172,6 +164,7 @@ const GradesAssessmentOverview = () => {
             </button>
           </div>
         </div>
+        )}
 
         {/* Table of Exams */}
         <section className="bg-surface-container-lowest rounded-xl shadow-sm overflow-hidden border border-outline-variant/10">
@@ -189,11 +182,11 @@ const GradesAssessmentOverview = () => {
             <table className="w-full text-left border-collapse min-w-[700px]">
               <thead>
                 <tr className="bg-surface-container-low/50">
-                  <th className="px-6 py-4 text-[10px] font-black text-slate-500 uppercase tracking-widest">Exam Name</th>
-                  <th className="px-6 py-4 text-[10px] font-black text-slate-500 uppercase tracking-widest">Subject</th>
-                  <th className="px-6 py-4 text-[10px] font-black text-slate-500 uppercase tracking-widest">Avg. Class Score</th>
-                  <th className="px-6 py-4 text-[10px] font-black text-slate-500 uppercase tracking-widest">Grading Status</th>
-                  <th className="px-6 py-4 text-[10px] font-black text-slate-500 uppercase tracking-widest text-right">Action</th>
+                  <th className="px-6 py-4 text-2xs font-black text-slate-500 uppercase tracking-widest">Exam Name</th>
+                  <th className="px-6 py-4 text-2xs font-black text-slate-500 uppercase tracking-widest">Subject</th>
+                  <th className="px-6 py-4 text-2xs font-black text-slate-500 uppercase tracking-widest">Avg. Class Score</th>
+                  <th className="px-6 py-4 text-2xs font-black text-slate-500 uppercase tracking-widest">Grading Status</th>
+                  <th className="px-6 py-4 text-2xs font-black text-slate-500 uppercase tracking-widest text-right">Action</th>
                  </tr>
               </thead>
               <tbody className="divide-y divide-surface-container-low">
@@ -268,7 +261,7 @@ const GradesAssessmentOverview = () => {
                         )}
                       </td>
                       <td className="px-6 py-5">
-                        <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full ${badgeColors} text-[10px] font-bold uppercase tracking-tight whitespace-nowrap`}>
+                        <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full ${badgeColors} text-2xs font-bold uppercase tracking-tight whitespace-nowrap`}>
                           <span className={`w-1.5 h-1.5 ${dotColor} rounded-full`}></span>
                           {assessment.status}
                         </span>
@@ -300,7 +293,7 @@ const GradesAssessmentOverview = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
           <Card className="shadow-lg space-y-3 bg-gradient-to-br from-blue-600 to-blue-700 border-none">
             <div className="flex justify-between items-start">
-              <span className="text-[10px] font-bold text-blue-200 uppercase tracking-widest block">Total Students</span>
+              <span className="text-2xs font-bold text-blue-200 uppercase tracking-widest block">Total Students</span>
               <div className="w-8 h-8 rounded-full bg-white/20 text-white flex items-center justify-center">
                 <span className="material-symbols-outlined text-lg block">groups</span>
               </div>
@@ -311,12 +304,12 @@ const GradesAssessmentOverview = () => {
               ) : (
                 <p className="text-2xl font-bold font-display text-white">{totalStudents || '--'}</p>
               )}
-              <p className="text-[10px] text-blue-200 font-bold mt-1">Across all classes</p>
+              <p className="text-2xs text-blue-200 font-bold mt-1">Across all classes</p>
             </div>
           </Card>
           <Card className="shadow-lg space-y-3 bg-gradient-to-br from-purple-600 to-purple-700 border-none">
             <div className="flex justify-between items-start">
-              <span className="text-[10px] font-bold text-purple-200 uppercase tracking-widest block">Completed Assessments</span>
+              <span className="text-2xs font-bold text-purple-200 uppercase tracking-widest block">Completed Assessments</span>
               <div className="w-8 h-8 rounded-full bg-white/20 text-white flex items-center justify-center">
                 <span className="material-symbols-outlined text-lg block">task_alt</span>
               </div>
@@ -327,12 +320,12 @@ const GradesAssessmentOverview = () => {
               ) : (
                 <p className="text-2xl font-bold font-display text-white">{completedCount}</p>
               )}
-              <p className="text-[10px] text-purple-200 font-bold mt-1">Graded so far</p>
+              <p className="text-2xs text-purple-200 font-bold mt-1">Graded so far</p>
             </div>
           </Card>
           <Card className="shadow-lg space-y-3 sm:col-span-2 md:col-span-1 bg-gradient-to-br from-amber-600 to-amber-700 border-none">
             <div className="flex justify-between items-start">
-              <span className="text-[10px] font-bold text-amber-200 uppercase tracking-widest block">Pending Assessments</span>
+              <span className="text-2xs font-bold text-amber-200 uppercase tracking-widest block">Pending Assessments</span>
               <div className="w-8 h-8 rounded-full bg-white/20 text-white flex items-center justify-center">
                 <span className="material-symbols-outlined text-lg block">timer</span>
               </div>
@@ -343,7 +336,7 @@ const GradesAssessmentOverview = () => {
               ) : (
                 <p className="text-2xl font-bold font-display text-white">{pendingCount}</p>
               )}
-              <p className="text-[10px] text-amber-200 font-bold mt-1">Need your attention</p>
+              <p className="text-2xs text-amber-200 font-bold mt-1">Need your attention</p>
             </div>
           </Card>
         </div>

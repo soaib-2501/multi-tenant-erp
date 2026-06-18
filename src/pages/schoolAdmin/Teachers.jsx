@@ -79,7 +79,7 @@ export default function Teachers() {
             onClick={() => navigate("/school-admin/teachers/create")}
             className="flex items-center gap-2 px-5 py-2.5 rounded-md text-sm bg-primary text-white font-semibold shadow-sm hover:bg-primary/90 transition-all font-body"
           >
-            <span className="material-symbols-outlined text-[18px]">person_add</span> Add Teacher
+            <span className="material-symbols-outlined text-lg">person_add</span> Add Teacher
           </button>
         </div>
 
@@ -162,24 +162,24 @@ export default function Teachers() {
                             )}
                             <div>
                               <p className="font-semibold text-on-surface group-hover:text-primary transition-colors font-body">{displayName}</p>
-                              <p className="text-[10px] text-outline font-mono mt-0.5">{emailAddr}</p>
+                              <p className="text-2xs text-outline font-mono mt-0.5">{emailAddr}</p>
                             </div>
                           </div>
                         </td>
                         <td className="px-6 py-4">
                           <p className="text-xs text-on-surface font-mono font-bold">{t.employee_id || "N/A"}</p>
-                          <p className="text-[10px] text-outline mt-0.5">{t.phone_number || "No phone"}</p>
+                          <p className="text-2xs text-outline mt-0.5">{t.phone_number || "No phone"}</p>
                         </td>
                         <td className="px-6 py-4">
-                          <span className="px-2.5 py-1 rounded text-[10px] font-bold uppercase bg-secondary/10 text-secondary border border-secondary/20 font-body">
+                          <span className="px-2.5 py-1 rounded text-2xs font-bold uppercase bg-secondary/10 text-secondary border border-secondary/20 font-body">
                             {t.qualification || "Unspecified"}
                           </span>
                         </td>
                         <td className="px-6 py-4">
                           {!t.is_archived ? (
-                            <span className="text-[10px] uppercase font-bold bg-success/20 text-success dark:bg-success/30 px-2 py-0.5 rounded-full">Active</span>
+                            <span className="text-2xs uppercase font-bold bg-success/20 text-success dark:bg-success/30 px-2 py-0.5 rounded-full">Active</span>
                           ) : (
-                            <span className="text-[10px] uppercase font-bold bg-outline-variant/20 text-outline px-2 py-0.5 rounded-full">Archived</span>
+                            <span className="text-2xs uppercase font-bold bg-outline-variant/20 text-outline px-2 py-0.5 rounded-full">Archived</span>
                           )}
                         </td>
                       </tr>

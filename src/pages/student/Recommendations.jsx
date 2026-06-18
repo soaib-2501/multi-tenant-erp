@@ -106,7 +106,7 @@ export default function Recommendations() {
 <p className="text-xs text-slate-400">Physics - Unit 2</p>
 </div>
 </div>
-<span className="bg-red-50 text-red-700 text-[10px] font-extrabold px-2 py-1 rounded uppercase">Hard</span>
+<span className="bg-red-50 text-red-700 text-2xs font-extrabold px-2 py-1 rounded uppercase">Hard</span>
 </div>
 <div className="bg-white p-4 rounded-xl flex items-center justify-between">
 <div className="flex items-center gap-4">
@@ -118,7 +118,7 @@ export default function Recommendations() {
 <p className="text-xs text-slate-400">Chemistry - Unit 4</p>
 </div>
 </div>
-<span className="bg-orange-50 text-orange-700 text-[10px] font-extrabold px-2 py-1 rounded uppercase">Medium</span>
+<span className="bg-orange-50 text-orange-700 text-2xs font-extrabold px-2 py-1 rounded uppercase">Medium</span>
 </div>
 <div className="bg-white p-4 rounded-xl flex items-center justify-between">
 <div className="flex items-center gap-4">
@@ -130,7 +130,7 @@ export default function Recommendations() {
 <p className="text-xs text-slate-400">Mathematics - Unit 1</p>
 </div>
 </div>
-<span className="bg-blue-50 text-blue-700 text-[10px] font-extrabold px-2 py-1 rounded uppercase">Review</span>
+<span className="bg-blue-50 text-blue-700 text-2xs font-extrabold px-2 py-1 rounded uppercase">Review</span>
 </div>
 </div>
 </div>
@@ -158,7 +158,7 @@ export default function Recommendations() {
 </div>
 </div>
 <div className="p-6">
-<span className="text-[10px] font-bold text-blue-600 uppercase tracking-widest mb-2 block">Video Lesson</span>
+<span className="text-2xs font-bold text-blue-600 uppercase tracking-widest mb-2 block">Video Lesson</span>
 <h5 className="font-headline font-bold text-slate-900 mb-2">Wave Optics</h5>
 <p className="text-slate-500 text-xs mb-6 leading-relaxed">Advanced breakdown of interference patterns and wave theory.</p>
 <button className="w-full py-3 bg-surface-container-high text-primary font-bold text-xs rounded-md group-hover:bg-primary group-hover:text-white transition-all">Start Learning</button>
@@ -175,7 +175,7 @@ export default function Recommendations() {
 </div>
 </div>
 <div className="p-6">
-<span className="text-[10px] font-bold text-orange-600 uppercase tracking-widest mb-2 block">Worksheet</span>
+<span className="text-2xs font-bold text-orange-600 uppercase tracking-widest mb-2 block">Worksheet</span>
 <h5 className="font-headline font-bold text-slate-900 mb-2">Complex Numbers</h5>
 <p className="text-slate-500 text-xs mb-6 leading-relaxed">Comprehensive practice set covering imaginary roots and Argand diagrams.</p>
 <button className="w-full py-3 bg-surface-container-high text-primary font-bold text-xs rounded-md group-hover:bg-primary group-hover:text-white transition-all">Download PDF</button>
@@ -192,7 +192,7 @@ export default function Recommendations() {
 </div>
 </div>
 <div className="p-6">
-<span className="text-[10px] font-bold text-purple-600 uppercase tracking-widest mb-2 block">Reading</span>
+<span className="text-2xs font-bold text-purple-600 uppercase tracking-widest mb-2 block">Reading</span>
 <h5 className="font-headline font-bold text-slate-900 mb-2">Modern Physics</h5>
 <p className="text-slate-500 text-xs mb-6 leading-relaxed">Introduction to Quantum Mechanics and Special Relativity for Grade 11.</p>
 <button className="w-full py-3 bg-surface-container-high text-primary font-bold text-xs rounded-md group-hover:bg-primary group-hover:text-white transition-all">Start Reading</button>

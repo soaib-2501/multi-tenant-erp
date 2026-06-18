@@ -13,7 +13,7 @@ const BottomNav = () => {
         {({ isActive }) => (
           <>
             <span className="material-symbols-outlined" style={isActive ? { fontVariationSettings: "'FILL' 1" } : {}}>dashboard</span>
-            <span className="text-[10px] font-medium mt-1">Home</span>
+            <span className="text-2xs font-medium mt-1">Home</span>
           </>
         )}
       </NavLink>
@@ -21,7 +21,7 @@ const BottomNav = () => {
         {({ isActive }) => (
           <>
             <span className="material-symbols-outlined" style={isActive ? { fontVariationSettings: "'FILL' 1" } : {}}>child_care</span>
-            <span className="text-[10px] font-medium mt-1">Child</span>
+            <span className="text-2xs font-medium mt-1">Child</span>
           </>
         )}
       </NavLink>
@@ -29,7 +29,7 @@ const BottomNav = () => {
         {({ isActive }) => (
           <>
             <span className="material-symbols-outlined" style={isActive ? { fontVariationSettings: "'FILL' 1" } : {}}>assignment</span>
-            <span className="text-[10px] font-medium mt-1">Tasks</span>
+            <span className="text-2xs font-medium mt-1">Tasks</span>
           </>
         )}
       </NavLink>
@@ -37,7 +37,7 @@ const BottomNav = () => {
         {({ isActive }) => (
           <>
             <span className="material-symbols-outlined" style={isActive ? { fontVariationSettings: "'FILL' 1" } : {}}>person</span>
-            <span className="text-[10px] font-medium mt-1">Profile</span>
+            <span className="text-2xs font-medium mt-1">Profile</span>
           </>
         )}
       </NavLink>

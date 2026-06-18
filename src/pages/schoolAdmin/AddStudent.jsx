@@ -89,23 +89,23 @@ export default function AddStudent() {
 
         {error && (
           <div className="p-3 bg-error/10 text-error rounded-md border border-error/20 text-sm font-medium flex gap-2 font-body">
-            <span className="material-symbols-outlined text-[20px]">error</span>{error}
+            <span className="material-symbols-outlined text-xl">error</span>{error}
           </div>
         )}
         {successMsg && (
           <div className="p-3 bg-success/10 text-success rounded-md border border-success/20 text-sm font-medium flex gap-2 font-body">
-            <span className="material-symbols-outlined text-[20px]">check_circle</span>{successMsg}
+            <span className="material-symbols-outlined text-xl">check_circle</span>{successMsg}
           </div>
         )}
 
         <form onSubmit={handleSave} className="space-y-6">
           <div className="bg-surface-container-lowest p-6 rounded-lg shadow-sm border border-outline-variant/10">
             <h3 className="text-base font-headline font-bold text-on-surface flex items-center gap-2 mb-5">
-              <span className="material-symbols-outlined text-primary text-[20px]">badge</span> Core Identity
+              <span className="material-symbols-outlined text-primary text-xl">badge</span> Core Identity
             </h3>
             <div className="grid md:grid-cols-2 gap-4 mb-4">
               <div className="flex flex-col gap-1.5">
-                <label className="text-[10px] font-headline font-bold text-on-surface-variant uppercase">First Name</label>
+                <label className="text-2xs font-headline font-bold text-on-surface-variant uppercase">First Name</label>
                 <input 
                   required 
                   value={firstName} 
@@ -114,7 +114,7 @@ export default function AddStudent() {
                 />
               </div>
               <div className="flex flex-col gap-1.5">
-                <label className="text-[10px] font-headline font-bold text-on-surface-variant uppercase">Last Name</label>
+                <label className="text-2xs font-headline font-bold text-on-surface-variant uppercase">Last Name</label>
                 <input 
                   value={lastName} 
                   onChange={(e) => setLastName(e.target.value)} 
@@ -124,7 +124,7 @@ export default function AddStudent() {
             </div>
             <div className="grid md:grid-cols-2 gap-4">
               <div className="flex flex-col gap-1.5">
-                <label className="text-[10px] font-headline font-bold text-on-surface-variant uppercase">Email Address</label>
+                <label className="text-2xs font-headline font-bold text-on-surface-variant uppercase">Email Address</label>
                 <input 
                   type="email" 
                   required 
@@ -134,7 +134,7 @@ export default function AddStudent() {
                 />
               </div>
               <div className="flex flex-col gap-1.5">
-                <label className="text-[10px] font-headline font-bold text-on-surface-variant uppercase">Temporary Password</label>
+                <label className="text-2xs font-headline font-bold text-on-surface-variant uppercase">Temporary Password</label>
                 <input 
                   type="password" 
                   required 
@@ -148,11 +148,11 @@ export default function AddStudent() {
 
           <div className="bg-surface-container-lowest p-6 rounded-lg shadow-sm border border-outline-variant/10">
             <h3 className="text-base font-headline font-bold text-on-surface flex items-center gap-2 mb-5">
-              <span className="material-symbols-outlined text-secondary text-[20px]">assignment_ind</span> Academic Profile
+              <span className="material-symbols-outlined text-secondary text-xl">assignment_ind</span> Academic Profile
             </h3>
             <div className="grid md:grid-cols-2 gap-4 mb-4">
               <div className="flex flex-col gap-1.5">
-                <label className="text-[10px] font-headline font-bold text-on-surface-variant uppercase">Enrollment Number</label>
+                <label className="text-2xs font-headline font-bold text-on-surface-variant uppercase">Enrollment Number</label>
                 <input 
                   required 
                   value={enrollmentNumber} 
@@ -161,7 +161,7 @@ export default function AddStudent() {
                 />
               </div>
               <div className="flex flex-col gap-1.5">
-                <label className="text-[10px] font-headline font-bold text-on-surface-variant uppercase">Date of Birth</label>
+                <label className="text-2xs font-headline font-bold text-on-surface-variant uppercase">Date of Birth</label>
                 <input 
                   type="date" 
                   value={dateOfBirth} 
@@ -172,7 +172,7 @@ export default function AddStudent() {
             </div>
             <div className="grid md:grid-cols-2 gap-4 mb-4">
               <div className="flex flex-col gap-1.5">
-                <label className="text-[10px] font-headline font-bold text-on-surface-variant uppercase">Phone Number</label>
+                <label className="text-2xs font-headline font-bold text-on-surface-variant uppercase">Phone Number</label>
                 <input 
                   value={phoneNumber} 
                   onChange={(e) => setPhoneNumber(e.target.value)} 
@@ -180,7 +180,7 @@ export default function AddStudent() {
                 />
               </div>
               <div className="flex flex-col gap-1.5">
-                <label className="text-[10px] font-headline font-bold text-on-surface-variant uppercase">Blood Group</label>
+                <label className="text-2xs font-headline font-bold text-on-surface-variant uppercase">Blood Group</label>
                 <select 
                   value={bloodGroup} 
                   onChange={(e) => setBloodGroup(e.target.value)} 
@@ -195,7 +195,7 @@ export default function AddStudent() {
               </div>
             </div>
             <div className="flex flex-col gap-1.5">
-              <label className="text-[10px] font-headline font-bold text-on-surface-variant uppercase">Residential Address</label>
+              <label className="text-2xs font-headline font-bold text-on-surface-variant uppercase">Residential Address</label>
               <textarea 
                 rows="2" 
                 value={address} 

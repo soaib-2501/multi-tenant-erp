@@ -403,7 +403,7 @@ const AIToolWorkspacePresentationOutline = () => {
                     <div className="absolute -left-10 -bottom-10 w-48 h-48 bg-primary-container/20 rounded-full blur-2xl"></div>
                     
                     {/* Header */}
-                    <div className="flex justify-between items-center text-[10px] tracking-widest text-primary font-bold uppercase z-10 font-display border-b border-white/5 pb-2">
+                    <div className="flex justify-between items-center text-2xs tracking-widest text-primary font-bold uppercase z-10 font-display border-b border-white/5 pb-2">
                       <span>{currentTitle}</span>
                       <span>Class {className} | {subject}</span>
                     </div>
@@ -421,7 +421,7 @@ const AIToolWorkspacePresentationOutline = () => {
                     </div>
 
                     {/* Footer */}
-                    <div className="flex justify-between items-center text-[10px] text-neutral-400 font-bold font-display z-10 pt-2 border-t border-white/5">
+                    <div className="flex justify-between items-center text-2xs text-neutral-400 font-bold font-display z-10 pt-2 border-t border-white/5">
                       <span>THE INTELLECTUAL ARCHITECT</span>
                       <span className="px-2 py-0.5 bg-white/10 text-white rounded">SLIDE {slide.slide_number || activeSlide + 1} OF {currentSlides.length}</span>
                     </div>
@@ -459,7 +459,7 @@ const AIToolWorkspacePresentationOutline = () => {
                   {/* Dark Mode Presenter Speaker Notes Console */}
                   {showTranscript && (
                   <div className="bg-[#18181b] text-emerald-400 p-6 rounded-2xl font-mono text-xs sm:text-sm leading-relaxed border-l-4 border-emerald-500 shadow-inner relative select-text">
-                    <span className="absolute top-3 right-4 bg-white/5 text-[9px] px-2 py-0.5 rounded font-display font-bold text-neutral-400 uppercase tracking-widest">
+                    <span className="absolute top-3 right-4 bg-white/5 text-3xs px-2 py-0.5 rounded font-display font-bold text-neutral-400 uppercase tracking-widest">
                       Speaker Notes Script
                     </span>
                     <h4 className="font-display font-bold text-neutral-200 mb-2 border-b border-white/5 pb-1 uppercase tracking-wide text-xs">

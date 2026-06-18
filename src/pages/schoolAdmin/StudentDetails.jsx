@@ -41,7 +41,7 @@ export default function StudentDetails() {
     <SchoolLayout title="Student Details">
       <div className="max-w-4xl mx-auto px-8 py-8">
         <button onClick={() => navigate("/school-admin/students")} className="flex items-center gap-1.5 text-[#0058be] text-sm font-semibold hover:underline mb-6">
-          <span className="material-symbols-outlined text-[18px]">arrow_back</span> Back to Directory
+          <span className="material-symbols-outlined text-lg">arrow_back</span> Back to Directory
         </button>
 
         <h1 className="text-2xl font-bold text-slate-800 mb-6">Student Profile</h1>
@@ -61,7 +61,7 @@ export default function StudentDetails() {
               {student.is_archived ? 
                 <span className="bg-gray-100 text-gray-600 px-4 py-2 rounded-lg font-bold text-sm">Archived Profile</span> : 
                 <span className="bg-green-50 text-green-700 border border-green-200 px-4 py-2 rounded-lg font-bold text-sm flex items-center gap-2">
-                  <span className="material-symbols-outlined text-[18px]">check_circle</span> Active Student
+                  <span className="material-symbols-outlined text-lg">check_circle</span> Active Student
                 </span>
               }
             </div>
@@ -69,23 +69,23 @@ export default function StudentDetails() {
 
           <div className="grid md:grid-cols-2 gap-y-8 gap-x-12">
             <div>
-              <p className="text-[10px] font-bold uppercase tracking-wider text-gray-400 mb-1.5">Enrollment Number</p>
+              <p className="text-2xs font-bold uppercase tracking-wider text-gray-400 mb-1.5">Enrollment Number</p>
               <p className="text-base font-bold text-slate-800 bg-[#f8f9ff] px-4 py-2.5 rounded-md border border-gray-100 font-mono">{student.enrollment_number || "N/A"}</p>
             </div>
             <div>
-              <p className="text-[10px] font-bold uppercase tracking-wider text-gray-400 mb-1.5">Date of Birth</p>
+              <p className="text-2xs font-bold uppercase tracking-wider text-gray-400 mb-1.5">Date of Birth</p>
               <p className="text-base font-bold text-slate-800 bg-[#f8f9ff] px-4 py-2.5 rounded-md border border-gray-100">{student.date_of_birth || "Unknown"}</p>
             </div>
             <div>
-              <p className="text-[10px] font-bold uppercase tracking-wider text-gray-400 mb-1.5">Phone Number</p>
+              <p className="text-2xs font-bold uppercase tracking-wider text-gray-400 mb-1.5">Phone Number</p>
               <p className="text-base font-bold text-slate-800 bg-[#f8f9ff] px-4 py-2.5 rounded-md border border-gray-100">{student.phone_number || "No Phone"}</p>
             </div>
             <div>
-              <p className="text-[10px] font-bold uppercase tracking-wider text-gray-400 mb-1.5">Blood Group</p>
+              <p className="text-2xs font-bold uppercase tracking-wider text-gray-400 mb-1.5">Blood Group</p>
               <p className="text-base font-bold text-slate-800 bg-[#f8f9ff] px-4 py-2.5 rounded-md border border-gray-100">{student.blood_group || "N/A"}</p>
             </div>
             <div className="md:col-span-2">
-              <p className="text-[10px] font-bold uppercase tracking-wider text-gray-400 mb-1.5">Residential Address</p>
+              <p className="text-2xs font-bold uppercase tracking-wider text-gray-400 mb-1.5">Residential Address</p>
               <p className="text-sm font-semibold text-slate-800 bg-[#f8f9ff] px-4 py-3 rounded-md border border-gray-100 min-h-[3rem]">{student.address || "No Address Provided"}</p>
             </div>
           </div>

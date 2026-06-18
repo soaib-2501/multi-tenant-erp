@@ -12,7 +12,7 @@ return(
 
 <div>
 
-<h3 className="text-[18px] font-semibold text-[#0b1c30]">
+<h3 className="text-lg font-semibold text-[#0b1c30]">
 Institution Growth
 </h3>
 
@@ -86,7 +86,7 @@ strokeLinecap="round"
 
 <div className="bg-white p-8 rounded-xl">
 
-<h3 className="text-[18px] font-semibold text-[#0b1c30]">
+<h3 className="text-lg font-semibold text-[#0b1c30]">
 Revenue Split
 </h3>
 
@@ -115,7 +115,7 @@ clipPath:"polygon(50% 50%,0% 55%,0% 0%,50% 0%)"
 112
 </h2>
 
-<p className="text-[11px] text-gray-400 tracking-widest">
+<p className="text-xs text-gray-400 tracking-widest">
 ACTIVE
 </p>
 

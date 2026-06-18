@@ -71,7 +71,7 @@ export default function StudentDetail() {
             {/* Data Grid */}
             <div className="grid md:grid-cols-2 gap-6">
               <div>
-                <p className="text-[10px] font-bold uppercase tracking-wider text-on-surface-variant mb-1 font-body">
+                <p className="text-2xs font-bold uppercase tracking-wider text-on-surface-variant mb-1 font-body">
                   Enrollment Number
                 </p>
                 <p className="text-lg font-medium text-on-surface bg-surface-container-high p-3 rounded-md border border-outline-variant/10 font-body">
@@ -80,7 +80,7 @@ export default function StudentDetail() {
               </div>
 
               <div>
-                <p className="text-[10px] font-bold uppercase tracking-wider text-on-surface-variant mb-1 font-body">
+                <p className="text-2xs font-bold uppercase tracking-wider text-on-surface-variant mb-1 font-body">
                   Email Address
                 </p>
                 <p className="text-lg font-medium text-on-surface bg-surface-container-high p-3 rounded-md border border-outline-variant/10 font-body">
@@ -89,7 +89,7 @@ export default function StudentDetail() {
               </div>
 
               <div>
-                <p className="text-[10px] font-bold uppercase tracking-wider text-on-surface-variant mb-1 font-body">
+                <p className="text-2xs font-bold uppercase tracking-wider text-on-surface-variant mb-1 font-body">
                   Phone Number
                 </p>
                 <p className="text-lg font-medium text-on-surface bg-surface-container-high p-3 rounded-md border border-outline-variant/10 font-body">
@@ -98,7 +98,7 @@ export default function StudentDetail() {
               </div>
 
               <div>
-                <p className="text-[10px] font-bold uppercase tracking-wider text-on-surface-variant mb-1 font-body">
+                <p className="text-2xs font-bold uppercase tracking-wider text-on-surface-variant mb-1 font-body">
                   Status
                 </p>
                 <p className="text-lg font-medium text-on-surface bg-surface-container-high p-3 rounded-md border border-outline-variant/10 flex items-center gap-2 font-body">
