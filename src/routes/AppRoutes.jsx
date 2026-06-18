@@ -38,16 +38,17 @@ import AddMapping from "../pages/schoolAdmin/AddMapping";
 import TeacherAssignment from "../pages/schoolAdmin/TeacherAssignment";
 import AssignTeacher from "../pages/schoolAdmin/AssignTeacher";
 import SchoolSettings from "../pages/schoolAdmin/Settings";
-import ParentDetail from "../pages/schoolAdmin/ParentDetail";
-import StudentDetail from "../pages/schoolAdmin/StudentDetail";
+import GuardianDetails from "../pages/schoolAdmin/GuardianDetails";
+import StudentDetails from "../pages/schoolAdmin/StudentDetails";
 import EditStudent from "../pages/schoolAdmin/EditStudent";
-import TeacherDetail from "../pages/schoolAdmin/TeacherDetail";
+import TeacherDetails from "../pages/schoolAdmin/TeacherDetails";
 import MappingDetail from "../pages/schoolAdmin/MappingDetail";
 import EditTeacherAssignment from "../pages/schoolAdmin/EditTeacherAssignment";
 import ClassLevels from "../pages/schoolAdmin/ClassLevels"; // Adjust the folder path if yours is slightly different!
 import CreateClassSection from "../pages/schoolAdmin/CreateClassSection";
 import CreateSubject from '../pages/schoolAdmin/CreateSubject';
 import CreateSection from '../pages/schoolAdmin/CreateSection';
+import SchoolAdminNotifications from "../pages/schoolAdmin/Notifications";
 
 /* ================= STUDENT ================= */
 import StudentDashboard from "../pages/student/Dashboard";
@@ -182,14 +183,14 @@ function AppRoutes() {
         <Route path="/school-admin/mapping/create" element={<AddMapping />} />
         <Route path="/school-admin/teacher-assignment" element={<TeacherAssignment />} />
         <Route path="/school-admin/teacher-assignment/create" element={<AssignTeacher />} />
-        <Route path="/school-admin/parents/:id" element={<ParentDetail />} />
-        <Route path="/school-admin/students/:id" element={<StudentDetail />} />
+        <Route path="/school-admin/parents/:id" element={<GuardianDetails />} />
+        <Route path="/school-admin/students/:id" element={<StudentDetails />} />
         <Route path="/school-admin/students/edit/:id" element={<EditStudent />} />
-        <Route path="/school-admin/teachers/:id" element={<TeacherDetail />} />
+        <Route path="/school-admin/teachers/:id" element={<TeacherDetails />} />
         <Route path="/school-admin/mapping/:id" element={<MappingDetail />} />
         <Route path="/school-admin/teacher-assignment/edit/:id" element={<EditTeacherAssignment />} />
         <Route path="/school-admin/manage-classes" element={<CreateClassSection />} /> 
-        <Route path="/school-admin/notifications" element={<Notifications />} />
+        <Route path="/school-admin/notifications" element={<SchoolAdminNotifications />} />
         <Route path="/school-admin/create-subject" element={<CreateSubject />} />
         <Route path="/school-admin/create-section"  element={<CreateSection />} />
         

@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import SchoolLayout from "../../components/erp/school/SchoolLayout";
+import { schoolAdminApi } from "../../services/schoolAdminApi";
 import api from "../../services/axiosClient";
-import { useTheme } from "../../context/ThemeContext";
 
 export default function AddStudent() {
   const navigate = useNavigate();
@@ -11,27 +11,63 @@ export default function AddStudent() {
   const [password, setPassword] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
-  
+
   const [enrollmentNumber, setEnrollmentNumber] = useState("");
   const [dateOfBirth, setDateOfBirth] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [bloodGroup, setBloodGroup] = useState("");
   const [address, setAddress] = useState("");
+  const [classLevel, setClassLevel] = useState("");
+  const [section, setSection] = useState("");
+  const [academicYear, setAcademicYear] = useState("");
+
+  const [classLevels, setClassLevels] = useState([]);
+  const [sections, setSections] = useState([]);
+  const [filteredSections, setFilteredSections] = useState([]);
+  const [academicYears, setAcademicYears] = useState([]);
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [successMsg, setSuccessMsg] = useState(null);
+
+  // Fetch class levels and sections on mount
+  useEffect(() => {
+    const fetchOptions = async () => {
+      try {
+        const [clRes, secRes, yearRes] = await Promise.all([
+          schoolAdminApi.getClassLevels(),
+          schoolAdminApi.getSections(),
+          schoolAdminApi.getAcademicYears(),
+        ]);
+        const clData = clRes.results ?? clRes;
+        const secData = secRes.results ?? secRes;
+        const yearData = yearRes.results ?? yearRes;
+        setClassLevels(Array.isArray(clData) ? clData : []);
+        setSections(Array.isArray(secData) ? secData : []);
+        setAcademicYears(Array.isArray(yearData) ? yearData : []);
+      } catch (err) {
+        console.error("Failed to fetch class levels/sections:", err);
+      }
+    };
+    fetchOptions();
+  }, []);
+
+  // Filter sections whenever class level changes
+  useEffect(() => {
+    if (classLevel) {
+      setFilteredSections(sections.filter(s => String(s.class_level) === String(classLevel) || String(s.class_level?.id) === String(classLevel)));
+    } else {
+      setFilteredSections(sections);
+    }
+    setSection("");
+  }, [classLevel, sections]);
 
   const handleSave = async (e) => {
     e.preventDefault();
-    setLoading(true);
-    setError(null);
-    setSuccessMsg(null);
+    setLoading(true); setError(null);
 
     try {
       const userPayload = { email, password, first_name: firstName, last_name: lastName };
-      const userResponse = await api.post(`users/`, userPayload);
-      const userData = userResponse.data;
+      const userData = await schoolAdminApi.createUser(userPayload);
 
       if (userData.id) {
         const profilePayload = {
@@ -39,30 +75,37 @@ export default function AddStudent() {
           enrollment_number: enrollmentNumber,
           is_archived: false
         };
-        
+        // Strip empty fields to prevent Django crashes
         if (dateOfBirth) profilePayload.date_of_birth = dateOfBirth;
         if (phoneNumber) profilePayload.phone_number = phoneNumber;
         if (bloodGroup) profilePayload.blood_group = bloodGroup;
         if (address) profilePayload.address = address;
 
-        await api.post(`profiles/students/`, profilePayload);
-      }
+        const studentProfile = await schoolAdminApi.createStudentProfile(profilePayload);
 
-      setSuccessMsg("Student registration complete!");
-      setTimeout(() => navigate("/school-admin/students"), 1500);
+        // Create enrollment record so class/section appear on the details page
+        if (classLevel && academicYear && studentProfile?.id) {
+          const enrollmentPayload = {
+            student: studentProfile.id,
+            academic_year: academicYear,
+            class_level: classLevel,
+            section: section || null,
+          };
+          await api.post(`academics/enrollments/`, enrollmentPayload);
+        }
+      }
+      alert("Student registration complete!");
+      navigate("/school-admin/students");
 
     } catch (err) {
-      console.error(err);
-      if (err.response && err.response.data) {
+      if (err.response?.data) {
         const data = err.response.data;
         if (typeof data === 'string' && data.includes('<!DOCTYPE')) {
-          setError("Server crashed (500 Internal Error). Check Django terminal.");
+          setError("Server Error (500). Please check Django terminal.");
         } else {
-          setError(Object.entries(data).map(([field, msgs]) => `${field}: ${Array.isArray(msgs) ? msgs.join(" ") : msgs}`).join(" | "));
+          setError(Object.entries(data).map(([k, v]) => `${k}: ${v}`).join(" | "));
         }
-      } else {
-        setError(err.message);
-      }
+      } else setError(err.message);
       window.scrollTo(0, 0);
     } finally {
       setLoading(false);
@@ -71,156 +114,112 @@ export default function AddStudent() {
 
   return (
     <SchoolLayout title="Student Registration">
-      <div className="max-w-4xl mx-auto space-y-6 px-4 md:px-6 py-4 md:py-6">
-        
-        <div className="flex flex-col sm:flex-row justify-between items-start gap-4">
+      <div className="max-w-4xl mx-auto space-y-6 px-6 py-6">
+        <div className="flex justify-between items-start mb-6">
           <div>
-            <h1 className="text-2xl font-headline font-extrabold text-on-surface">Register New Student</h1>
-            <p className="text-sm text-on-surface-variant mt-1 max-w-2xl font-body">Create authentication identity and academic profile.</p>
+            <h1 className="text-2xl font-bold text-slate-800">Register New Student</h1>
           </div>
-          <button 
-            type="button" 
-            onClick={() => navigate("/school-admin/students")} 
-            className="flex items-center gap-1 px-3 py-1.5 text-sm bg-surface-container-lowest hover:bg-surface-container-high border border-outline-variant/20 text-primary font-semibold rounded-md shadow-sm font-body transition-colors"
-          >
-            <span className="material-symbols-outlined text-[16px]">arrow_back</span> Directory
-          </button>
+          <button type="button" onClick={() => navigate("/school-admin/students")} className="px-4 py-2 bg-white border border-gray-200 text-[#0058be] font-semibold rounded shadow-sm text-sm">Go Back</button>
         </div>
 
-        {error && (
-          <div className="p-3 bg-error/10 text-error rounded-md border border-error/20 text-sm font-medium flex gap-2 font-body">
-            <span className="material-symbols-outlined text-xl">error</span>{error}
-          </div>
-        )}
-        {successMsg && (
-          <div className="p-3 bg-success/10 text-success rounded-md border border-success/20 text-sm font-medium flex gap-2 font-body">
-            <span className="material-symbols-outlined text-xl">check_circle</span>{successMsg}
-          </div>
-        )}
+        {error && <div className="p-4 bg-red-50 text-red-700 rounded-lg border border-red-200">{error}</div>}
 
         <form onSubmit={handleSave} className="space-y-6">
-          <div className="bg-surface-container-lowest p-6 rounded-lg shadow-sm border border-outline-variant/10">
-            <h3 className="text-base font-headline font-bold text-on-surface flex items-center gap-2 mb-5">
-              <span className="material-symbols-outlined text-primary text-xl">badge</span> Core Identity
-            </h3>
-            <div className="grid md:grid-cols-2 gap-4 mb-4">
-              <div className="flex flex-col gap-1.5">
-                <label className="text-2xs font-headline font-bold text-on-surface-variant uppercase">First Name</label>
-                <input 
-                  required 
-                  value={firstName} 
-                  onChange={(e) => setFirstName(e.target.value)} 
-                  className="bg-surface-container-low px-3 py-2 text-sm rounded-md outline-none focus:ring-2 focus:ring-primary/20 border border-transparent focus:border-primary/40 transition-all font-body text-on-surface placeholder:text-outline" 
-                />
-              </div>
-              <div className="flex flex-col gap-1.5">
-                <label className="text-2xs font-headline font-bold text-on-surface-variant uppercase">Last Name</label>
-                <input 
-                  value={lastName} 
-                  onChange={(e) => setLastName(e.target.value)} 
-                  className="bg-surface-container-low px-3 py-2 text-sm rounded-md outline-none focus:ring-2 focus:ring-primary/20 border border-transparent focus:border-primary/40 transition-all font-body text-on-surface placeholder:text-outline" 
-                />
-              </div>
-            </div>
+          <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
+            <h3 className="text-base font-bold mb-4">Core Identity</h3>
             <div className="grid md:grid-cols-2 gap-4">
-              <div className="flex flex-col gap-1.5">
-                <label className="text-2xs font-headline font-bold text-on-surface-variant uppercase">Email Address</label>
-                <input 
-                  type="email" 
-                  required 
-                  value={email} 
-                  onChange={(e) => setEmail(e.target.value)} 
-                  className="bg-surface-container-low px-3 py-2 text-sm rounded-md outline-none focus:ring-2 focus:ring-primary/20 border border-transparent focus:border-primary/40 transition-all font-body text-on-surface placeholder:text-outline" 
-                />
-              </div>
-              <div className="flex flex-col gap-1.5">
-                <label className="text-2xs font-headline font-bold text-on-surface-variant uppercase">Temporary Password</label>
-                <input 
-                  type="password" 
-                  required 
-                  value={password} 
-                  onChange={(e) => setPassword(e.target.value)} 
-                  className="bg-surface-container-low px-3 py-2 text-sm rounded-md outline-none focus:ring-2 focus:ring-primary/20 border border-transparent focus:border-primary/40 transition-all font-body text-on-surface placeholder:text-outline" 
-                />
-              </div>
+              <input required value={firstName} onChange={(e) => setFirstName(e.target.value)} placeholder="First Name" className="bg-[#eff4ff] px-4 py-2.5 rounded text-sm outline-none" />
+              <input value={lastName} onChange={(e) => setLastName(e.target.value)} placeholder="Last Name" className="bg-[#eff4ff] px-4 py-2.5 rounded text-sm outline-none" />
+              <input type="email" required value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email Address" className="bg-[#eff4ff] px-4 py-2.5 rounded text-sm outline-none" />
+              <input type="password" required value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Temporary Password" className="bg-[#eff4ff] px-4 py-2.5 rounded text-sm outline-none" />
             </div>
           </div>
 
-          <div className="bg-surface-container-lowest p-6 rounded-lg shadow-sm border border-outline-variant/10">
-            <h3 className="text-base font-headline font-bold text-on-surface flex items-center gap-2 mb-5">
-              <span className="material-symbols-outlined text-secondary text-xl">assignment_ind</span> Academic Profile
-            </h3>
+          <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
+            <h3 className="text-base font-bold mb-4">Academic Profile</h3>
             <div className="grid md:grid-cols-2 gap-4 mb-4">
-              <div className="flex flex-col gap-1.5">
-                <label className="text-2xs font-headline font-bold text-on-surface-variant uppercase">Enrollment Number</label>
-                <input 
-                  required 
-                  value={enrollmentNumber} 
-                  onChange={(e) => setEnrollmentNumber(e.target.value)} 
-                  className="bg-surface-container-low px-3 py-2 text-sm rounded-md outline-none focus:ring-2 focus:ring-primary/20 border border-transparent focus:border-primary/40 transition-all font-body text-on-surface placeholder:text-outline" 
-                />
-              </div>
-              <div className="flex flex-col gap-1.5">
-                <label className="text-2xs font-headline font-bold text-on-surface-variant uppercase">Date of Birth</label>
-                <input 
-                  type="date" 
-                  value={dateOfBirth} 
-                  onChange={(e) => setDateOfBirth(e.target.value)} 
-                  className="bg-surface-container-low px-3 py-2 text-sm rounded-md outline-none focus:ring-2 focus:ring-primary/20 border border-transparent focus:border-primary/40 transition-all font-body text-on-surface" 
-                />
-              </div>
+              <input required value={enrollmentNumber} onChange={(e) => setEnrollmentNumber(e.target.value)} placeholder="Enrollment Number" className="bg-[#eff4ff] px-4 py-2.5 rounded text-sm outline-none" />
+              <input type="date" value={dateOfBirth} onChange={(e) => setDateOfBirth(e.target.value)} className="bg-[#eff4ff] px-4 py-2.5 rounded text-sm outline-none text-slate-600" />
+              <input value={phoneNumber} onChange={(e) => setPhoneNumber(e.target.value)} placeholder="Phone Number" className="bg-[#eff4ff] px-4 py-2.5 rounded text-sm outline-none" />
+              <select value={bloodGroup} onChange={(e) => setBloodGroup(e.target.value)} className="bg-[#eff4ff] px-4 py-2.5 rounded text-sm outline-none text-slate-600">
+                <option value="">Blood Group...</option>
+                <option value="A+">A+</option>
+                <option value="A-">A-</option>
+                <option value="B+">B+</option>
+                <option value="B-">B-</option>
+                <option value="AB+">AB+</option>
+                <option value="AB-">AB-</option>
+                <option value="O+">O+</option>
+                <option value="O-">O-</option>
+              </select>
+              <select
+                value={classLevel}
+                onChange={(e) => setClassLevel(e.target.value)}
+                className="bg-[#eff4ff] px-4 py-2.5 rounded text-sm outline-none text-slate-600"
+              >
+                <option value="">Class Level...</option>
+                {classLevels.map((cl) => (
+                  <option key={cl.id} value={cl.id}>
+                    {cl.name}
+                  </option>
+                ))}
+              </select>
+              <select
+                value={section}
+                onChange={(e) => setSection(e.target.value)}
+                disabled={!classLevel}
+                className="bg-[#eff4ff] px-4 py-2.5 rounded text-sm outline-none text-slate-600 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                <option value="">{classLevel ? "Select Section..." : "Select Class Level first"}</option>
+                {filteredSections.map((sec) => (
+                  <option key={sec.id} value={sec.id}>
+                    {sec.name}
+                  </option>
+                ))}
+              </select>
             </div>
-            <div className="grid md:grid-cols-2 gap-4 mb-4">
-              <div className="flex flex-col gap-1.5">
-                <label className="text-2xs font-headline font-bold text-on-surface-variant uppercase">Phone Number</label>
-                <input 
-                  value={phoneNumber} 
-                  onChange={(e) => setPhoneNumber(e.target.value)} 
-                  className="bg-surface-container-low px-3 py-2 text-sm rounded-md outline-none focus:ring-2 focus:ring-primary/20 border border-transparent focus:border-primary/40 transition-all font-body text-on-surface placeholder:text-outline" 
-                />
-              </div>
-              <div className="flex flex-col gap-1.5">
-                <label className="text-2xs font-headline font-bold text-on-surface-variant uppercase">Blood Group</label>
-                <select 
-                  value={bloodGroup} 
-                  onChange={(e) => setBloodGroup(e.target.value)} 
-                  className="bg-surface-container-low px-3 py-2 text-sm rounded-md outline-none focus:ring-2 focus:ring-primary/20 border border-transparent focus:border-primary/40 transition-all font-body text-on-surface"
-                >
-                  <option value="">Select Group</option>
-                  <option value="A+">A+</option><option value="A-">A-</option>
-                  <option value="B+">B+</option><option value="B-">B-</option>
-                  <option value="AB+">AB+</option><option value="AB-">AB-</option>
-                  <option value="O+">O+</option><option value="O-">O-</option>
-                </select>
-              </div>
-            </div>
-            <div className="flex flex-col gap-1.5">
-              <label className="text-2xs font-headline font-bold text-on-surface-variant uppercase">Residential Address</label>
-              <textarea 
-                rows="2" 
-                value={address} 
-                onChange={(e) => setAddress(e.target.value)} 
-                className="bg-surface-container-low px-3 py-2 text-sm rounded-md outline-none focus:ring-2 focus:ring-primary/20 border border-transparent focus:border-primary/40 transition-all font-body text-on-surface placeholder:text-outline resize-none" 
-              />
+            <textarea rows="2" value={address} onChange={(e) => setAddress(e.target.value)} placeholder="Residential Address" className="w-full bg-[#eff4ff] px-4 py-2.5 rounded text-sm outline-none resize-none" />
+          </div>
+
+          <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
+            <h3 className="text-base font-bold mb-4">Class Enrollment</h3>
+            <div className="grid md:grid-cols-2 gap-4">
+              <select
+                value={academicYear}
+                onChange={(e) => setAcademicYear(e.target.value)}
+                className="bg-[#eff4ff] px-4 py-2.5 rounded text-sm outline-none text-slate-600"
+              >
+                <option value="">Academic Year...</option>
+                {academicYears.map((y) => (
+                  <option key={y.id} value={y.id}>{y.name}</option>
+                ))}
+              </select>
+              <select
+                value={classLevel}
+                onChange={(e) => setClassLevel(e.target.value)}
+                className="bg-[#eff4ff] px-4 py-2.5 rounded text-sm outline-none text-slate-600"
+              >
+                <option value="">Class Level...</option>
+                {classLevels.map((cl) => (
+                  <option key={cl.id} value={cl.id}>{cl.name}</option>
+                ))}
+              </select>
+              <select
+                value={section}
+                onChange={(e) => setSection(e.target.value)}
+                disabled={!classLevel}
+                className="bg-[#eff4ff] px-4 py-2.5 rounded text-sm outline-none text-slate-600 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                <option value="">{classLevel ? "Select Section..." : "Select Class Level first"}</option>
+                {filteredSections.map((sec) => (
+                  <option key={sec.id} value={sec.id}>{sec.name}</option>
+                ))}
+              </select>
             </div>
           </div>
 
           <div className="flex justify-end gap-3 pt-2">
-            <button 
-              type="button" 
-              disabled={loading} 
-              onClick={() => navigate("/school-admin/students")} 
-              className="px-6 py-2 text-sm text-on-surface-variant font-semibold hover:bg-surface-container-high rounded-md transition-colors disabled:opacity-50 font-body"
-            >
-              Cancel
-            </button>
-            <button 
-              type="submit" 
-              disabled={loading} 
-              className="px-8 py-2 bg-primary text-white text-sm font-bold rounded-md shadow-md hover:bg-primary/90 transition flex items-center gap-2 disabled:opacity-70 font-body"
-            >
-              {loading ? "Registering..." : "Register Student"}
-            </button>
+            <button type="submit" disabled={loading} className="px-8 py-2.5 bg-[#0058be] text-white text-sm font-bold rounded shadow-md">{loading ? "Saving..." : "Register Student"}</button>
           </div>
         </form>
       </div>

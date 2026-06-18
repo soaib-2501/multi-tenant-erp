@@ -1,19 +1,20 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import SchoolLayout from "../../components/erp/school/SchoolLayout";
 import { schoolAdminApi } from '../../services/schoolAdminApi';
 import { useTheme } from "../../context/ThemeContext";
 
+const PAGE_SIZE_OPTIONS = [10, 25];
+
 export default function RolesPermissions() {
   const navigate = useNavigate();
 
-  const [roles, setRoles] = useState([]);
+  const [allRoles, setAllRoles] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  
-  const [totalCount, setTotalCount] = useState(0);
+
   const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
 
   const [searchQuery, setSearchQuery] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
@@ -23,29 +24,25 @@ export default function RolesPermissions() {
     return () => clearTimeout(timer);
   }, [searchQuery]);
 
+  useEffect(() => { setCurrentPage(1); }, [debouncedSearch, pageSize]);
+
   useEffect(() => {
-    setCurrentPage(1);
+    fetchAllRoles(debouncedSearch);
   }, [debouncedSearch]);
 
-  useEffect(() => {
-    fetchRoles(currentPage, debouncedSearch);
-  }, [currentPage, debouncedSearch]);
-
-  const fetchRoles = async (page = 1, search = "") => {
-    setLoading(true);
-    setError(null);
+  const fetchAllRoles = async (search) => {
+    setLoading(true); setError(null);
     try {
-      const data = await schoolAdminApi.getRoles(page, search);
-      
-      if (data.results) {
-        setRoles(data.results);
-        setTotalCount(data.count);
-        setTotalPages(Math.ceil(data.count / 10));
-      } else {
-        setRoles(data);
-        setTotalCount(data.length || 0);
-        setTotalPages(1);
+      let page = 1;
+      let results = [];
+      let hasNext = true;
+      while (hasNext) {
+        const data = await schoolAdminApi.getRoles(page, search);
+        results = [...results, ...(data.results || data || [])];
+        hasNext = Boolean(data.next);
+        page += 1;
       }
+      setAllRoles(results);
     } catch (err) {
       console.error("Fetch Roles Error:", err);
       setError(err.message || "Failed to fetch roles.");
@@ -54,116 +51,109 @@ export default function RolesPermissions() {
     }
   };
 
+  const totalCount = allRoles.length;
+  const totalPages = Math.max(1, Math.ceil(totalCount / pageSize));
+
+  const roles = useMemo(() => {
+    const start = (currentPage - 1) * pageSize;
+    return allRoles.slice(start, start + pageSize);
+  }, [allRoles, currentPage, pageSize]);
+
+  const rangeStart = totalCount === 0 ? 0 : (currentPage - 1) * pageSize + 1;
+  const rangeEnd = Math.min(currentPage * pageSize, totalCount);
+
   const getRoleAesthetics = (roleName) => {
     const name = roleName.toLowerCase();
-    if (name.includes("admin")) {
-      return { icon: "admin_panel_settings", bg: "bg-primary/10", text: "text-primary" };
-    }
-    if (name.includes("teacher")) {
-      return { icon: "school", bg: "bg-secondary/10", text: "text-secondary" };
-    }
-    if (name.includes("finance") || name.includes("account")) {
-      return { icon: "account_balance", bg: "bg-success/10", text: "text-success" };
-    }
-    if (name.includes("lib")) {
-      return { icon: "menu_book", bg: "bg-tertiary/10", text: "text-tertiary" };
-    }
+    if (name.includes("admin")) return { icon: "admin_panel_settings", bg: "bg-primary/10", text: "text-primary" };
+    if (name.includes("teacher")) return { icon: "school", bg: "bg-secondary/10", text: "text-secondary" };
+    if (name.includes("finance") || name.includes("account")) return { icon: "account_balance", bg: "bg-success/10", text: "text-success" };
+    if (name.includes("lib")) return { icon: "menu_book", bg: "bg-tertiary/10", text: "text-tertiary" };
     return { icon: "verified_user", bg: "bg-outline/10", text: "text-outline" };
   };
 
   return (
     <SchoolLayout title="Roles & Permissions">
-      <div className="px-4 md:px-8 pt-4 md:pt-6 max-w-7xl mx-auto pb-12">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
-          <div className="bg-surface-container-lowest p-6 rounded-lg shadow-sm border border-outline-variant/10">
-            <p className="text-xs font-headline font-bold text-on-surface-variant uppercase">Total Roles</p>
-            <h3 className="text-3xl font-headline font-bold text-primary">{totalCount}</h3>
+      <div className="px-4 md:px-8 pt-4 md:pt-6 max-w-7xl pb-12">
+
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-6 gap-4">
+          <div>
+            <h2 className="text-2xl font-headline font-extrabold text-on-surface">Roles & Permissions</h2>
+            <p className="text-sm text-on-surface-variant mt-1 font-body">Manage access control and permission sets across the institution.</p>
           </div>
-          <div className="bg-surface-container-lowest p-6 rounded-lg border-l-4 border-secondary shadow-sm border border-outline-variant/10">
-            <p className="text-xs font-headline font-bold text-on-surface-variant uppercase">Custom Permissions</p>
-            <h3 className="text-3xl font-headline font-bold text-on-surface">Active</h3>
-          </div>
-          <div className="bg-surface-container-lowest p-6 rounded-lg shadow-sm border border-outline-variant/10">
-            <p className="text-xs font-headline font-bold text-on-surface-variant uppercase">System Health</p>
-            <h3 className="text-3xl font-headline font-bold text-success">Secure</h3>
-          </div>
-          <div className="flex justify-end items-center">
-            <button
-              onClick={() => navigate("/school-admin/roles/create")}
-              className="px-6 py-3 bg-primary text-white rounded-md font-semibold flex gap-2 items-center shadow-lg hover:bg-primary/90 transition-all font-body"
-            >
-              <span className="material-symbols-outlined">add</span>
-              Create Role
-            </button>
-          </div>
+          <button
+            onClick={() => navigate("/school-admin/roles/create")}
+            className="bg-primary text-white px-5 py-2.5 rounded-md font-semibold text-sm flex items-center gap-2 shadow-sm hover:bg-primary/90 transition-colors font-body"
+          >
+            <span className="material-symbols-outlined text-[18px]">add</span>
+            Create Role
+          </button>
         </div>
 
         {error && (
-          <div className="mb-6 p-4 bg-error/10 text-error rounded-md border border-error/20 font-body">
-            {error}
-          </div>
+          <div className="mb-4 p-3 bg-error/10 text-error rounded-md border border-error/20 text-sm font-body">{error}</div>
         )}
 
-        <div className="bg-surface-container-lowest rounded-xl shadow-sm overflow-hidden border border-outline-variant/10">
-          <div className="p-6 flex flex-col sm:flex-row justify-between items-center gap-4 bg-surface-container-high/50 border-b border-outline-variant/10">
-            <div className="relative w-full sm:w-80">
-              <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline">search</span>
-              <input
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Search roles..."
-                className="w-full bg-surface-container-low rounded-md pl-10 pr-4 py-2 outline-none border border-outline-variant/20 focus:border-primary/30 transition-all shadow-sm font-body text-on-surface placeholder:text-outline"
-              />
+        <div className="bg-surface-container-lowest rounded-lg shadow-sm overflow-hidden border border-outline-variant/10">
+
+          {/* FILTER BAR */}
+          <div className="p-4 flex flex-wrap gap-3 justify-between bg-surface-container-high/50 border-b border-outline-variant/10 items-center">
+            <div className="flex flex-wrap gap-3 items-center flex-1">
+              <div className="relative w-64">
+                <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-sm">search</span>
+                <input
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder="Search roles..."
+                  className="w-full bg-surface-container-low pl-9 pr-3 py-2 rounded-md border border-outline-variant/20 text-sm outline-none focus:border-primary transition-colors font-body text-on-surface placeholder:text-outline"
+                />
+              </div>
             </div>
-            <div className="text-sm text-on-surface-variant font-medium font-body">
-              Showing {roles.length} of {totalCount} records
+            <div className="text-xs font-bold text-outline uppercase tracking-wider font-body">
+              {totalCount} Records Found
             </div>
           </div>
 
+          {/* TABLE */}
           <div className="overflow-x-auto">
             <table className="w-full text-left">
-              <thead className="bg-surface-container-low/50 text-xs uppercase text-on-surface-variant border-b border-outline-variant/10">
+              <thead className="bg-surface-container-low/50 text-xs text-on-surface-variant uppercase tracking-wider border-b border-outline-variant/10">
                 <tr>
                   <th className="px-6 py-4 font-headline font-bold">Role Name</th>
                   <th className="px-6 py-4 font-headline font-bold text-center">Permissions</th>
                   <th className="px-6 py-4 font-headline font-bold">Description</th>
-                  <th className="px-6 py-4 font-headline font-bold text-right pr-6">Action</th>
+                  <th className="px-6 py-4 font-headline font-bold text-right">Action</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-outline-variant/10">
                 {loading ? (
-                   <tr>
-                     <td colSpan="4" className="text-center py-10 text-on-surface-variant font-body">Loading roles...</td>
-                   </tr>
+                  <tr><td colSpan="4" className="p-8 text-center text-on-surface-variant font-body">Loading roles...</td></tr>
                 ) : roles.length === 0 ? (
-                   <tr>
-                     <td colSpan="4" className="text-center py-10 text-on-surface-variant font-body">No roles found.</td>
-                   </tr>
+                  <tr><td colSpan="4" className="p-8 text-center text-on-surface-variant font-body">No roles found.</td></tr>
                 ) : (
                   roles.map((r) => {
                     const aes = getRoleAesthetics(r.name);
                     return (
-                      <tr key={r.id} className="hover:bg-surface-container-high/30 transition-colors">
-                        <td className="px-6 py-5">
+                      <tr key={r.id} className="hover:bg-surface-container-high/30 transition-colors group">
+                        <td className="px-6 py-4">
                           <div className="flex items-center gap-3">
-                            <div className={`w-10 h-10 rounded-md flex items-center justify-center ${aes.bg}`}>
-                              <span className={`material-symbols-outlined ${aes.text}`}>{aes.icon}</span>
+                            <div className={`w-9 h-9 rounded-md flex items-center justify-center ${aes.bg}`}>
+                              <span className={`material-symbols-outlined text-[18px] ${aes.text}`}>{aes.icon}</span>
                             </div>
-                            <span className="font-semibold text-on-surface font-body">{r.name}</span>
+                            <p className="font-semibold text-on-surface group-hover:text-primary transition-colors font-body">{r.name}</p>
                           </div>
                         </td>
-                        <td className="text-center">
-                          <span className="px-3 py-1 bg-primary/10 text-primary font-medium rounded-full text-sm border border-primary/20 font-body">
+                        <td className="px-6 py-4 text-center">
+                          <span className="text-[10px] uppercase font-bold bg-primary/10 text-primary px-2 py-0.5 rounded-full border border-primary/20 font-body">
                             {r.permissions?.length || 0} assigned
                           </span>
                         </td>
-                        <td className="text-sm text-on-surface-variant max-w-xs truncate pr-4 font-body">
-                          {r.description || "No description provided."}
+                        <td className="px-6 py-4">
+                          <p className="text-xs text-on-surface-variant font-body truncate max-w-xs">{r.description || "No description provided."}</p>
                         </td>
-                        <td className="text-right pr-6">
-                          <button 
+                        <td className="px-6 py-4 text-right">
+                          <button
                             onClick={() => navigate(`/school-admin/roles/edit/${r.id}`)}
-                            className="px-4 py-1.5 text-sm font-medium text-primary bg-primary/10 hover:bg-primary/20 rounded-md transition-colors font-body"
+                            className="px-3 py-1.5 text-xs font-semibold text-primary bg-primary/10 hover:bg-primary/20 rounded-md transition-colors font-body"
                           >
                             Edit Details
                           </button>
@@ -176,25 +166,34 @@ export default function RolesPermissions() {
             </table>
           </div>
 
-          {totalPages > 1 && (
-            <div className="flex justify-between items-center p-4 border-t border-outline-variant/10 bg-surface-container-low/50">
-              <p className="text-xs text-on-surface-variant font-medium font-body">Showing page {currentPage} of {totalPages}</p>
-              <div className="flex gap-2">
-                <button 
-                  onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))} 
-                  disabled={currentPage === 1} 
-                  className="w-8 h-8 flex items-center justify-center border border-outline-variant/20 bg-surface-container-lowest hover:bg-surface-container-high rounded text-outline transition-colors disabled:opacity-50"
+          {/* PAGINATION BAR */}
+          {!loading && totalCount > 0 && (
+            <div className="p-4 flex flex-wrap gap-4 justify-between items-center border-t border-outline-variant/10 bg-surface-container-high/30">
+              <div className="flex items-center gap-2 text-xs font-body text-on-surface-variant">
+                <span>Rows per page:</span>
+                <select
+                  value={pageSize}
+                  onChange={(e) => setPageSize(Number(e.target.value))}
+                  className="bg-surface-container-low border border-outline-variant/20 text-xs rounded-md px-2 py-1.5 outline-none focus:border-primary text-on-surface font-body"
                 >
-                  <span className="material-symbols-outlined text-[16px]">chevron_left</span>
-                </button>
-                <span className="w-8 h-8 flex items-center justify-center bg-primary text-white rounded text-sm font-bold shadow-sm">{currentPage}</span>
-                <button 
-                  onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))} 
-                  disabled={currentPage === totalPages} 
-                  className="w-8 h-8 flex items-center justify-center border border-outline-variant/20 bg-surface-container-lowest hover:bg-surface-container-high rounded text-outline transition-colors disabled:opacity-50"
-                >
-                  <span className="material-symbols-outlined text-[16px]">chevron_right</span>
-                </button>
+                  {PAGE_SIZE_OPTIONS.map((size) => (
+                    <option key={size} value={size}>{size}</option>
+                  ))}
+                </select>
+                <span className="ml-2">Showing {rangeStart}-{rangeEnd} of {totalCount}</span>
+              </div>
+              <div className="flex items-center gap-3">
+                <button
+                  onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+                  disabled={currentPage === 1}
+                  className="px-3 py-1.5 rounded-md text-xs font-semibold border border-outline-variant/20 text-on-surface disabled:opacity-40 disabled:cursor-not-allowed hover:bg-surface-container-high transition-colors font-body"
+                >Previous</button>
+                <span className="text-xs font-semibold text-on-surface-variant font-body">Page {currentPage} of {totalPages}</span>
+                <button
+                  onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+                  disabled={currentPage === totalPages}
+                  className="px-3 py-1.5 rounded-md text-xs font-semibold border border-outline-variant/20 text-on-surface disabled:opacity-40 disabled:cursor-not-allowed hover:bg-surface-container-high transition-colors font-body"
+                >Next</button>
               </div>
             </div>
           )}

@@ -37,12 +37,6 @@ export const deleteAcademicYear = async (id) => {
     return response.data;
 };
 
-// --- Roles & Permissions ---
-export const getRoles = async () => {
-    const response = await apiClient.get('/accounts/roles/');
-    return response.data;
-};
-
 export const getRoleDetails = async (id) => {
     const response = await apiClient.get(`/accounts/roles/${id}/`);
     return response.data;
@@ -187,9 +181,14 @@ export const updateSettings = async (data) => {
 
 // src/services/schoolAdminApi.js
 
-export const getStudents = async (page = 1, search = "") => {
-    const searchParam = search ? `&search=${encodeURIComponent(search)}` : "";
-    const response = await apiClient.get(`/profiles/students/?page=${page}${searchParam}`);
+export const getStudents = async (page = 1, search = "", status = "ALL", classId = "") => {
+    const params = new URLSearchParams({ page });
+    if (search)   params.append("search", search);
+    if (classId)  params.append("class_level", classId);  
+    // status filter: backend uses is_archived boolean
+    if (status === "ACTIVE")   params.append("is_archived", "false");
+    if (status === "ARCHIVED") params.append("is_archived", "true");
+    const response = await apiClient.get(`/profiles/students/?${params.toString()}`);
     return response.data;
 };
 
@@ -245,6 +244,15 @@ export const deleteSectionById = async (id) => {
     return response.data;
 };
 
+export const getRoles = async (page = 1, search = "") => {
+    const params = new URLSearchParams({ page });
+    if (search) {
+        params.append("search", search);  // for SearchFilter backends
+        params.append("name", search);    // for filterset_fields = ['name'] backends
+    }
+    const response = await apiClient.get(`/accounts/roles/?${params.toString()}`);
+    return response.data;
+};
 
 // --- Bundled Export ---
 export const schoolAdminApi = {
@@ -292,5 +300,5 @@ export const schoolAdminApi = {
     updateSettings,
     getSectionsByClass,
     deleteClassLevelById,
-    deleteSectionById
+    deleteSectionById,
 };

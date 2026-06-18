@@ -43,7 +43,7 @@ export default function Dashboard() {
 
   return (
     <SchoolLayout>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 py-4 md:py-6">
+      <div className="max-w-7xl px-4 sm:px-6 md:px-8 py-4 md:py-6">
         {/* title & quick actions */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-6 gap-4">
           <div>
