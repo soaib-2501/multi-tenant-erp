@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import DashboardLayout from "../../components/erp/parent/DashboardLayout";
+import { parentData } from "../../services/parentAPIs";
 
 const Toggle = ({ enabled, onToggle }) => (
   <button
@@ -126,12 +127,32 @@ const ParentPortalSettings = () => {
   const [notifs, setNotifs]           = useState({ email: true, push: true, sms: false });
   const [saved, setSaved]             = useState(false);
   const [countryCode, setCountryCode] = useState("+91");
-  const [phone, setPhone]             = useState("5550123456");
+  const [phone, setPhone] = useState();
+  const [name, setName] = useState();
+  const [email, setEmail] = useState()
 
   const handleSave = () => {
     setSaved(true);
     setTimeout(() => setSaved(false), 2000);
   };
+
+  // Fetch Parent Dynamic Data
+    setTimeout(() => {
+      async function gerParentData(){
+        try {
+          const userData = JSON.parse(localStorage.getItem("user_data"));
+          const parentId = userData?.profiles?.parent?.id
+          const parentStats = await parentData(parentId);
+          setName(parentStats.first_name[0].toUpperCase() + parentStats.first_name.slice(1) + " " + parentStats.last_name[0].toUpperCase() + parentStats.last_name.slice(1))
+          setEmail(parentStats.email)
+          setPhone(parentStats.phone_number)
+
+        } catch(err){
+            console.error("couldn't fetch parent data", err)
+          }
+      }
+      gerParentData();
+    }, 1000);
 
   const inputCls =
     "w-full rounded-lg px-3 py-2 text-xs border-none outline-none " +
@@ -168,13 +189,13 @@ const ParentPortalSettings = () => {
               {/* Full Name */}
               <div className="space-y-1">
                 <label className="text-[10px] font-semibold text-slate-400 dark:text-slate-300 uppercase tracking-wider">Full Name</label>
-                <input type="text" defaultValue="Alex Harrison" className={inputCls} />
+                <input type="text" defaultValue={name} className={inputCls} />
               </div>
 
               {/* Email */}
               <div className="space-y-1">
                 <label className="text-[10px] font-semibold text-slate-400 dark:text-slate-300 uppercase tracking-wider">Email Address</label>
-                <input type="email" defaultValue="alex.harrison@edu-mail.com" className={inputCls} />
+                <input type="email" defaultValue={email} className={inputCls} />
               </div>
 
               {/* Phone with country code */}
@@ -202,7 +223,7 @@ const ParentPortalSettings = () => {
                       className={`${inputCls} pr-10`}
                     />
                     <span className="absolute right-2 top-1/2 -translate-y-1/2 text-[9px] sm:text-[10px] text-slate-400 dark:text-slate-300 pointer-events-none whitespace-nowrap">
-                      {phone.length}/{COUNTRY_CODES.find((c) => c.code === countryCode)?.maxDigits || 10}
+                      {phone && phone.length}/{COUNTRY_CODES.find((c) => c.code === countryCode)?.maxDigits || 10}
                     </span>
                   </div>
                 </div>
