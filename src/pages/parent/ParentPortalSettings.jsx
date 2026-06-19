@@ -142,20 +142,20 @@ const ParentPortalSettings = () => {
 
   return (
     <DashboardLayout>
-      <div className="p-3 sm:p-5 md:p-5 max-w-7xl mx-auto flex flex-col gap-3 sm:gap-4">
+      <div className="p-3 sm:p-5 max-w-7xl mx-auto flex flex-col gap-3 sm:gap-4">
 
         {/* ── Header ── */}
         <div>
-          <h1 className="text-base sm:text-lg font-bold text-slate-800 dark:text-white">Settings</h1>
+          <h1 className="text-lg sm:text-xl font-bold text-slate-800 dark:text-white">Settings</h1>
           <p className="text-xs text-slate-500 dark:text-slate-300 mt-0.5">
             Manage your account preferences and configuration.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-3 sm:gap-4">
+        <div className="grid grid-cols-1 xl:grid-cols-12 gap-3 sm:gap-4">
 
           {/* ── Account Profile ── */}
-          <section className="lg:col-span-7 bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 p-4 flex flex-col transition-colors duration-300">
+          <section className="xl:col-span-7 bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 p-4 flex flex-col transition-colors duration-300">
 
             <div className="flex items-center gap-2 mb-3">
               <span className="p-1.5 bg-blue-100 dark:bg-blue-900/40 text-blue-600 dark:text-blue-300 rounded-lg material-symbols-outlined text-base">person</span>
@@ -231,7 +231,7 @@ const ParentPortalSettings = () => {
           </section>
 
           {/* ── Right column ── */}
-          <div className="lg:col-span-5 flex flex-col gap-3 sm:gap-4">
+          <div className="xl:col-span-5 flex flex-col gap-3 sm:gap-4">
 
             {/* Language & Appearance */}
             <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 p-4 flex flex-col gap-3 transition-colors duration-300">
@@ -287,7 +287,7 @@ const ParentPortalSettings = () => {
             </div>
 
             {/* AI Configuration */}
-            <div className="bg-amber-50 dark:bg-amber-950/20 rounded-xl p-3 sm:p-4 border-l-4 border-amber-500 flex items-center justify-between gap-3 transition-colors duration-300">
+            <div className="bg-amber-50 dark:bg-amber-950/20 rounded-xl p-3 sm:p-4 border-l-4 border-amber-500 flex flex-col sm:flex-row sm:items-center justify-between gap-3 transition-colors duration-300">
               <div className="flex items-start gap-2 min-w-0">
                 <span className="material-symbols-outlined text-amber-600 dark:text-amber-300 text-base mt-0.5 flex-shrink-0">auto_awesome</span>
                 <div className="min-w-0">
@@ -297,13 +297,13 @@ const ParentPortalSettings = () => {
                   </p>
                 </div>
               </div>
-              <button className="flex-shrink-0 bg-amber-600 text-white px-2.5 sm:px-3 py-1.5 rounded-lg text-xs font-semibold hover:opacity-90 transition-opacity whitespace-nowrap">
+              <button className="flex-shrink-0 w-full sm:w-auto bg-amber-600 text-white px-2.5 sm:px-3 py-1.5 rounded-lg text-xs font-semibold hover:opacity-90 transition-opacity whitespace-nowrap">
                 Manage →
               </button>
             </div>
 
             {/* Account Security */}
-            <div className="bg-red-50 dark:bg-red-950/20 rounded-xl p-3 sm:p-4 flex items-center justify-between gap-3 transition-colors duration-300">
+            <div className="bg-red-50 dark:bg-red-950/20 rounded-xl p-3 sm:p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 transition-colors duration-300">
               <div className="flex items-start gap-2 min-w-0">
                 <span className="material-symbols-outlined text-red-500 dark:text-red-300 text-base mt-0.5 flex-shrink-0">warning</span>
                 <div className="min-w-0">
@@ -313,19 +313,19 @@ const ParentPortalSettings = () => {
                   </p>
                 </div>
               </div>
-              <button className="flex-shrink-0 bg-red-500 text-white px-2.5 sm:px-3 py-1.5 rounded-lg text-xs font-semibold hover:bg-red-600 transition-colors whitespace-nowrap">
+              <button className="flex-shrink-0 w-full sm:w-auto bg-red-500 text-white px-2.5 sm:px-3 py-1.5 rounded-lg text-xs font-semibold hover:bg-red-600 transition-colors whitespace-nowrap">
                 Sign Out All
               </button>
             </div>
           </div>
 
           {/* ── Notifications ── */}
-          <section className="lg:col-span-12 bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 p-4 transition-colors duration-300">
+          <section className="xl:col-span-12 bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 p-4 transition-colors duration-300">
             <div className="flex items-center gap-2 mb-3">
               <span className="p-1.5 bg-blue-100 dark:bg-blue-900/40 text-blue-600 dark:text-blue-300 rounded-lg material-symbols-outlined text-base">notifications_active</span>
               <h2 className="text-sm font-bold text-slate-800 dark:text-white">Notification Preferences</h2>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-2 sm:gap-3">
               {[
                 { key: "email", icon: "mail",      label: "Email Summaries",    desc: "Weekly digests of child progress"   },
                 { key: "push",  icon: "smartphone", label: "Push Notifications", desc: "Real-time alerts for absences"      },

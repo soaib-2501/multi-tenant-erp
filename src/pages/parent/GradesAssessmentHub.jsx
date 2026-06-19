@@ -18,20 +18,20 @@ function GradesSkeleton() {
           </div>
           <Skeleton className="w-full sm:w-48 h-9 rounded-xl" />
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-4 sm:gap-6">
-          <div className="md:col-span-4 bg-white dark:bg-slate-800 rounded-xl p-6 space-y-4 shadow-sm">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-6">
+          <div className="lg:col-span-4 bg-white dark:bg-slate-800 rounded-xl p-6 space-y-4 shadow-sm">
             <Skeleton className="w-24 h-3 mx-auto" />
             <Skeleton className="w-40 h-40 rounded-full mx-auto" />
             <Skeleton className="w-48 h-3 mx-auto" />
           </div>
-          <div className="md:col-span-8 bg-white dark:bg-slate-800 rounded-xl p-6 space-y-4 shadow-sm">
+          <div className="lg:col-span-8 bg-white dark:bg-slate-800 rounded-xl p-6 space-y-4 shadow-sm">
             <Skeleton className="w-48 h-5" />
             <Skeleton className="w-full h-16" />
             <div className="grid grid-cols-3 gap-3">
               {[1, 2, 3].map((i) => <Skeleton key={i} className="h-16 rounded-lg" />)}
             </div>
           </div>
-          <div className="md:col-span-12 bg-white dark:bg-slate-800 rounded-xl shadow-sm overflow-hidden">
+          <div className="lg:col-span-12 bg-white dark:bg-slate-800 rounded-xl shadow-sm overflow-hidden">
             <div className="p-5 space-y-2">
               <Skeleton className="w-40 h-5" />
             </div>
@@ -174,7 +174,7 @@ function CircularGrade({ grade, gpa }) {
   );
 }
 
-/* ─── Mobile grade card — replaces table rows on small screens ─────────── */
+/* ─── Mobile grade card — replaces table rows on small/tablet screens ──── */
 function MobileGradeCard({ g, style, gc, pct, examName }) {
   return (
     <div className="bg-surface-container-lowest dark:bg-slate-800/60 rounded-lg p-4 border border-surface-container-low dark:border-slate-700">
@@ -309,10 +309,10 @@ export default function GradesAssessmentHub() {
         </div>
 
         {/* ── Bento grid ── */}
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-4 sm:gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-6">
 
           {/* Overall grade circle */}
-          <div className="md:col-span-4 bg-surface-container-lowest dark:bg-slate-800/60 rounded-xl p-5 sm:p-6 shadow-sm border border-outline-variant/10 dark:border-slate-700/40 flex flex-col items-center justify-center relative overflow-hidden">
+          <div className="lg:col-span-4 bg-surface-container-lowest dark:bg-slate-800/60 rounded-xl p-5 sm:p-6 shadow-sm border border-outline-variant/10 dark:border-slate-700/40 flex flex-col items-center justify-center relative overflow-hidden">
             <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full -mr-16 -mt-16" />
             {allGrades.length === 0 ? (
               <div className="text-center py-8">
@@ -335,7 +335,7 @@ export default function GradesAssessmentHub() {
           </div>
 
           {/* AI / Performance Insight */}
-          <div className="md:col-span-8 bg-surface-container-lowest dark:bg-slate-800/60 rounded-xl p-4 sm:p-5 shadow-sm border border-outline-variant/10 dark:border-slate-700/40 flex flex-col justify-between">
+          <div className="lg:col-span-8 bg-surface-container-lowest dark:bg-slate-800/60 rounded-xl p-4 sm:p-5 shadow-sm border border-outline-variant/10 dark:border-slate-700/40 flex flex-col justify-between">
             <div className="flex items-start justify-between gap-3">
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2 mb-2">
@@ -382,7 +382,7 @@ export default function GradesAssessmentHub() {
           </div>
 
           {/* Subject-wise table / mobile cards */}
-          <div className="md:col-span-12 bg-surface-container-lowest dark:bg-slate-800/60 rounded-xl overflow-hidden shadow-sm border border-outline-variant/10 dark:border-slate-700/40">
+          <div className="lg:col-span-12 bg-surface-container-lowest dark:bg-slate-800/60 rounded-xl overflow-hidden shadow-sm border border-outline-variant/10 dark:border-slate-700/40">
             <div className="px-4 sm:px-5 py-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 border-b border-surface-container-low dark:border-slate-700">
               <h3 className="text-sm font-bold font-headline text-on-surface dark:text-white">Detailed Assessment</h3>
 
@@ -423,8 +423,8 @@ export default function GradesAssessmentHub() {
               </div>
             ) : (
               <>
-                {/* Mobile cards (< md) */}
-                <div className="md:hidden px-4 py-4 space-y-3">
+                {/* Mobile + tablet cards (< lg) — avoids cramped table on iPad/tablet widths */}
+                <div className="lg:hidden px-4 py-4 space-y-3">
                   {filteredGrades.map((g, idx) => {
                     const style = subjectStyle(g.subjectName);
                     const gc = gradeColor(g.grade);
@@ -445,8 +445,8 @@ export default function GradesAssessmentHub() {
                   })}
                 </div>
 
-                {/* Desktop table (>= md) */}
-                <div className="hidden md:block overflow-x-auto">
+                {/* Desktop table (>= lg) — by lg the sidebar has settled and there's enough room for 6 columns */}
+                <div className="hidden lg:block overflow-x-auto">
                   <table className="w-full text-left border-collapse">
                     <thead>
                       <tr className="bg-surface-container-low/50 dark:bg-slate-700/30">
@@ -454,7 +454,7 @@ export default function GradesAssessmentHub() {
                         <th className="px-5 py-3 text-[10px] font-bold text-on-surface-variant dark:text-slate-400 uppercase tracking-wider">Exam</th>
                         <th className="px-5 py-3 text-[10px] font-bold text-on-surface-variant dark:text-slate-400 uppercase tracking-wider">Marks</th>
                         <th className="px-5 py-3 text-[10px] font-bold text-on-surface-variant dark:text-slate-400 uppercase tracking-wider">Grade</th>
-                        <th className="px-5 py-3 text-[10px] font-bold text-on-surface-variant dark:text-slate-400 uppercase tracking-wider hidden lg:table-cell">Remarks</th>
+                        <th className="px-5 py-3 text-[10px] font-bold text-on-surface-variant dark:text-slate-400 uppercase tracking-wider hidden xl:table-cell">Remarks</th>
                         <th className="px-5 py-3 text-[10px] font-bold text-on-surface-variant dark:text-slate-400 uppercase tracking-wider text-right">Score %</th>
                       </tr>
                     </thead>
@@ -486,11 +486,11 @@ export default function GradesAssessmentHub() {
                                 {g.grade}
                               </span>
                             </td>
-                            <td className="px-5 py-4 text-xs text-on-surface-variant dark:text-slate-400 italic hidden lg:table-cell">{g.remarks}</td>
+                            <td className="px-5 py-4 text-xs text-on-surface-variant dark:text-slate-400 italic hidden xl:table-cell">{g.remarks}</td>
                             <td className="px-5 py-4 text-right">
                               {pct !== null ? (
                                 <div className="flex items-center justify-end gap-2">
-                                  <div className="w-16 bg-surface-container dark:bg-slate-600 rounded-full h-1.5 hidden lg:block">
+                                  <div className="w-16 bg-surface-container dark:bg-slate-600 rounded-full h-1.5 hidden xl:block">
                                     <div
                                       className={`h-1.5 rounded-full ${pct >= 75 ? "bg-primary" : pct >= 50 ? "bg-yellow-400" : "bg-red-400"}`}
                                       style={{ width: `${pct}%` }}
@@ -521,7 +521,7 @@ export default function GradesAssessmentHub() {
           </div>
 
           {/* Bottom cards row */}
-          <div className="md:col-span-12 grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+          <div className="lg:col-span-12 grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
 
             {/* Best subject highlight */}
             <div className="relative overflow-hidden rounded-2xl p-5 sm:p-6 text-white shadow-md bg-gradient-to-br from-blue-700 to-blue-600">

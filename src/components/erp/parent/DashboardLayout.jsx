@@ -36,18 +36,22 @@ export default function DashboardLayout({ children }) {
   }, []);
 
   return (
-    <div className="flex min-h-screen bg-white dark:bg-slate-950 transition-colors duration-300">
+    // overflow-x-hidden + max-w-[100vw] → safety net, page can never scroll sideways
+    <div className="flex min-h-screen w-full max-w-[100vw] overflow-x-hidden bg-white dark:bg-slate-950 transition-colors duration-300">
 
       <Sidebar />
 
       {/*
+        min-w-0 is the actual fix — without it, a flex child refuses to shrink
+        below its content's intrinsic width (e.g. a 520px-wide table), which
+        forces the WHOLE page to scroll horizontally instead of just that table.
         md:ml-72 / md:ml-20  → shift right of sidebar on desktop only.
         On mobile the sidebar is an off-canvas drawer (fixed, translated
         off-screen), so content never needs a left margin there — ml-0.
         pb-20                 → bottom padding on mobile so content doesn't hide behind BottomNav
       */}
       <div
-        className={`flex-1 min-h-screen bg-white dark:bg-slate-950
+        className={`flex-1 min-w-0 min-h-screen bg-white dark:bg-slate-950
                     transition-all duration-300
                     ml-0 pb-20 md:pb-0
                     ${sidebarExpanded ? "md:ml-72" : "md:ml-20"}`}
@@ -55,7 +59,7 @@ export default function DashboardLayout({ children }) {
         <Navbar />
 
         {/* Responsive page padding: tighter on mobile, comfortable on desktop */}
-        <div className="p-4 sm:p-6 md:p-8">
+        <div className="p-4 sm:p-6 md:p-8 min-w-0">
           {children}
         </div>
       </div>

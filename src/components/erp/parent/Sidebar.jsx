@@ -3,22 +3,45 @@
 import React, { useState, useEffect } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 
+const STORAGE_KEY = "parent_sidebar_expanded";
+
 export default function Sidebar() {
   const navigate = useNavigate();
 
-  const [isExpanded, setIsExpanded] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(true);
   const [isMobile, setIsMobile]     = useState(false);
 
+  // Desktop: restore the user's last saved collapse preference (survives page
+  // navigation, since this component remounts on every route change).
+  // Mobile: always start closed (off-canvas drawer).
+  const applyModeState = (mobile) => {
+    let expanded;
+    if (mobile) {
+      expanded = false;
+    } else {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      expanded = saved !== null ? saved === "true" : true;
+    }
+    setIsExpanded(expanded);
+    window.dispatchEvent(new CustomEvent("parent-sidebar-toggle", { detail: { expanded } }));
+  };
+
   useEffect(() => {
+    let lastMobile = window.innerWidth < 768;
+    setIsMobile(lastMobile);
+    applyModeState(lastMobile);
+
+    // Only re-apply state when crossing the mobile/desktop breakpoint —
+    // NOT on every resize tick (that was wiping out manual toggles before,
+    // causing the sidebar to randomly snap back to expanded).
     const check = () => {
       const mobile = window.innerWidth < 768;
-      setIsMobile(mobile);
-      setIsExpanded(!mobile);
-      window.dispatchEvent(
-        new CustomEvent("parent-sidebar-toggle", { detail: { expanded: !mobile } })
-      );
+      if (mobile !== lastMobile) {
+        lastMobile = mobile;
+        setIsMobile(mobile);
+        applyModeState(mobile);
+      }
     };
-    check();
     window.addEventListener("resize", check);
     return () => window.removeEventListener("resize", check);
   }, []);
@@ -35,6 +58,7 @@ export default function Sidebar() {
   const toggle = () => {
     setIsExpanded((prev) => {
       const next = !prev;
+      if (!isMobile) localStorage.setItem(STORAGE_KEY, String(next));
       window.dispatchEvent(new CustomEvent("parent-sidebar-toggle", { detail: { expanded: next } }));
       return next;
     });
@@ -97,13 +121,6 @@ export default function Sidebar() {
           }
         `}
       >
-        {/*
-          Inner wrapper fills full height with flex column.
-          NO overflow/scroll anywhere — everything fits by using
-          compact but comfortable spacing (py-2.5, gap-0.5, mb-4).
-          Even iPhone SE (667px tall) fits: ~60 logo + ~72 profile +
-          6×44 nav + 2 bottom items + divider = ~530px total, safely fits.
-        */}
         <div className="flex flex-col h-full px-3 py-3">
 
           {/* ── Logo + toggle ── */}

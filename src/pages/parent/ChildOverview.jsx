@@ -202,10 +202,10 @@ const ChildOverview = () => {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-6">
+        <div className="grid grid-cols-1 xl:grid-cols-12 gap-4 sm:gap-6">
 
           {/* Student profile card */}
-          <div className="lg:col-span-4 bg-gradient-to-b from-blue-50/60 to-white dark:from-slate-800 dark:to-slate-800 rounded-2xl p-5 sm:p-7 flex flex-col items-center text-center border border-blue-100 dark:border-slate-700 shadow-sm">
+          <div className="xl:col-span-4 bg-gradient-to-b from-blue-50/60 to-white dark:from-slate-800 dark:to-slate-800 rounded-2xl p-5 sm:p-7 flex flex-col items-center text-center border border-blue-100 dark:border-slate-700 shadow-sm">
             <img
               alt={childData.name}
               className="w-20 h-20 sm:w-28 sm:h-28 rounded-2xl object-cover ring-4 ring-slate-50 dark:ring-slate-700 bg-slate-100"
@@ -243,7 +243,7 @@ const ChildOverview = () => {
           </div>
 
           {/* Academic summary */}
-          <div className="lg:col-span-8 grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6">
+          <div className="xl:col-span-8 grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6">
 
             {/* Total subjects */}
             <div className="bg-gradient-to-br from-blue-50 to-white dark:from-slate-800 dark:to-slate-800 rounded-2xl p-5 sm:p-6 border border-blue-100 dark:border-slate-700 shadow-sm flex flex-col hover:shadow-md transition-shadow">

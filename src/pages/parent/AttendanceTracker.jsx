@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import DashboardLayout from "../../components/erp/parent/DashboardLayout";
 import { useParent } from "../../context/ParentProvider";
 
@@ -21,8 +21,8 @@ function AttendanceSkeleton() {
             <Skeleton className="w-32 h-9 rounded-md" />
           </div>
         </div>
-        <section className="grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-6">
-          <div className="lg:col-span-4 flex flex-col gap-4">
+        <section className="grid grid-cols-1 xl:grid-cols-12 gap-4 sm:gap-6">
+          <div className="xl:col-span-4 flex flex-col gap-4">
             {[1, 2, 3].map(i => (
               <div key={i} className="bg-white dark:bg-slate-800 p-4 rounded-xl shadow-sm space-y-3">
                 <Skeleton className="w-9 h-9 rounded-lg" />
@@ -31,7 +31,7 @@ function AttendanceSkeleton() {
               </div>
             ))}
           </div>
-          <div className="lg:col-span-8 bg-white dark:bg-slate-800 rounded-xl p-4 sm:p-5 shadow-sm space-y-4">
+          <div className="xl:col-span-8 bg-white dark:bg-slate-800 rounded-xl p-4 sm:p-5 shadow-sm space-y-4">
             <div className="flex justify-between">
               <Skeleton className="w-36 h-5" />
               <div className="flex gap-2">
@@ -202,6 +202,12 @@ export default function AttendanceTracker() {
   const [showLeaveModal, setShowLeaveModal]  = useState(false);
   const [exportFeedback, setExportFeedback]  = useState(false);
   const [selectedRow,    setSelectedRow]     = useState(null);
+  const [visibleLogs,    setVisibleLogs]     = useState(5);
+
+  // Reset pagination whenever the underlying records change (e.g. child switch)
+  useEffect(() => {
+    setVisibleLogs(5);
+  }, [attendanceRecords]);
 
   const year      = currentDate.getFullYear();
   const month     = currentDate.getMonth();
@@ -279,6 +285,7 @@ export default function AttendanceTracker() {
   const studentFirstName = profile?.first_name || "your child";
   const studentFullName  = `${profile?.first_name || ""} ${profile?.last_name || ""}`.trim() || studentFirstName;
   const sortedRecords    = [...(attendanceRecords || [])].sort((a, b) => new Date(b.date) - new Date(a.date));
+  const visibleRecords   = sortedRecords.slice(0, visibleLogs);
 
   return (
     <DashboardLayout>
@@ -287,7 +294,7 @@ export default function AttendanceTracker() {
         {/* ── Header ── */}
         <div className="flex flex-col xs:flex-row xs:justify-between xs:items-center gap-3">
           <div className="min-w-0">
-            <h1 className="text-base sm:text-lg font-bold font-headline text-on-surface dark:text-white">
+            <h1 className="text-lg sm:text-xl font-bold font-headline text-on-surface dark:text-white">
               Child Attendance
             </h1>
             <p className="text-xs text-on-surface-variant dark:text-slate-400 mt-0.5">
@@ -315,10 +322,10 @@ export default function AttendanceTracker() {
         </div>
 
         {/* ── Stat cards + Calendar ── */}
-        <section className="grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-5">
+        <section className="grid grid-cols-1 xl:grid-cols-12 gap-4 sm:gap-5">
 
           {/* LEFT: 3 stat cards */}
-          <div className="lg:col-span-4 grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-1 gap-3 sm:gap-4">
+          <div className="xl:col-span-4 grid grid-cols-1 sm:grid-cols-3 xl:grid-cols-1 gap-3 sm:gap-4">
 
             {/* Card 1: Overall */}
             <div className="bg-surface-container-lowest dark:bg-slate-800 px-4 py-3.5 rounded-xl shadow-sm border border-outline-variant/10 dark:border-slate-700 flex items-center justify-between gap-3 flex-wrap transition-colors duration-300">
@@ -406,7 +413,7 @@ export default function AttendanceTracker() {
           </div>
 
           {/* RIGHT: Calendar */}
-          <div className="lg:col-span-8 bg-surface-container-lowest dark:bg-slate-800 rounded-xl p-4 sm:p-5 shadow-sm border border-outline-variant/10 dark:border-slate-700 transition-colors duration-300">
+          <div className="xl:col-span-8 bg-surface-container-lowest dark:bg-slate-800 rounded-xl p-4 sm:p-5 shadow-sm border border-outline-variant/10 dark:border-slate-700 transition-colors duration-300">
             <div className="flex justify-between items-center flex-wrap gap-2 mb-4 sm:mb-5">
               <div className="min-w-0">
                 <h3 className="text-sm sm:text-base font-bold font-headline text-on-surface dark:text-white truncate">
@@ -443,7 +450,7 @@ export default function AttendanceTracker() {
                   <div
                     key={day}
                     title={record?.status || ""}
-                    className={`h-8 sm:h-9 lg:h-10 rounded-lg flex items-center justify-center text-[11px] sm:text-xs font-semibold border transition-all cursor-default select-none ${
+                    className={`h-8 sm:h-9 xl:h-10 rounded-lg flex items-center justify-center text-[11px] sm:text-xs font-semibold border transition-all cursor-default select-none ${
                       record
                         ? (statusClasses[record.status] ?? "bg-surface-container dark:bg-slate-700 border-surface-container dark:border-slate-600")
                         : "bg-surface-container-lowest dark:bg-slate-800 border-surface-container dark:border-slate-700 text-on-surface-variant dark:text-slate-400"
@@ -475,7 +482,7 @@ export default function AttendanceTracker() {
         {/* ── Enrollment Details ── */}
         <div className="bg-surface-container-lowest dark:bg-slate-800 rounded-xl shadow-sm border border-outline-variant/10 dark:border-slate-700 px-4 py-3.5 transition-colors duration-300">
           <p className="text-xs font-semibold text-on-surface-variant dark:text-slate-400 mb-3 uppercase tracking-wider">Enrollment Details</p>
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3 sm:gap-4">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4">
             {[
               { label: "Student",       value: studentFullName },
               { label: "Class",         value: enrollment ? `${enrollment.class_level_name} – ${enrollment.section_name}` : "N/A" },
@@ -497,15 +504,13 @@ export default function AttendanceTracker() {
           {/* Table header bar */}
           <div className="flex items-center justify-between gap-2 px-4 py-3.5 border-b border-surface-container-low dark:border-slate-700">
             <h2 className="text-sm font-bold font-headline text-on-surface dark:text-white">Attendance Log</h2>
-            <span className="text-xs text-on-surface-variant dark:text-slate-400 flex-shrink-0">{sortedRecords.length} records</span>
+            <span className="text-xs text-on-surface-variant dark:text-slate-400 flex-shrink-0">
+              Showing {Math.min(visibleLogs, sortedRecords.length)} of {sortedRecords.length}
+            </span>
           </div>
 
           <div className="overflow-x-auto">
             <table className="w-full text-left min-w-[520px]">
-              {/*
-                ── Column headings: clean white/dark background, primary-tinted text,
-                   no grey wash — the border-bottom does all the separation work.
-              ── */}
               <thead>
                 <tr className="border-b-2 border-primary/20 dark:border-primary/30">
                   <th className="sticky left-0 z-10 bg-surface-container-lowest dark:bg-slate-800 px-4 py-3 text-[10px] font-bold uppercase tracking-widest text-primary dark:text-blue-400 whitespace-nowrap">
@@ -531,7 +536,7 @@ export default function AttendanceTracker() {
                     </td>
                   </tr>
                 ) : (
-                  sortedRecords.map(rec => {
+                  visibleRecords.map(rec => {
                     const d          = new Date(rec.date);
                     const isSelected = selectedRow === rec.id;
                     return (
@@ -544,7 +549,6 @@ export default function AttendanceTracker() {
                             : "hover:bg-primary/5 dark:hover:bg-primary/10"
                         }`}
                       >
-                        {/* Sticky date cell — background must match row state */}
                         <td className={`sticky left-0 z-10 px-4 py-3 text-xs font-semibold text-on-surface dark:text-white whitespace-nowrap transition-colors duration-150 ${
                           isSelected
                             ? "bg-primary/8 dark:bg-primary/15"
@@ -570,6 +574,18 @@ export default function AttendanceTracker() {
               </tbody>
             </table>
           </div>
+
+          {/* Lazy load trigger */}
+          {visibleLogs < sortedRecords.length && (
+            <div className="px-4 py-3 border-t border-surface-container-low dark:border-slate-700 flex justify-center">
+              <button
+                onClick={() => setVisibleLogs(v => v + 5)}
+                className="text-xs font-semibold text-primary dark:text-blue-300 hover:underline px-3 py-1.5 rounded-lg hover:bg-primary/5 dark:hover:bg-primary/10 transition-colors"
+              >
+                Load more ({sortedRecords.length - visibleLogs} remaining)
+              </button>
+            </div>
+          )}
         </div>
 
       </div>
