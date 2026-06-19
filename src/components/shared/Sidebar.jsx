@@ -28,8 +28,12 @@ export default function Sidebar() {
   const { class_level_name = '', section_name = '' } = enroll || {};
 
   useEffect(() => {
+    // Threshold is 1280px (not 768px) to match MainLayout.jsx. Below this,
+    // the sidebar overlays content instead of pushing it via margin-left,
+    // since a fixed 288px push-margin squeezes tablet-width content (iPad
+    // Mini/Air/Pro all fall under 1280px and were getting cramped grids).
     const check = () => {
-      const mobile = window.innerWidth < 768;
+      const mobile = window.innerWidth < 1280;
       setIsMobile(mobile);
       if (mobile) {
         setIsExpanded(false);
@@ -41,7 +45,7 @@ export default function Sidebar() {
 
     check();
 
-    if (window.innerWidth >= 768) {
+    if (window.innerWidth >= 1280) {
       window.dispatchEvent(
         new CustomEvent('sidebar-toggle', { detail: { expanded: true } })
       );
@@ -175,7 +179,7 @@ export default function Sidebar() {
             <p className="text-xs text-on-surface-variant whitespace-nowrap">
               {class_level_name} - {section_name}
             </p>
-            <p className="text-2xs text-primary font-bold whitespace-nowrap">
+            <p className="text-[10px] text-primary font-bold whitespace-nowrap">
               ID: {enrollment_number}
             </p>
           </div>

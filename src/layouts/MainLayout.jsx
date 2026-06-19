@@ -10,14 +10,19 @@ export default function MainLayout({ children, title }) {
 
     Desktop expanded  → marginLeft = 288px (w-72)
     Desktop collapsed → marginLeft = 64px  (w-16)
-    Mobile (any)      → marginLeft = 0px   (sidebar overlays, doesn't push)
+    Tablet/Mobile     → marginLeft = 0px   (sidebar overlays, doesn't push)
+
+    Threshold is 1280px (not 768px) because a fixed 288px push-margin on an
+    iPad-width screen (768–1024px) leaves too little content width and
+    squeezes multi-column grids (e.g. the 3 stat cards on the dashboard).
+    Below 1280px the sidebar overlays content instead of pushing it.
   */
   const [sidebarExpanded, setSidebarExpanded] = useState(true);
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
     const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768);
+      setIsMobile(window.innerWidth < 1280);
     };
     checkMobile();
     window.addEventListener('resize', checkMobile);

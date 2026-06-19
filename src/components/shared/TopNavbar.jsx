@@ -6,7 +6,15 @@ export default function TopNavbar({ title }) {
     // ✅ dark:bg-white hataya — CSS variable se chalega
     <header className="sticky top-0 z-40 bg-surface-container-low/90 backdrop-blur-md border-b border-outline-variant/30 transition-colors duration-300">
       <div className="flex justify-between items-center px-8 py-4">
-        <div className="flex items-center gap-4 pl-12 md:pl-0">
+        {/*
+          pl-12 reserves space for Sidebar's floating hamburger button
+          (fixed top-4 left-4), which renders whenever the sidebar is in
+          overlay mode. That mode now applies below 1280px (matches the
+          threshold in Sidebar.jsx / MainLayout.jsx), so the padding must
+          only drop away at xl, not md — otherwise on iPad widths the
+          floating button overlaps the title text.
+        */}
+        <div className="flex items-center gap-4 pl-12 xl:pl-0">
           
           <h1 className="text-xl font-bold font-headline text-on-background tracking-tight">
             {title}

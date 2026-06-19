@@ -259,7 +259,7 @@ export default function Teachers() {
           </div>
           <button
             onClick={() => navigate("/school-admin/teachers/create")}
-            className="bg-primary text-white px-5 py-2.5 rounded-lg text-sm font-bold shadow-sm hover:bg-primary/90 transition-all active:scale-95 flex items-center gap-2"
+            className="sm:auto whitespace-nowrap bg-primary text-white px-5 py-2.5 rounded-lg text-sm font-bold shadow-sm hover:bg-primary/90 transition-all active:scale-95 flex items-center gap-2"
           >
             <span className="material-symbols-outlined text-[18px]">person_add</span>
             Add Teacher

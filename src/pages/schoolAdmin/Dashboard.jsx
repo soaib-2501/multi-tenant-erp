@@ -472,7 +472,7 @@ export default function Dashboard() {
           </div>
           <div className="relative w-full sm:w-auto">
             <button onClick={() => setShowQuickActions(p => !p)}
-              className="sm:w-auto flex items-center justify-center gap-2 bg-primary text-white px-5 py-2.5 rounded-lg text-sm font-bold shadow-sm hover:bg-primary/90 transition-all active:scale-95">
+              className="sm:w-auto whitespace-nowrap flex items-center justify-center gap-2 bg-primary text-white px-5 py-2.5 rounded-lg text-sm font-bold shadow-sm hover:bg-primary/90 transition-all active:scale-95">
               <span className="material-symbols-outlined text-[18px]">add</span>
               Quick Add
             </button>

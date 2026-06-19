@@ -266,7 +266,7 @@ export default function TeacherAssignment() {
       <div className="flex flex-col gap-4 px-4 md:px-8 pt-4 pb-12">
 
         {/* Responsive Header Block */}
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
           <div>
             <h2 className="text-2xl font-headline font-extrabold text-on-surface">Resource Allocation</h2>
             <p className="text-sm text-on-surface-variant mt-1 font-body">
@@ -275,7 +275,7 @@ export default function TeacherAssignment() {
           </div>
           <button
             onClick={() => navigate("/school-admin/teacher-assignment/create")}
-            className="sm:w-auto bg-primary text-white px-5 py-2.5 rounded-lg text-sm font-bold shadow-sm hover:bg-primary/90 transition-all active:scale-95 flex items-center justify-center gap-2"
+            className="sm:w-auto whitespace-nowrap bg-primary text-white px-5 py-2.5 rounded-lg text-sm font-bold shadow-sm hover:bg-primary/90 transition-all active:scale-95 flex items-center justify-center gap-2"
           >
             <span className="material-symbols-outlined text-[18px]">add</span>
             Assign Teacher

@@ -253,13 +253,13 @@ export default function Dashboard() {
                 <span className="material-symbols-outlined text-xl">calendar_today</span>
               </span>
               <div>
-                <p className="text-xs font-medium text-on-surface-variant">Attendance Rate</p>
+                <p className="text-xs font-medium text-on-surface-variant whitespace-nowrap">Attendance Rate</p>
                 <p className="text-xl font-bold font-headline text-on-surface leading-tight">
                   {attendanceRate}<span className="text-sm font-semibold">%</span>
                 </p>
               </div>
             </div>
-            <span className={`text-2xs font-bold px-2 py-1 rounded-full ${attendanceStatus.className}`}>
+            <span className={`text-2xs font-bold px-2 py-1 rounded-full flex-shrink-0 whitespace-nowrap ${attendanceStatus.className}`}>
               {attendanceStatus.label}
             </span>
           </div>
@@ -271,13 +271,13 @@ export default function Dashboard() {
                 <span className="material-symbols-outlined text-xl">grade</span>
               </span>
               <div>
-                <p className="text-xs font-medium text-on-surface-variant">Overall Percentage</p>
+                <p className="text-xs font-medium text-on-surface-variant whitespace-nowrap">Overall Percentage</p>
                 <p className="text-xl font-bold font-headline text-on-surface leading-tight">
                   {percentage}<span className="text-sm font-semibold">%</span>
                 </p>
               </div>
             </div>
-            <span className={`text-2xs font-bold px-2 py-1 rounded-full ${percentageStatus.className}`}>
+            <span className={`text-2xs font-bold px-2 py-1 rounded-full flex-shrink-0 whitespace-nowrap ${percentageStatus.className}`}>
               {percentageStatus.label}
             </span>
           </div>
@@ -300,12 +300,12 @@ export default function Dashboard() {
         </div>
 
         {/* ── ROW 2: Calendar + Subjects + Right col ── */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-start">
-          <div className="md:col-span-2 grid grid-cols-2 gap-6 items-stretch">
+        <div className="grid grid-cols-1 xl:grid-cols-3 gap-6 items-start">
+          <div className="xl:col-span-2 grid grid-cols-1 xl:grid-cols-2 gap-6 items-start">
 
             {/* Calendar */}
-            <Link to="/student/attendance" className="block group h-full">
-              <div className="h-full bg-surface-container-lowest rounded-xl p-4 custom-shadow border border-outline-variant/10 group-hover:border-primary/40 transition-all duration-200 flex flex-col">
+            <Link to="/student/attendance" className="block group xl:h-full">
+              <div className="xl:h-full bg-surface-container-lowest rounded-xl p-4 custom-shadow border border-outline-variant/10 group-hover:border-primary/40 transition-all duration-200 flex flex-col">
                 <div className="flex items-center justify-between mb-3">
                   <div>
                     <p className="text-xs font-bold text-on-surface">{monthWord} {year}</p>
@@ -356,7 +356,7 @@ export default function Dashboard() {
             </Link>
 
             {/* Subjects */}
-            <div className="h-full bg-surface-container-lowest rounded-xl custom-shadow border border-outline-variant/10 overflow-hidden flex flex-col">
+            <div className="xl:h-full bg-surface-container-lowest rounded-xl custom-shadow border border-outline-variant/10 overflow-hidden flex flex-col">
               <div className="flex items-center justify-between px-4 pt-4 pb-2 border-b border-surface-container-low flex-shrink-0">
                 <div>
                   <p className="text-xs font-bold text-on-surface">My Subjects</p>
