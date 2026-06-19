@@ -1,79 +1,24 @@
 // src/components/erp/parent/Sidebar.jsx
 
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 
-const STORAGE_KEY = "parent_sidebar_expanded";
-
-export default function Sidebar() {
+export default function Sidebar({ isExpanded, isMobile, onToggle, onClose }) {
   const navigate = useNavigate();
 
-  const [isExpanded, setIsExpanded] = useState(true);
-  const [isMobile, setIsMobile]     = useState(false);
+  // Get parent data from localStorage with safety checks
   const userData = JSON.parse(localStorage.getItem('user_data') || 'null');
   const parentData = userData?.identity;
   const parentFirstName = parentData?.first_name || '';
   const parentLastName = parentData?.last_name || '';
 
-  // Desktop: restore the user's last saved collapse preference (survives page
-  // navigation, since this component remounts on every route change).
-  // Mobile: always start closed (off-canvas drawer).
-  const applyModeState = (mobile) => {
-    let expanded;
-    if (mobile) {
-      expanded = false;
-    } else {
-      const saved = localStorage.getItem(STORAGE_KEY);
-      expanded = saved !== null ? saved === "true" : true;
-    }
-    setIsExpanded(expanded);
-    window.dispatchEvent(new CustomEvent("parent-sidebar-toggle", { detail: { expanded } }));
-  };
-
-  useEffect(() => {
-    let lastMobile = window.innerWidth < 768;
-    setIsMobile(lastMobile);
-    applyModeState(lastMobile);
-
-    // Only re-apply state when crossing the mobile/desktop breakpoint —
-    // NOT on every resize tick (that was wiping out manual toggles before,
-    // causing the sidebar to randomly snap back to expanded).
-    const check = () => {
-      const mobile = window.innerWidth < 768;
-      if (mobile !== lastMobile) {
-        lastMobile = mobile;
-        setIsMobile(mobile);
-        applyModeState(mobile);
-      }
-    };
-    window.addEventListener("resize", check);
-    return () => window.removeEventListener("resize", check);
-  }, []);
-
-  useEffect(() => {
-    const openHandler = () => {
-      setIsExpanded(true);
-      window.dispatchEvent(new CustomEvent("parent-sidebar-toggle", { detail: { expanded: true } }));
-    };
-    window.addEventListener("parent-sidebar-open", openHandler);
-    return () => window.removeEventListener("parent-sidebar-open", openHandler);
-  }, []);
-
-  const toggle = () => {
-    setIsExpanded((prev) => {
-      const next = !prev;
-      if (!isMobile) localStorage.setItem(STORAGE_KEY, String(next));
-      window.dispatchEvent(new CustomEvent("parent-sidebar-toggle", { detail: { expanded: next } }));
-      return next;
-    });
-  };
-
-  const close = () => {
-    if (isMobile) {
-      setIsExpanded(false);
-      window.dispatchEvent(new CustomEvent("parent-sidebar-toggle", { detail: { expanded: false } }));
-    }
-  };
+  // Format name safely
+  const formattedFirstName = parentFirstName
+    ? parentFirstName[0].toUpperCase() + parentFirstName.slice(1)
+    : 'Guardian';
+  const formattedLastName = parentLastName
+    ? parentLastName[0].toUpperCase() + parentLastName.slice(1)
+    : '';
 
   const handleLogout = () => {
     localStorage.removeItem("access_token");
@@ -105,7 +50,7 @@ export default function Sidebar() {
       {isMobile && isExpanded && (
         <div
           className="fixed inset-0 bg-black/50 z-40"
-          onClick={close}
+          onClick={onClose}
           aria-hidden="true"
         />
       )}
@@ -131,7 +76,7 @@ export default function Sidebar() {
           <div className={`flex items-center mb-4 px-1 flex-shrink-0 ${isExpanded ? "gap-3" : "justify-center"}`}>
             {isMobile ? (
               <button
-                onClick={close}
+                onClick={onClose}
                 className="w-9 h-9 flex items-center justify-center rounded-xl
                            hover:bg-white/60 dark:hover:bg-slate-800 transition-colors flex-shrink-0"
                 aria-label="Close sidebar"
@@ -142,7 +87,7 @@ export default function Sidebar() {
               </button>
             ) : (
               <button
-                onClick={toggle}
+                onClick={onToggle}
                 className="w-9 h-9 flex items-center justify-center rounded-xl
                            hover:bg-white/60 dark:hover:bg-slate-800 transition-colors flex-shrink-0"
                 aria-label="Toggle sidebar"
@@ -168,7 +113,9 @@ export default function Sidebar() {
               alt="Profile"
             />
             <div className={`overflow-hidden transition-all duration-300 min-w-0 ${isExpanded ? "w-auto opacity-100" : "w-0 opacity-0"}`}>
-              <p className="font-bold text-sm text-slate-800 dark:text-slate-100 whitespace-nowrap">{parentFirstName[0].toUpperCase() + parentFirstName.slice(1)} {parentLastName[0].toUpperCase() + parentLastName.slice(1)}</p>
+              <p className="font-bold text-sm text-slate-800 dark:text-slate-100 whitespace-nowrap">
+                {formattedFirstName} {formattedLastName}
+              </p>
               <p className="text-xs text-slate-500 dark:text-slate-400 whitespace-nowrap">Guardian ID: #8821</p>
             </div>
           </div>
@@ -180,7 +127,7 @@ export default function Sidebar() {
                 key={label}
                 to={to}
                 end={end}
-                onClick={close}
+                onClick={onClose}
                 title={!isExpanded ? label : undefined}
                 className={navClass}
               >
@@ -199,7 +146,7 @@ export default function Sidebar() {
           <div className="flex flex-col gap-0.5 flex-shrink-0">
             <NavLink
               to="/parent/settings"
-              onClick={close}
+              onClick={onClose}
               title={!isExpanded ? "Settings" : undefined}
               className={navClass}
             >
