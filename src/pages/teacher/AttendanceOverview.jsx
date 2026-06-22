@@ -140,10 +140,10 @@ const AttendanceOverview = () => {
       <RevalidatingBar show={classesRevalidating || attendanceRevalidating} />
 
       {/* Header Section */}
-      <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-8 gap-4">
+      <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-6 md:mb-8 gap-4">
         <div>
-          <h2 className="text-3xl font-extrabold text-on-surface font-display tracking-tight">Attendance Overview</h2>
-          <p className="text-on-surface-variant font-medium mt-1">Academic Session: {academicYearName} • {formattedDate}</p>
+          <h2 className="text-xl md:text-3xl font-extrabold text-on-surface font-display tracking-tight">Attendance Overview</h2>
+          <p className="text-xs md:text-base text-on-surface-variant font-medium mt-1">Academic Session: {academicYearName} • {formattedDate}</p>
         </div>
         {/* Commented out bulk marking and export report
         <div className="flex space-x-3">
@@ -163,57 +163,59 @@ const AttendanceOverview = () => {
       </div>
 
       {/* Bento Stats Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
-        <Card className="flex flex-col justify-between relative overflow-hidden group shadow-lg bg-gradient-to-br from-[#0058be] to-[#0044a0] border-none">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 mb-8 md:mb-10">
+        <Card className="flex flex-col justify-between relative overflow-hidden group shadow-lg bg-gradient-to-br from-[#0058be] to-[#0044a0] border-none text-center">
           <div className="absolute -right-4 -top-4 w-24 h-24 bg-white/10 rounded-full group-hover:scale-110 transition-transform duration-500"></div>
           <div className="relative z-10">
-            <p className="text-sm font-semibold text-blue-100 mb-1 uppercase tracking-wider">Average Attendance</p>
+            <p className="text-2xs md:text-sm font-semibold text-blue-100 mb-1 uppercase tracking-wider">Average Attendance</p>
             {attendanceLoading && !attendancePayload ? (
               <AttendanceStatSkeleton />
             ) : (
-              <h3 className="text-4xl font-extrabold text-white">{`${avgAttendance}%`}</h3>
+              <h3 className="text-3xl md:text-4xl font-extrabold text-white">{`${avgAttendance}%`}</h3>
             )}
           </div>
           {!(attendanceLoading && !attendancePayload) && (
-            <div className="mt-4 flex items-center text-xs font-bold text-green-300 relative z-10">
-              <span className="material-symbols-outlined text-[16px] mr-1">trending_up</span>
+            <div className="mt-3 md:mt-4 flex items-center justify-center text-2xs md:text-xs font-bold text-green-300 relative z-10">
+              <span className="material-symbols-outlined text-sm md:text-[16px] mr-1">trending_up</span>
               <span>{`${totalAttendanceRecords} total records`}</span>
             </div>
           )}
         </Card>
 
-        <Card className="flex flex-col justify-between relative overflow-hidden group shadow-lg bg-gradient-to-br from-[#6b38d4] to-[#5527b0] border-none">
+        <Card className="flex flex-col justify-between relative overflow-hidden group shadow-lg bg-gradient-to-br from-[#6b38d4] to-[#5527b0] border-none text-center">
           <div className="absolute -right-4 -top-4 w-24 h-24 bg-white/10 rounded-full group-hover:scale-110 transition-transform duration-500"></div>
           <div className="relative z-10">
-            <p className="text-sm font-semibold text-purple-100 mb-1 uppercase tracking-wider">Weekly Avg</p>
+            <p className="text-2xs md:text-sm font-semibold text-purple-100 mb-1 uppercase tracking-wider">Weekly Avg</p>
             {attendanceLoading && !attendancePayload ? (
               <AttendanceStatSkeleton />
             ) : (
-              <h3 className="text-4xl font-extrabold text-white">{`${weeklyAvg}%`}</h3>
+              <h3 className="text-3xl md:text-4xl font-extrabold text-white">{`${weeklyAvg}%`}</h3>
             )}
           </div>
           {!(attendanceLoading && !attendancePayload) && (
-            <div className="mt-4 flex items-center text-xs font-bold text-purple-200 relative z-10">
-              <span className="material-symbols-outlined text-[16px] mr-1">history</span>
-              <span>{`${weeklyRecords.length} records in last 7 days`}</span>
+            <div className="mt-3 md:mt-4 flex items-center justify-center text-2xs md:text-xs font-bold text-purple-200 relative z-10">
+              <span className="material-symbols-outlined text-sm md:text-[16px] mr-1">history</span>
+              <span className="hidden md:inline">{`${weeklyRecords.length} records in last 7 days`}</span>
+              <span className="md:hidden">{`${weeklyRecords.length} in 7 days`}</span>
             </div>
           )}
         </Card>
 
-        <Card className="flex flex-col justify-between relative overflow-hidden group shadow-lg bg-gradient-to-br from-[#dc2626] to-[#b91c1c] border-none">
+        <Card className="flex flex-col justify-between relative overflow-hidden group shadow-lg bg-gradient-to-br from-[#dc2626] to-[#b91c1c] border-none text-center">
           <div className="absolute -right-4 -top-4 w-24 h-24 bg-white/10 rounded-full group-hover:scale-110 transition-transform duration-500"></div>
           <div className="relative z-10">
-            <p className="text-sm font-semibold text-red-100 mb-1 uppercase tracking-wider">Absent Students</p>
+            <p className="text-2xs md:text-sm font-semibold text-red-100 mb-1 uppercase tracking-wider">Absent Students</p>
             {attendanceLoading && !attendancePayload ? (
               <AttendanceStatSkeleton />
             ) : (
-              <h3 className="text-4xl font-extrabold text-white">{absentLatest}</h3>
+              <h3 className="text-3xl md:text-4xl font-extrabold text-white">{absentLatest}</h3>
             )}
           </div>
           {!(attendanceLoading && !attendancePayload) && (
-            <div className="mt-4 flex items-center text-xs font-bold text-red-200 relative z-10">
-              <span className="material-symbols-outlined text-[16px] mr-1">warning</span>
-              <span>{latestDate ? `On latest run (${latestDate})` : 'No records yet'}</span>
+            <div className="mt-3 md:mt-4 flex items-center justify-center text-2xs md:text-xs font-bold text-red-200 relative z-10">
+              <span className="material-symbols-outlined text-sm md:text-[16px] mr-1">warning</span>
+              <span className="hidden md:inline">{latestDate ? `On latest run (${latestDate})` : 'No records yet'}</span>
+              <span className="md:hidden">{latestDate ? `Latest run` : 'No records'}</span>
             </div>
           )}
         </Card>
@@ -224,11 +226,11 @@ const AttendanceOverview = () => {
         
         {/* Class List Section (8 cols) */}
         <div className="lg:col-span-8">
-          <div className="flex items-center justify-between mb-6">
-            <h3 className="text-xl font-bold text-on-surface">Scheduled Classes Today</h3>
-            <span className="text-sm font-medium text-primary bg-primary/10 px-3 py-1 rounded-full">{classes.length} Classes Total</span>
+          <div className="flex items-center justify-between mb-4 md:mb-6">
+            <h3 className="text-base md:text-xl font-bold text-on-surface">Scheduled Classes Today</h3>
+            <span className="text-2xs md:text-sm font-medium text-primary bg-primary/10 px-2 md:px-3 py-1 rounded md:rounded-full">{classes.length} Classes Total</span>
           </div>
-          <div className="space-y-4">
+          <div className="space-y-3 md:space-y-4">
             
             {classesLoading && classes.length === 0 ? (
               Array.from({ length: 4 }).map((_, index) => <AttendanceClassSkeleton key={index} />)
@@ -242,26 +244,56 @@ const AttendanceOverview = () => {
                 const icon = icons[idx % icons.length];
 
                 return (
-                  <div key={cls.id} className="bg-surface-container-lowest rounded-xl p-5 flex flex-col sm:flex-row sm:items-center shadow-sm hover:shadow-md transition-shadow group gap-4">
-                    <div className={`w-14 h-14 rounded-xl bg-${color}-50 flex items-center justify-center text-${color}-600 shrink-0`}>
-                      <span className="material-symbols-outlined text-3xl">{icon}</span>
+                  <div key={cls.id} className="bg-surface-container-lowest rounded-xl p-3 md:p-5 shadow-sm hover:shadow-md transition-shadow group">
+                    {/* Mobile Layout */}
+                    <div className="flex md:hidden flex-col gap-3">
+                      <div className="flex items-center gap-3">
+                        <div className={`w-12 h-12 rounded-lg bg-${color}-50 flex items-center justify-center text-${color}-600 shrink-0`}>
+                          <span className="material-symbols-outlined text-2xl">{icon}</span>
+                        </div>
+                        <div className="flex-grow min-w-0">
+                          <h4 className="font-bold text-on-surface text-sm leading-tight">{cls.subject_name}</h4>
+                          <p className="text-2xs text-on-surface-variant">{cls.class_level_name} - {cls.section_name}</p>
+                        </div>
+                      </div>
+                      <div className="flex gap-2">
+                        <button
+                          onClick={() => navigate(`/teacher/attendance/mark/${cls.id}`)}
+                          className="flex-1 px-3 py-2 bg-primary text-white rounded-md font-semibold text-2xs hover:opacity-90 transition"
+                        >
+                          Mark Attendance
+                        </button>
+                        <button
+                          onClick={() => navigate(`/teacher/classes/${cls.id}/performance`)}
+                          className="flex-1 px-3 py-2 rounded-md bg-surface-container-high text-primary font-bold text-2xs hover:bg-primary hover:text-white transition-all"
+                        >
+                          View Details
+                        </button>
+                      </div>
                     </div>
-                    <div className="flex-grow">
-                      <h4 className="font-bold text-on-surface text-lg">{cls.subject_name}</h4>
-                      <p className="text-sm text-on-surface-variant">{cls.class_level_name} - {cls.section_name}</p>
+
+                    {/* Desktop Layout */}
+                    <div className="hidden md:flex items-center gap-4">
+                      <div className={`w-14 h-14 rounded-xl bg-${color}-50 flex items-center justify-center text-${color}-600 shrink-0`}>
+                        <span className="material-symbols-outlined text-3xl">{icon}</span>
+                      </div>
+                      <div className="flex-grow">
+                        <h4 className="font-bold text-on-surface text-lg">{cls.subject_name}</h4>
+                        <p className="text-sm text-on-surface-variant">{cls.class_level_name} - {cls.section_name}</p>
+                      </div>
+                      <button
+                        onClick={() => navigate(`/teacher/attendance/mark/${cls.id}`)}
+                        className="px-5 py-2 bg-primary text-white rounded-md font-semibold text-sm hover:opacity-90 transition whitespace-nowrap ml-6"
+                      >
+                        Mark Attendance
+                      </button>
+                      <button
+                        onClick={() => navigate(`/teacher/classes/${cls.id}/performance`)}
+                        className="ml-2 px-5 py-2 rounded-xl bg-surface-container-high text-primary font-bold text-sm hover:bg-primary hover:text-white transition-all whitespace-nowrap"
+                      >
+                        View Details
+                      </button>
                     </div>
-                    <button
-                      onClick={() => navigate(`/teacher/attendance/mark/${cls.id}`)}
-                      className="px-5 py-2 bg-primary text-white rounded-md font-semibold text-sm hover:opacity-90 transition whitespace-nowrap sm:ml-6"
-                    >
-                      Mark Attendance
-                    </button>
-                    <button
-                      onClick={() => navigate(`/teacher/classes/${cls.id}/performance`)}
-                      className="sm:ml-2 px-5 py-2 rounded-xl bg-surface-container-high text-primary font-bold text-sm hover:bg-primary hover:text-white transition-all whitespace-nowrap"
-                    >
-                      View Details
-                    </button>
                   </div>
                 );
               })

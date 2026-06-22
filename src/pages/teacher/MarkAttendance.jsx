@@ -245,124 +245,124 @@ const MarkAttendance = () => {
 
       <Link
         to="/teacher/attendance"
-        className="flex items-center gap-2 text-primary font-semibold text-sm mb-4 hover:-translate-x-1 transition-transform w-max"
+        className="flex items-center gap-2 text-primary font-semibold text-2xs md:text-sm mb-3 md:mb-4 hover:-translate-x-1 transition-transform w-max"
       >
-        <span className="material-symbols-outlined">arrow_back</span>
+        <span className="material-symbols-outlined text-base md:text-xl">arrow_back</span>
         Back to Attendance Hub
       </Link>
 
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-8 gap-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 md:mb-8 gap-3 md:gap-4">
         <div>
-          <h2 className="text-3xl font-extrabold font-display text-on-surface tracking-tight">Mark Attendance</h2>
-          <p className="text-on-surface-variant font-medium">
+          <h2 className="text-xl md:text-3xl font-extrabold font-display text-on-surface tracking-tight">Mark Attendance</h2>
+          <p className="text-2xs md:text-base text-on-surface-variant font-medium">
             {rosterLoading ? 'Loading class...' : classNameStr}
           </p>
         </div>
-        <div className="flex items-center space-x-3">
+        <div className="flex items-center space-x-2 md:space-x-3">
           <button
             onClick={markAllPresent}
             disabled={rosterLoading}
-            className="px-5 py-2.5 rounded-xl bg-surface-container-high text-primary font-bold text-sm transition-all hover:bg-surface-container-highest active:scale-95 disabled:opacity-40"
+            className="px-3 md:px-5 py-2 md:py-2.5 rounded-xl bg-surface-container-high text-primary font-bold text-2xs md:text-sm transition-all hover:bg-surface-container-highest active:scale-95 disabled:opacity-40"
           >
-            Mark All Present
+            All Present
           </button>
           <button
             onClick={handleSubmitAttendance}
             disabled={isSubmitting || rosterLoading}
-            className="px-6 py-2.5 rounded-xl bg-gradient-to-br from-primary to-primary-container text-white font-bold text-sm shadow-lg shadow-blue-500/20 hover:shadow-xl hover:shadow-blue-500/30 transition-all active:scale-95 disabled:opacity-50"
+            className="px-4 md:px-6 py-2 md:py-2.5 rounded-xl bg-gradient-to-br from-primary to-primary-container text-white font-bold text-2xs md:text-sm shadow-lg shadow-blue-500/20 hover:shadow-xl hover:shadow-blue-500/30 transition-all active:scale-95 disabled:opacity-50"
           >
-            {isSubmitting ? 'Submitting…' : 'Submit Attendance'}
+            {isSubmitting ? 'Submitting…' : 'Submit'}
           </button>
         </div>
       </div>
 
       {/* Error/Success Messages */}
       {error && (
-        <div className="mb-8 p-4 bg-red-50 text-red-700 rounded-md border border-red-200 flex gap-3 shadow-sm">
-          <span className="material-symbols-outlined">error</span>
+        <div className="mb-6 md:mb-8 p-3 md:p-4 bg-red-50 text-red-700 rounded-md border border-red-200 flex gap-2 md:gap-3 shadow-sm">
+          <span className="material-symbols-outlined text-base md:text-xl">error</span>
           <div>
-            <p className="font-bold text-sm">Action Required</p>
-            <p className="text-sm mt-1">{error}</p>
+            <p className="font-bold text-2xs md:text-sm">Action Required</p>
+            <p className="text-2xs md:text-sm mt-1">{error}</p>
           </div>
         </div>
       )}
 
       {successMsg && (
-        <div className="mb-8 p-4 bg-green-50 text-green-800 rounded-md border border-green-200 flex gap-3 shadow-sm">
-          <span className="material-symbols-outlined">check_circle</span>
+        <div className="mb-6 md:mb-8 p-3 md:p-4 bg-green-50 text-green-800 rounded-md border border-green-200 flex gap-2 md:gap-3 shadow-sm">
+          <span className="material-symbols-outlined text-base md:text-xl">check_circle</span>
           <div>
-            <p className="font-bold text-sm">Success!</p>
-            <p className="text-sm mt-1">{successMsg}</p>
+            <p className="font-bold text-2xs md:text-sm">Success!</p>
+            <p className="text-2xs md:text-sm mt-1">{successMsg}</p>
           </div>
         </div>
       )}
 
       {/* Dashboard Layout */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-16">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 md:gap-8 mb-12 md:mb-16">
 
         {/* Left: Summary + Filters */}
-        <div className="col-span-1 lg:col-span-4 space-y-8">
+        <div className="col-span-1 lg:col-span-4 space-y-4 md:space-y-8">
           {/* Summary Card */}
-          <div className={`rounded-3xl p-8 relative overflow-hidden transition-all duration-300 ${
+          <div className={`rounded-xl md:rounded-3xl p-4 md:p-8 relative overflow-hidden transition-all duration-300 ${
             darkMode 
               ? 'bg-gradient-to-br from-blue-700 to-blue-800 text-white shadow-2xl' 
               : 'bg-surface-container-lowest border border-outline-variant/10 text-on-surface shadow-sm'
           }`}>
-            <div className={`absolute top-0 right-0 w-32 h-32 rounded-full -mr-16 -mt-16 blur-2xl ${darkMode ? 'bg-white/10' : 'bg-primary/5'}`} />
+            <div className={`absolute top-0 right-0 w-20 md:w-32 h-20 md:h-32 rounded-full -mr-10 md:-mr-16 -mt-10 md:-mt-16 blur-2xl ${darkMode ? 'bg-white/10' : 'bg-primary/5'}`} />
             <div className="relative z-10">
-              <h3 className={`font-semibold mb-6 flex items-center gap-2 ${darkMode ? 'text-blue-100' : 'text-primary'}`}>
-                <span className="material-symbols-outlined">analytics</span>
+              <h3 className={`font-semibold text-2xs md:text-base mb-3 md:mb-6 flex items-center gap-1.5 md:gap-2 ${darkMode ? 'text-blue-100' : 'text-primary'}`}>
+                <span className="material-symbols-outlined text-sm md:text-xl">analytics</span>
                 Live Overview
               </h3>
-              <div className="flex justify-between items-end mb-8">
+              <div className="flex justify-between items-end mb-4 md:mb-8">
                 <div>
                   {rosterLoading ? (
-                    <SkeletonBlock className={`h-14 w-20 ${darkMode ? 'bg-white/25' : ''}`} />
+                    <SkeletonBlock className={`h-8 md:h-14 w-12 md:w-20 ${darkMode ? 'bg-white/25' : ''}`} />
                   ) : (
-                    <p className="text-5xl font-extrabold font-display">{studentsWithAttendance.length}</p>
+                    <p className="text-2xl md:text-5xl font-extrabold font-display">{studentsWithAttendance.length}</p>
                   )}
-                  <p className={`text-sm mt-1 ${darkMode ? 'text-white/70' : 'text-on-surface-variant'}`}>Total Students</p>
+                  <p className={`text-3xs md:text-sm mt-0.5 md:mt-1 ${darkMode ? 'text-white/70' : 'text-on-surface-variant'}`}>Total Students</p>
                 </div>
                 <div className="text-right">
                   {rosterLoading ? (
-                    <SkeletonBlock className={`h-8 w-14 ml-auto ${darkMode ? 'bg-white/25' : ''}`} />
+                    <SkeletonBlock className={`h-5 md:h-8 w-8 md:w-14 ml-auto ${darkMode ? 'bg-white/25' : ''}`} />
                   ) : (
-                    <p className="text-2xl font-bold">{successRate}%</p>
+                    <p className="text-lg md:text-2xl font-bold">{successRate}%</p>
                   )}
-                  <p className={`text-sm mt-1 ${darkMode ? 'text-blue-200' : 'text-primary'}`}>Presence</p>
+                  <p className={`text-3xs md:text-sm mt-0.5 md:mt-1 ${darkMode ? 'text-blue-200' : 'text-primary'}`}>Presence</p>
                 </div>
               </div>
-              <div className={`grid grid-cols-3 gap-4 pt-6 border-t ${darkMode ? 'border-white/10' : 'border-outline-variant/10'}`}>
+              <div className={`grid grid-cols-3 gap-2 md:gap-4 pt-3 md:pt-6 border-t ${darkMode ? 'border-white/10' : 'border-outline-variant/10'}`}>
                 <div>
-                  {rosterLoading ? <SkeletonBlock className={`h-7 w-8 ${darkMode ? 'bg-white/25' : ''}`} /> : <p className="text-xl font-bold">{presentCount}</p>}
-                  <p className={`text-2xs uppercase tracking-wider ${darkMode ? 'text-blue-200' : 'text-on-surface-variant'}`}>Present</p>
+                  {rosterLoading ? <SkeletonBlock className={`h-5 md:h-7 w-5 md:w-8 ${darkMode ? 'bg-white/25' : ''}`} /> : <p className="text-sm md:text-xl font-bold">{presentCount}</p>}
+                  <p className={`text-3xs md:text-2xs uppercase tracking-wider mt-0.5 ${darkMode ? 'text-blue-200' : 'text-on-surface-variant'}`}>Present</p>
                 </div>
                 <div>
-                  {rosterLoading ? <SkeletonBlock className={`h-7 w-8 ${darkMode ? 'bg-white/25' : ''}`} /> : <p className={`text-xl font-bold ${darkMode ? 'text-red-300' : 'text-red-600'}`}>{absentCount}</p>}
-                  <p className={`text-2xs uppercase tracking-wider ${darkMode ? 'text-red-200/70' : 'text-red-600/80'}`}>Absent</p>
+                  {rosterLoading ? <SkeletonBlock className={`h-5 md:h-7 w-5 md:w-8 ${darkMode ? 'bg-white/25' : ''}`} /> : <p className={`text-sm md:text-xl font-bold ${darkMode ? 'text-red-300' : 'text-red-600'}`}>{absentCount}</p>}
+                  <p className={`text-3xs md:text-2xs uppercase tracking-wider mt-0.5 ${darkMode ? 'text-red-200/70' : 'text-red-600/80'}`}>Absent</p>
                 </div>
                 <div>
-                  {rosterLoading ? <SkeletonBlock className={`h-7 w-8 ${darkMode ? 'bg-white/25' : ''}`} /> : <p className={`text-xl font-bold ${darkMode ? 'text-orange-300' : 'text-orange-600'}`}>{lateCount}</p>}
-                  <p className={`text-2xs uppercase tracking-wider ${darkMode ? 'text-orange-200/70' : 'text-orange-600/80'}`}>Late</p>
+                  {rosterLoading ? <SkeletonBlock className={`h-5 md:h-7 w-5 md:w-8 ${darkMode ? 'bg-white/25' : ''}`} /> : <p className={`text-sm md:text-xl font-bold ${darkMode ? 'text-orange-300' : 'text-orange-600'}`}>{lateCount}</p>}
+                  <p className={`text-3xs md:text-2xs uppercase tracking-wider mt-0.5 ${darkMode ? 'text-orange-200/70' : 'text-orange-600/80'}`}>Late</p>
                 </div>
               </div>
             </div>
           </div>
 
           {/* Filter Card */}
-          <Card className="rounded-2xl p-8 border border-outline-variant/10 shadow-sm bg-surface-container-lowest">
-            <h4 className="text-on-surface font-bold mb-6 flex items-center">
-              <span className="material-symbols-outlined mr-2 text-primary">database</span>
-              Model Context (Required)
+          <Card className="rounded-xl md:rounded-2xl p-4 md:p-8 border border-outline-variant/10 shadow-sm bg-surface-container-lowest">
+            <h4 className="text-on-surface font-bold text-2xs md:text-base mb-3 md:mb-6 flex items-center">
+              <span className="material-symbols-outlined mr-1.5 md:mr-2 text-primary text-sm md:text-xl">database</span>
+              Model Context
             </h4>
-            <div className="space-y-5">
-              <div className="flex flex-col gap-1.5 w-full">
-                <label className="text-xs font-bold text-on-surface-variant uppercase tracking-wider">Class Name</label>
+            <div className="space-y-3 md:space-y-5">
+              <div className="flex flex-col gap-1 md:gap-1.5 w-full">
+                <label className="text-3xs md:text-xs font-bold text-on-surface-variant uppercase tracking-wider">Class Name</label>
                 <select 
                   value={id || ''}
                   onChange={(e) => navigate(`/teacher/attendance/mark/${e.target.value}`)}
-                  className="w-full bg-surface-container-low border-transparent rounded-xl px-4 py-3 text-sm font-medium focus:ring-2 focus:ring-primary/20 transition-all outline-none"
+                  className="w-full bg-surface-container-low border-transparent rounded-md md:rounded-xl px-2.5 md:px-4 py-1.5 md:py-3 text-2xs md:text-sm font-medium focus:ring-2 focus:ring-primary/20 transition-all outline-none"
                   disabled={isSubmitting || classesLoading}
                 >
                   {allClasses.length > 0 ? allClasses.map(cls => (
@@ -374,24 +374,24 @@ const MarkAttendance = () => {
                   )}
                 </select>
               </div>
-              <div className="flex flex-col gap-1.5 w-full">
-                <label className="text-xs font-bold text-on-surface-variant uppercase tracking-wider">Date of Record</label>
+              <div className="flex flex-col gap-1 md:gap-1.5 w-full">
+                <label className="text-3xs md:text-xs font-bold text-on-surface-variant uppercase tracking-wider">Date of Record</label>
                 <div className="relative">
                   <input
                     value={attendanceDate}
                     onChange={(e) => setAttendanceDate(e.target.value)}
-                    className="w-full bg-surface-container-low border-transparent rounded-xl px-4 py-3 text-sm font-medium focus:ring-2 focus:ring-primary/20 transition-all outline-none text-on-surface"
+                    className="w-full bg-surface-container-low border-transparent rounded-md md:rounded-xl px-2.5 md:px-4 py-1.5 md:py-3 text-2xs md:text-sm font-medium focus:ring-2 focus:ring-primary/20 transition-all outline-none text-on-surface"
                     type="date"
                   />
                 </div>
               </div>
-              <div className="flex flex-col gap-1.5 w-full">
-                <label className="text-xs font-bold text-on-surface-variant uppercase tracking-wider">Academic Year</label>
+              <div className="flex flex-col gap-1 md:gap-1.5 w-full">
+                <label className="text-3xs md:text-xs font-bold text-on-surface-variant uppercase tracking-wider">Academic Year</label>
                 <div className="relative">
                   <input
                     value={assignment?.academic_year_name || ''}
                     disabled
-                    className="w-full bg-surface-container-low border-transparent text-on-surface-variant rounded-xl px-4 py-3 text-sm font-medium opacity-70 cursor-not-allowed"
+                    className="w-full bg-surface-container-low border-transparent text-on-surface-variant rounded-md md:rounded-xl px-2.5 md:px-4 py-1.5 md:py-3 text-2xs md:text-sm font-medium opacity-70 cursor-not-allowed"
                     placeholder="Select class first"
                   />
                 </div>
@@ -400,15 +400,15 @@ const MarkAttendance = () => {
           </Card>
 
           {/* AI Insight */}
-          <div className="bg-amber-500/10 rounded-3xl p-6 relative overflow-hidden border border-amber-500/20 text-amber-900 dark:text-amber-200">
-            <div className="flex items-start space-x-4">
-              <div className="bg-amber-700 dark:bg-amber-800 text-white p-2 rounded-lg flex items-center justify-center">
-                <span className="material-symbols-outlined text-xl">auto_awesome</span>
+          <div className="bg-amber-500/10 rounded-xl md:rounded-3xl p-3 md:p-6 relative overflow-hidden border border-amber-500/20 text-amber-900 dark:text-amber-200">
+            <div className="flex items-start space-x-2 md:space-x-4">
+              <div className="bg-amber-700 dark:bg-amber-800 text-white p-1 md:p-2 rounded-md md:rounded-lg flex items-center justify-center shrink-0">
+                <span className="material-symbols-outlined text-sm md:text-xl">auto_awesome</span>
               </div>
               <div className="relative z-10">
-                <h5 className="text-amber-900 dark:text-amber-300 font-bold text-sm">Attendance Insight</h5>
-                <p className="text-amber-800 dark:text-amber-200 text-xs mt-1 leading-relaxed">
-                  Students with recurring absences may benefit from a personalized check-in. Consider reaching out to their guardians.
+                <h5 className="text-amber-900 dark:text-amber-300 font-bold text-3xs md:text-sm">Attendance Insight</h5>
+                <p className="text-amber-800 dark:text-amber-200 text-3xs md:text-xs mt-0.5 md:mt-1 leading-relaxed">
+                  Students with recurring absences may benefit from a check-in.
                 </p>
               </div>
             </div>
@@ -417,21 +417,21 @@ const MarkAttendance = () => {
 
         {/* Right: Student Roster */}
         <div className="col-span-1 lg:col-span-8">
-          <div className="bg-surface-container-lowest rounded-2xl shadow-sm overflow-hidden border border-outline-variant/10">
+          <div className="bg-surface-container-lowest rounded-xl md:rounded-2xl shadow-sm overflow-hidden border border-outline-variant/10">
             {/* Table Header */}
-            <div className="px-8 py-6 bg-surface-container-low flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 border-b border-outline-variant/10">
-              <div className="flex items-center gap-3">
-                <h3 className="font-display font-bold text-on-surface">Student Roster</h3>
+            <div className="px-4 md:px-8 py-4 md:py-6 bg-surface-container-low flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 md:gap-4 border-b border-outline-variant/10">
+              <div className="flex items-center gap-2 md:gap-3">
+                <h3 className="font-display font-bold text-on-surface text-sm md:text-base">Student Roster</h3>
                 {attendanceLoading && (
                   <span className="inline-block w-2 h-2 rounded-full bg-primary animate-pulse" title="Refreshing attendance…" />
                 )}
               </div>
-              <div className="flex items-center space-x-4 text-xs font-bold text-on-surface-variant uppercase tracking-widest">
-                <span>Status Key:</span>
-                <div className="flex items-center space-x-4">
-                  <span className="flex items-center"><span className="w-2 h-2 rounded-full bg-green-500 mr-1" /> P</span>
-                  <span className="flex items-center"><span className="w-2 h-2 rounded-full bg-red-500 mr-1" /> A</span>
-                  <span className="flex items-center"><span className="w-2 h-2 rounded-full bg-orange-500 mr-1" /> L</span>
+              <div className="flex items-center space-x-3 md:space-x-4 text-3xs md:text-xs font-bold text-on-surface-variant uppercase tracking-widest">
+                <span>Status:</span>
+                <div className="flex items-center space-x-2 md:space-x-4">
+                  <span className="flex items-center"><span className="w-1.5 md:w-2 h-1.5 md:h-2 rounded-full bg-green-500 mr-1" /> P</span>
+                  <span className="flex items-center"><span className="w-1.5 md:w-2 h-1.5 md:h-2 rounded-full bg-red-500 mr-1" /> A</span>
+                  <span className="flex items-center"><span className="w-1.5 md:w-2 h-1.5 md:h-2 rounded-full bg-orange-500 mr-1" /> L</span>
                 </div>
               </div>
             </div>
@@ -441,10 +441,10 @@ const MarkAttendance = () => {
               <table className="w-full min-w-[600px]">
                 <thead>
                   <tr className="text-left text-on-surface-variant border-b border-outline-variant/10 bg-surface-container-lowest">
-                    <th className="px-8 py-4 text-xs font-bold uppercase tracking-widest">Student Identity</th>
-                    <th className="px-4 py-4 text-xs font-bold uppercase tracking-widest">Enrollment No.</th>
-                    <th className="px-4 py-4 text-xs font-bold uppercase tracking-widest text-center">Record Status</th>
-                    <th className="px-8 py-4 text-xs font-bold uppercase tracking-widest text-right">Remarks</th>
+                    <th className="px-4 md:px-8 py-2 md:py-4 text-3xs md:text-xs font-bold uppercase tracking-wider md:tracking-widest">Student</th>
+                    <th className="px-3 md:px-4 py-2 md:py-4 text-3xs md:text-xs font-bold uppercase tracking-wider md:tracking-widest">Enrollment</th>
+                    <th className="px-3 md:px-4 py-2 md:py-4 text-3xs md:text-xs font-bold uppercase tracking-wider md:tracking-widest text-center">Status</th>
+                    <th className="px-4 md:px-8 py-2 md:py-4 text-3xs md:text-xs font-bold uppercase tracking-wider md:tracking-widest text-right">Remarks</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-surface-container/50">
@@ -456,20 +456,20 @@ const MarkAttendance = () => {
                         className="hover:bg-surface-container-low transition-colors group"
                         style={{ opacity: attendanceLoading ? 0.6 : 1, transition: 'opacity 0.2s' }}
                       >
-                        <td className="px-8 py-5">
-                          <div className="flex items-center space-x-3">
-                            <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold">
+                        <td className="px-4 md:px-8 py-3 md:py-5">
+                          <div className="flex items-center space-x-2 md:space-x-3">
+                            <div className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold text-2xs md:text-sm">
                               {student.initials}
                             </div>
                             <div>
-                              <p className="text-sm font-bold text-on-surface">{student.name}</p>
-                              <p className="text-xs text-on-surface-variant">{student.email}</p>
+                              <p className="text-xs md:text-sm font-bold text-on-surface">{student.name}</p>
+                              <p className="text-2xs md:text-xs text-on-surface-variant">{student.email}</p>
                             </div>
                           </div>
                          </td>
-                        <td className="px-4 py-5 text-sm font-medium text-on-surface-variant">{student.roll}</td>
-                        <td className="px-4 py-5">
-                          <div className="flex items-center justify-center space-x-2">
+                        <td className="px-3 md:px-4 py-3 md:py-5 text-2xs md:text-sm font-medium text-on-surface-variant">{student.roll}</td>
+                        <td className="px-3 md:px-4 py-3 md:py-5">
+                          <div className="flex items-center justify-center space-x-1 md:space-x-2">
                             {['Present', 'Absent', 'Late'].map((status) => {
                               const colors = {
                                 Present: { active: 'bg-green-500 text-white shadow-md shadow-green-500/20', idle: 'bg-surface-container-high text-on-surface-variant hover:bg-green-50' },
@@ -481,7 +481,7 @@ const MarkAttendance = () => {
                                 <button
                                   key={status}
                                   onClick={() => updateStatus(student.id, status)}
-                                  className={`w-12 py-2 rounded-lg font-bold text-xs transition-all ${isActive ? colors[status].active : colors[status].idle}`}
+                                  className={`w-10 md:w-12 py-1.5 md:py-2 rounded-lg font-bold text-2xs md:text-xs transition-all ${isActive ? colors[status].active : colors[status].idle}`}
                                 >
                                   {status[0]}
                                 </button>
@@ -489,11 +489,11 @@ const MarkAttendance = () => {
                             })}
                           </div>
                         </td>
-                        <td className="px-8 py-5 flex justify-end">
+                        <td className="px-4 md:px-8 py-3 md:py-5 flex justify-end">
                           {student.remark ? (
                             <button
                               onClick={() => handleRemarkClick(student)} 
-                              className="text-2xs bg-red-500/10 text-red-600 dark:text-red-400 px-2 py-1 rounded-md font-bold uppercase tracking-tighter inline-block text-left max-w-[120px] truncate"
+                              className="text-3xs md:text-2xs bg-red-500/10 text-red-600 dark:text-red-400 px-1.5 md:px-2 py-0.5 md:py-1 rounded-md font-bold uppercase tracking-tighter inline-block text-left max-w-[100px] md:max-w-[120px] truncate"
                               title={student.remark}
                             >
                               {student.remark}
@@ -501,9 +501,9 @@ const MarkAttendance = () => {
                           ) : (
                             <button 
                               onClick={() => handleRemarkClick(student)}
-                              className="p-2 rounded-lg text-outline hover:text-primary transition-colors"
+                              className="p-1.5 md:p-2 rounded-lg text-outline hover:text-primary transition-colors"
                             >
-                              <span className="material-symbols-outlined">add_comment</span>
+                              <span className="material-symbols-outlined text-base md:text-xl">add_comment</span>
                             </button>
                           )}
                         </td>
@@ -514,7 +514,7 @@ const MarkAttendance = () => {
             </div>
 
             {/* Footer */}
-            <div className="px-8 py-4 bg-surface-container-lowest border-t border-outline-variant/10 flex justify-between items-center text-sm font-medium text-on-surface-variant">
+            <div className="px-4 md:px-8 py-3 md:py-4 bg-surface-container-lowest border-t border-outline-variant/10 flex justify-between items-center text-2xs md:text-sm font-medium text-on-surface-variant">
               <span>Showing {studentsWithAttendance.length} students</span>
             </div>
           </div>

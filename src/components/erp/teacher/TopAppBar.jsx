@@ -16,7 +16,7 @@ const TopAppBar = ({ title, isSidebarOpen, onToggleSidebar }) => {
       <div className="flex items-center gap-3 min-w-0">
         <button
           onClick={onToggleSidebar}
-          className={`hidden md:flex rounded-full p-2.5 transition-all duration-200 outline-none items-center justify-center active:scale-95 ${
+          className={`flex md:flex rounded-full p-2.5 transition-all duration-200 outline-none items-center justify-center active:scale-95 ${
             darkMode
               ? 'hover:bg-slate-700 text-slate-300 hover:text-white'
               : 'hover:bg-slate-50 text-slate-500 hover:text-blue-600'

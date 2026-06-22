@@ -163,60 +163,60 @@ const Dashboard = () => {
       <RevalidatingBar show={revalidating || statsRevalidating} />
 
       {/* TopAppBar Context */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between w-full mb-8 gap-4">
+      <div className="flex flex-col md:flex-row md:items-center justify-between w-full mb-4 md:mb-8 gap-4">
         <div>
-          <h2 className="font-display text-2xl font-extrabold text-on-surface tracking-tight">{`Good morning, ${teacherName}`}</h2>
+          <h2 className="font-display text-lg md:text-2xl font-extrabold text-on-surface tracking-tight">{`Good morning, ${teacherName}`}</h2>
         </div>
       </div>
 
       {/* Stats Grid */}
-      <section className="grid grid-cols-1 md:grid-cols-4 gap-5 mb-8">
+      <section className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-5 mb-6 md:mb-8">
         {/* Total Classes */}
         <Card hoverable className={`group border shadow-sm ${darkMode ? 'bg-gradient-to-br from-blue-600 to-blue-700 border-transparent shadow-lg' : 'bg-slate-100 border-slate-200'}`}>
-          <div className="flex justify-between items-start mb-3">
-            <div className={`p-2.5 rounded-lg transition-transform duration-500 group-hover:rotate-12 group-hover:scale-105 ${darkMode ? 'bg-white/20 text-white' : 'bg-slate-200 text-slate-600'}`}>
-              <span className="material-symbols-outlined text-xl">groups</span>
+          <div className="flex justify-between items-start mb-2 md:mb-3">
+            <div className={`p-1.5 md:p-2.5 rounded-lg transition-transform duration-500 group-hover:rotate-12 group-hover:scale-105 ${darkMode ? 'bg-white/20 text-white' : 'bg-slate-200 text-slate-600'}`}>
+              <span className="material-symbols-outlined text-base md:text-xl">groups</span>
             </div>
-            <span className={`text-2xs font-black uppercase tracking-widest px-2 py-1 rounded-lg ${darkMode ? 'text-blue-200 bg-white/10' : 'text-slate-500 bg-slate-200'}`}>Today</span>
+            <span className={`text-3xs md:text-2xs font-black uppercase tracking-wider md:tracking-widest px-1.5 md:px-2 py-0.5 md:py-1 rounded-lg ${darkMode ? 'text-blue-200 bg-white/10' : 'text-slate-500 bg-slate-200'}`}>Today</span>
           </div>
-          <p className={`text-xs font-bold uppercase tracking-wider ${darkMode ? 'text-blue-200' : 'text-slate-500'}`}>Total Classes</p>
+          <p className={`text-2xs md:text-xs font-bold uppercase tracking-wide md:tracking-wider ${darkMode ? 'text-blue-200' : 'text-slate-500'}`}>Total Classes</p>
           {loading && classes.length === 0 ? (
             <StatValueSkeleton darkMode={darkMode} />
           ) : (
-            <h3 className={`font-display text-3xl font-black mt-1 ${darkMode ? 'text-white' : 'text-slate-800'}`}>{classes.length}</h3>
+            <h3 className={`font-display text-2xl md:text-3xl font-black mt-0.5 md:mt-1 ${darkMode ? 'text-white' : 'text-slate-800'}`}>{classes.length}</h3>
           )}
         </Card>
         {/* Avg Attendance */}
          <Card hoverable className={`group border shadow-sm ${darkMode ? 'bg-gradient-to-br from-amber-600 to-amber-700 border-transparent shadow-lg' : 'bg-slate-100 border-slate-200'}`}>
-          <div className="flex justify-between items-start mb-3">
-            <div className={`p-2.5 rounded-lg transition-transform duration-500 group-hover:rotate-12 group-hover:scale-105 ${darkMode ? 'bg-white/20 text-white' : 'bg-slate-200 text-slate-600'}`}>
-              <span className="material-symbols-outlined text-xl">how_to_reg</span>
+          <div className="flex justify-between items-start mb-2 md:mb-3">
+            <div className={`p-1.5 md:p-2.5 rounded-lg transition-transform duration-500 group-hover:rotate-12 group-hover:scale-105 ${darkMode ? 'bg-white/20 text-white' : 'bg-slate-200 text-slate-600'}`}>
+              <span className="material-symbols-outlined text-base md:text-xl">how_to_reg</span>
             </div>
-            <span className={`text-2xs font-bold flex items-center gap-1 px-2 py-1 rounded-lg ${darkMode ? 'text-green-200 bg-green-900/30' : 'text-green-700 bg-green-100'}`}>
-              <span className="material-symbols-outlined text-xs">trending_up</span> 2.1%
+            <span className={`text-3xs md:text-2xs font-bold flex items-center gap-0.5 md:gap-1 px-1.5 md:px-2 py-0.5 md:py-1 rounded-lg ${darkMode ? 'text-green-200 bg-green-900/30' : 'text-green-700 bg-green-100'}`}>
+              <span className="material-symbols-outlined text-2xs md:text-xs">trending_up</span> <span className="hidden md:inline">2.1%</span>
             </span>
           </div>
-          <p className={`text-xs font-bold uppercase tracking-wider ${darkMode ? 'text-amber-100' : 'text-slate-500'}`}>Avg Attendance</p>
+          <p className={`text-2xs md:text-xs font-bold uppercase tracking-wide md:tracking-wider ${darkMode ? 'text-amber-100' : 'text-slate-500'}`}>Avg Attendance</p>
           {statsLoading && !stats ? (
             <StatValueSkeleton darkMode={darkMode} />
           ) : (
-            <h3 className={`font-display text-3xl font-black mt-1 ${darkMode ? 'text-white' : 'text-slate-800'}`}>
+            <h3 className={`font-display text-2xl md:text-3xl font-black mt-0.5 md:mt-1 ${darkMode ? 'text-white' : 'text-slate-800'}`}>
               {`${stats?.avgAttendance ?? 0}%`}
             </h3>
           )}
         </Card>
         {/* Avg Performance */}
-        <Card hoverable className={`group border shadow-sm ${darkMode ? 'bg-gradient-to-br from-purple-600 to-purple-700 border-transparent shadow-lg' : 'bg-slate-100 border-slate-200'}`}>
-          <div className="flex justify-between items-start mb-3">
-            <div className={`p-2.5 rounded-lg transition-transform duration-500 group-hover:-rotate-12 group-hover:scale-105 ${darkMode ? 'bg-white/20 text-white' : 'bg-slate-200 text-slate-600'}`}>
-              <span className="material-symbols-outlined text-xl">query_stats</span>
+        <Card hoverable className={`group border shadow-sm col-span-2 md:col-span-1 ${darkMode ? 'bg-gradient-to-br from-purple-600 to-purple-700 border-transparent shadow-lg' : 'bg-slate-100 border-slate-200'}`}>
+          <div className="flex justify-between items-start mb-2 md:mb-3">
+            <div className={`p-1.5 md:p-2.5 rounded-lg transition-transform duration-500 group-hover:-rotate-12 group-hover:scale-105 ${darkMode ? 'bg-white/20 text-white' : 'bg-slate-200 text-slate-600'}`}>
+              <span className="material-symbols-outlined text-base md:text-xl">query_stats</span>
             </div>
           </div>
-          <p className={`text-xs font-bold uppercase tracking-wider ${darkMode ? 'text-purple-100' : 'text-slate-500'}`}>Avg Performance</p>
+          <p className={`text-2xs md:text-xs font-bold uppercase tracking-wide md:tracking-wider ${darkMode ? 'text-purple-100' : 'text-slate-500'}`}>Avg Performance</p>
           {statsLoading && !stats ? (
             <StatValueSkeleton darkMode={darkMode} />
           ) : (
-            <h3 className={`font-display text-3xl font-black mt-1 ${darkMode ? 'text-white' : 'text-slate-800'}`}>
+            <h3 className={`font-display text-2xl md:text-3xl font-black mt-0.5 md:mt-1 ${darkMode ? 'text-white' : 'text-slate-800'}`}>
               {`${stats?.avgPerformancePercentage ?? 0}%`}
             </h3>
           )}
@@ -227,16 +227,16 @@ const Dashboard = () => {
       <div className="grid grid-cols-12 gap-6">
         
         {/* Schedule Section */}
-        <div className="col-span-12 lg:col-span-8 space-y-6">
+        <div className="col-span-12 lg:col-span-8 space-y-4 md:space-y-6">
           <section>
-            <div className="flex justify-between items-center mb-5">
-              <h4 className="font-display text-lg font-bold flex items-center gap-2">
-                <span className="material-symbols-outlined text-primary text-xl">calendar_today</span>
+            <div className="flex justify-between items-center mb-3 md:mb-5">
+              <h4 className="font-display text-base md:text-lg font-bold flex items-center gap-2">
+                <span className="material-symbols-outlined text-primary text-lg md:text-xl">calendar_today</span>
                 Today's Schedule
               </h4>
-              <button className="text-xs font-bold text-primary hover:underline">Full Calendar</button>
+              <button className="text-2xs md:text-xs font-bold text-primary hover:underline">Full Calendar</button>
             </div>
-            <div className="space-y-4">
+            <div className="space-y-3 md:space-y-4">
               {loading && classes.length === 0 ? (
                 Array.from({ length: 3 }).map((_, index) => (
                   <ScheduleSkeletonCard key={index} darkMode={darkMode} />
@@ -245,29 +245,60 @@ const Dashboard = () => {
                 <div className="p-5 text-center text-slate-500 bg-surface-container-lowest rounded-xl">No classes assigned for you today.</div>
               ) : (
                 classes.map((cls, index) => (
-                  <Card key={cls.id} className={`p-4 flex flex-col sm:flex-row sm:items-center gap-5 group border transition-all duration-300 shadow-sm ${darkMode ? 'bg-gradient-to-br from-slate-800 to-slate-900 border-slate-700 hover:border-slate-600 shadow-md' : 'bg-slate-100 border-slate-200 hover:border-slate-300'}`}>
-                    <div className={`w-14 h-14 rounded-lg flex flex-col items-center justify-center shrink-0 border ${darkMode ? 'bg-slate-700 border-slate-600' : 'bg-slate-200 border-slate-300'}`}>
-                      <span className={`text-xs font-bold ${darkMode ? 'text-blue-400' : 'text-primary'}`}>Class</span>
-                      <div className={`w-8 h-[2px] my-1 ${darkMode ? 'bg-blue-500/30' : 'bg-primary/20'}`}></div>
-                      <span className={`text-lg font-black ${darkMode ? 'text-blue-400' : 'text-primary'}`}>{index + 1}</span>
+                  <Card key={cls.id} className={`p-3 md:p-4 group border transition-all duration-300 shadow-sm ${darkMode ? 'bg-gradient-to-br from-slate-800 to-slate-900 border-slate-700 hover:border-slate-600 shadow-md' : 'bg-slate-100 border-slate-200 hover:border-slate-300'}`}>
+                    {/* Mobile Layout */}
+                    <div className="flex md:hidden flex-col gap-3">
+                      <div className="flex items-center gap-3">
+                        <div className={`w-12 h-12 rounded-lg flex flex-col items-center justify-center shrink-0 border ${darkMode ? 'bg-slate-700 border-slate-600' : 'bg-slate-200 border-slate-300'}`}>
+                          <span className={`text-2xs font-bold ${darkMode ? 'text-blue-400' : 'text-primary'}`}>Class</span>
+                          <span className={`text-base font-black ${darkMode ? 'text-blue-400' : 'text-primary'}`}>{index + 1}</span>
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <h5 className={`font-bold text-sm leading-tight ${darkMode ? 'text-white' : 'text-slate-800'}`}>{cls.subject_name}</h5>
+                          <p className={`text-2xs ${darkMode ? 'text-slate-400' : 'text-slate-500'}`}>{cls.class_level_name} - {cls.section_name}</p>
+                        </div>
+                      </div>
+                      <div className="flex gap-2">
+                        <button
+                          onClick={() => navigate(`/teacher/classes/${cls.id}/performance`)}
+                          className={`flex-1 px-3 py-2 rounded-md text-2xs font-semibold transition-colors border ${darkMode ? 'bg-blue-600/20 text-blue-300 border-blue-600/30 hover:bg-blue-600 hover:text-white' : 'bg-primary/10 text-primary border-primary/20 hover:bg-primary hover:text-white'}`}
+                        >
+                          View Class
+                        </button>
+                        <button
+                          onClick={() => navigate(`/teacher/attendance/mark/${cls.id}`)}
+                          className={`flex-1 px-3 py-2 text-white rounded-md text-2xs font-semibold transition-colors shadow-md ${darkMode ? 'bg-blue-600 hover:bg-blue-500' : 'bg-primary hover:bg-primary/90'}`}
+                        >
+                          Mark Attendance
+                        </button>
+                      </div>
                     </div>
-                    <div className="flex-1">
-                      <h5 className={`font-bold text-base ${darkMode ? 'text-white' : 'text-slate-800'}`}>{cls.subject_name} ({cls.class_level_name} - {cls.section_name})</h5>
-                      <p className={`text-xs ${darkMode ? 'text-slate-400' : 'text-slate-500'}`}>Academic Year: {cls.academic_year_name}</p>
-                    </div>
-                    <div className="flex gap-3">
-                      <button
-                        onClick={() => navigate(`/teacher/classes/${cls.id}/performance`)}
-                        className={`px-3.5 py-2 rounded-md text-xs font-semibold transition-colors border ${darkMode ? 'bg-blue-600/20 text-blue-300 border-blue-600/30 hover:bg-blue-600 hover:text-white' : 'bg-primary/10 text-primary border-primary/20 hover:bg-primary hover:text-white'}`}
-                      >
-                        View Class
-                      </button>
-                      <button
-                        onClick={() => navigate(`/teacher/attendance/mark/${cls.id}`)}
-                        className={`px-3.5 py-2 text-white rounded-md text-xs font-semibold transition-colors shadow-md ${darkMode ? 'bg-blue-600 hover:bg-blue-500' : 'bg-primary hover:bg-primary/90'}`}
-                      >
-                        Mark Attendance
-                      </button>
+                    
+                    {/* Desktop Layout */}
+                    <div className="hidden md:flex items-center gap-5">
+                      <div className={`w-14 h-14 rounded-lg flex flex-col items-center justify-center shrink-0 border ${darkMode ? 'bg-slate-700 border-slate-600' : 'bg-slate-200 border-slate-300'}`}>
+                        <span className={`text-xs font-bold ${darkMode ? 'text-blue-400' : 'text-primary'}`}>Class</span>
+                        <div className={`w-8 h-[2px] my-1 ${darkMode ? 'bg-blue-500/30' : 'bg-primary/20'}`}></div>
+                        <span className={`text-lg font-black ${darkMode ? 'text-blue-400' : 'text-primary'}`}>{index + 1}</span>
+                      </div>
+                      <div className="flex-1">
+                        <h5 className={`font-bold text-base ${darkMode ? 'text-white' : 'text-slate-800'}`}>{cls.subject_name} ({cls.class_level_name} - {cls.section_name})</h5>
+                        <p className={`text-xs ${darkMode ? 'text-slate-400' : 'text-slate-500'}`}>Academic Year: {cls.academic_year_name}</p>
+                      </div>
+                      <div className="flex gap-3">
+                        <button
+                          onClick={() => navigate(`/teacher/classes/${cls.id}/performance`)}
+                          className={`px-3.5 py-2 rounded-md text-xs font-semibold transition-colors border ${darkMode ? 'bg-blue-600/20 text-blue-300 border-blue-600/30 hover:bg-blue-600 hover:text-white' : 'bg-primary/10 text-primary border-primary/20 hover:bg-primary hover:text-white'}`}
+                        >
+                          View Class
+                        </button>
+                        <button
+                          onClick={() => navigate(`/teacher/attendance/mark/${cls.id}`)}
+                          className={`px-3.5 py-2 text-white rounded-md text-xs font-semibold transition-colors shadow-md ${darkMode ? 'bg-blue-600 hover:bg-blue-500' : 'bg-primary hover:bg-primary/90'}`}
+                        >
+                          Mark Attendance
+                        </button>
+                      </div>
                     </div>
                   </Card>
                 ))
@@ -279,11 +310,11 @@ const Dashboard = () => {
           
           {/* Quick Actions */}
 <section>
-  <h4 className="font-display text-lg font-bold mb-5">
+  <h4 className="font-display text-base md:text-lg font-bold mb-3 md:mb-5">
     Quick Actions
   </h4>
 
-    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+    <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
 
     {/* Create Assignment */}
     {/*
@@ -308,37 +339,37 @@ const Dashboard = () => {
     {/* Mark Attendance */}
     <Card
       hoverable
-      className={`cursor-pointer flex flex-col items-center justify-center text-center gap-3 py-8 group border shadow-sm ${darkMode ? 'bg-gradient-to-br from-purple-600 to-purple-700 border-transparent shadow-lg' : 'bg-slate-100 border-slate-200'}`}
+      className={`cursor-pointer flex flex-col items-center justify-center text-center gap-2 md:gap-3 py-4 md:py-8 group border shadow-sm ${darkMode ? 'bg-gradient-to-br from-purple-600 to-purple-700 border-transparent shadow-lg' : 'bg-slate-100 border-slate-200'}`}
       onClick={() => navigate("/teacher/attendance/mark")}
     >
-      <div className={`p-3 rounded-lg group-hover:scale-105 transition ${darkMode ? 'bg-white/20 text-white' : 'bg-slate-200 text-slate-600'}`}>
-        <span className="material-symbols-outlined text-2xl">fact_check</span>
+      <div className={`p-2 md:p-3 rounded-lg group-hover:scale-105 transition ${darkMode ? 'bg-white/20 text-white' : 'bg-slate-200 text-slate-600'}`}>
+        <span className="material-symbols-outlined text-xl md:text-2xl">fact_check</span>
       </div>
-      <p className={`text-xs font-bold tracking-wide ${darkMode ? 'text-white' : 'text-slate-600'}`}>MARK ATTENDANCE</p>
+      <p className={`text-2xs md:text-xs font-bold tracking-wide leading-tight px-1 ${darkMode ? 'text-white' : 'text-slate-600'}`}>MARK ATTENDANCE</p>
     </Card>
 
     {/* Create Exam */}
     <Card
       hoverable
-      className={`cursor-pointer flex flex-col items-center justify-center text-center gap-2.5 py-6 group border shadow-sm ${darkMode ? 'bg-gradient-to-br from-amber-600 to-amber-700 border-transparent shadow-lg' : 'bg-slate-100 border-slate-200'}`}
+      className={`cursor-pointer flex flex-col items-center justify-center text-center gap-2 md:gap-2.5 py-4 md:py-6 group border shadow-sm ${darkMode ? 'bg-gradient-to-br from-amber-600 to-amber-700 border-transparent shadow-lg' : 'bg-slate-100 border-slate-200'}`}
       onClick={() => navigate("/teacher/exams/create")}
     >
-      <div className={`p-3 rounded-lg group-hover:scale-105 transition ${darkMode ? 'bg-white/20 text-white' : 'bg-slate-200 text-slate-600'}`}>
-        <span className="material-symbols-outlined text-2xl">quiz</span>
+      <div className={`p-2 md:p-3 rounded-lg group-hover:scale-105 transition ${darkMode ? 'bg-white/20 text-white' : 'bg-slate-200 text-slate-600'}`}>
+        <span className="material-symbols-outlined text-xl md:text-2xl">quiz</span>
       </div>
-      <p className={`text-xs font-bold tracking-wide ${darkMode ? 'text-white' : 'text-slate-600'}`}>CREATE EXAM</p>
+      <p className={`text-2xs md:text-xs font-bold tracking-wide leading-tight px-1 ${darkMode ? 'text-white' : 'text-slate-600'}`}>CREATE EXAM</p>
     </Card>
 
     {/* Upload Material */}
     <Card
       hoverable
-       className={`cursor-pointer flex flex-col items-center justify-center text-center gap-2.5 py-6 group border shadow-sm ${darkMode ? 'bg-gradient-to-br from-blue-600 to-blue-700 border-transparent shadow-lg' : 'bg-slate-100 border-slate-200'}`}
+       className={`cursor-pointer flex flex-col items-center justify-center text-center gap-2 md:gap-2.5 py-4 md:py-6 group border shadow-sm ${darkMode ? 'bg-gradient-to-br from-blue-600 to-blue-700 border-transparent shadow-lg' : 'bg-slate-100 border-slate-200'}`}
       onClick={() => navigate("/teacher/ai-tools")}
     >
-      <div className={`p-3 rounded-lg group-hover:scale-105 transition ${darkMode ? 'bg-white/20 text-white' : 'bg-slate-200 text-slate-600'}`}>
-        <span className="material-symbols-outlined text-2xl">upload_file</span>
+      <div className={`p-2 md:p-3 rounded-lg group-hover:scale-105 transition ${darkMode ? 'bg-white/20 text-white' : 'bg-slate-200 text-slate-600'}`}>
+        <span className="material-symbols-outlined text-xl md:text-2xl">upload_file</span>
       </div>
-      <p className={`text-xs font-bold tracking-wide ${darkMode ? 'text-white' : 'text-slate-600'}`}>UPLOAD MATERIAL</p>
+      <p className={`text-2xs md:text-xs font-bold tracking-wide leading-tight px-1 ${darkMode ? 'text-white' : 'text-slate-600'}`}>UPLOAD MATERIAL</p>
     </Card>
 
   </div>

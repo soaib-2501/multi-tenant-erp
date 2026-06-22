@@ -3,16 +3,28 @@ import Sidebar from "./Sidebar";
 import TopAppBar from "./TopAppBar";
 import MobileNav from "./MobileNav";
 const MainLayout = ({ children, title }) => {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  // Initialize sidebar state based on screen size
+  const [isSidebarOpen, setIsSidebarOpen] = useState(() => {
+    return window.innerWidth >= 768; // Open on desktop, closed on mobile
+  });
 
   return (
     <div className="bg-surface font-body text-sm text-on-surface antialiased min-h-screen overflow-x-hidden">
-      <div className={`fixed inset-y-0 left-0 z-50 transition-all duration-300 ease-in-out ${
+      {/* Overlay for mobile */}
+      {isSidebarOpen && (
+        <div 
+          className="fixed inset-0 bg-black/50 z-40 md:hidden backdrop-blur-sm transition-opacity duration-300"
+          onClick={() => setIsSidebarOpen(false)}
+        />
+      )}
+      
+      {/* Sidebar */}
+      <div className={`fixed inset-y-0 left-0 z-50 w-64 transition-transform duration-300 ease-in-out ${
         isSidebarOpen
-          ? "w-64 translate-x-0 opacity-100"
-          : "w-0 -translate-x-full opacity-0 pointer-events-none overflow-hidden"
+          ? "translate-x-0"
+          : "-translate-x-full"
       }`}>
-        <Sidebar />
+        <Sidebar onClose={() => setIsSidebarOpen(false)} />
       </div>
 
       <main className={`min-h-screen flex flex-col pb-20 md:pb-0 transition-all duration-300 ease-in-out ${

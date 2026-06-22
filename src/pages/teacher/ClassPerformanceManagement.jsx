@@ -138,17 +138,17 @@ const ClassPerformanceManagement = () => {
       <RevalidatingBar show={revalidating} />
 
       {/* Page Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-8 gap-4 border-b border-outline-variant/10 pb-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-4 md:mb-8 gap-4 border-b border-outline-variant/10 pb-3 md:pb-4">
         <div>
           {loading && !payload ? (
             <div className="space-y-2 animate-pulse">
-              <div className="h-8 w-64 bg-slate-100 rounded" />
-              <div className="h-5 w-32 bg-slate-100 rounded-full" />
+              <div className="h-6 md:h-8 w-48 md:w-64 bg-slate-100 rounded" />
+              <div className="h-4 md:h-5 w-24 md:w-32 bg-slate-100 rounded-full" />
             </div>
           ) : (
             <>
-              <h2 className="text-3xl font-extrabold font-display text-on-surface tracking-tight">{className}</h2>
-              <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-bold bg-blue-100 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300 mt-2">
+              <h2 className="text-xl md:text-3xl font-extrabold font-display text-on-surface tracking-tight">{className}</h2>
+              <span className="inline-flex items-center px-2 py-0.5 rounded-full text-3xs md:text-xs font-bold bg-blue-100 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300 mt-1 md:mt-2">
                 Active Semester — {assignment?.academic_year_name}
               </span>
             </>
@@ -156,37 +156,39 @@ const ClassPerformanceManagement = () => {
         </div>
       </div>
 
-      <div className="space-y-8">
+      <div className="space-y-4 md:space-y-8">
         {/* Bento Hero Section */}
-        <section className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <section className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6">
           {/* Class Overview Card */}
           <div
-            className="lg:col-span-2 bg-surface-container-lowest rounded-lg p-8 relative overflow-hidden group"
+            className="lg:col-span-2 bg-surface-container-lowest rounded-lg p-4 md:p-8 relative overflow-hidden group"
             style={{ boxShadow: '0px 12px 32px rgba(11,28,48,0.04)' }}
           >
             <div className="relative z-10 flex flex-col h-full">
-              <div className="mb-4">
+              <div className="mb-3 md:mb-4">
                 {loading && !payload ? (
                   <div className="space-y-3 animate-pulse">
-                    <div className="h-7 w-48 bg-slate-100 rounded" />
-                    <div className="h-4 w-80 bg-slate-100 rounded" />
+                    <div className="h-6 md:h-7 w-32 md:w-48 bg-slate-100 rounded" />
+                    <div className="h-3 md:h-4 w-56 md:w-80 bg-slate-100 rounded" />
                   </div>
                 ) : (
                   <>
-                    <h2 className="font-display text-3xl font-bold text-on-surface mb-2">{subjectName}</h2>
-                    <p className="text-on-surface-variant max-w-xl leading-relaxed">
+                    <h2 className="font-display text-xl md:text-3xl font-bold text-on-surface mb-1 md:mb-2">{subjectName}</h2>
+                    <p className="text-on-surface-variant max-w-xl leading-relaxed text-2xs md:text-base">
                       Class performance and analytics for {className} section.
                     </p>
                   </>
                 )}
               </div>
-              <div className="mt-auto flex flex-wrap gap-3">
-                <button className="bg-primary hover:bg-primary-container text-white px-6 py-3 rounded-md font-semibold transition-all flex items-center justify-center gap-2">
-                  <span className="material-symbols-outlined text-sm">description</span>
-                  Course Syllabus
+              <div className="mt-auto flex flex-wrap gap-2 md:gap-3">
+                <button className="bg-primary hover:bg-primary-container text-white px-4 md:px-6 py-2 md:py-3 rounded-md text-2xs md:text-base font-semibold transition-all flex items-center justify-center gap-1.5 md:gap-2">
+                  <span className="material-symbols-outlined text-xs md:text-sm">description</span>
+                  <span className="hidden md:inline">Course Syllabus</span>
+                  <span className="md:hidden">Syllabus</span>
                 </button>
-                <button className="bg-surface-container-high text-primary px-6 py-3 rounded-md font-semibold hover:bg-surface-variant transition-all">
-                  Learning Materials
+                <button className="bg-surface-container-high text-primary px-4 md:px-6 py-2 md:py-3 rounded-md text-2xs md:text-base font-semibold hover:bg-surface-variant transition-all">
+                  <span className="hidden md:inline">Learning Materials</span>
+                  <span className="md:hidden">Materials</span>
                 </button>
               </div>
             </div>
@@ -197,18 +199,18 @@ const ClassPerformanceManagement = () => {
           </div>
 
           {/* Quick Actions & AI Insight */}
-          <div className="space-y-6">
-            <Card className="p-6 border border-outline-variant/10 shadow-sm">
-              <h3 className="font-display font-bold text-slate-800 mb-4 flex items-center gap-2">
-                <span className="material-symbols-outlined text-amber-600">bolt</span> Quick Actions
+          <div className="space-y-4 md:space-y-6">
+            <Card className="p-4 md:p-6 border border-outline-variant/10 shadow-sm">
+              <h3 className="font-display font-bold text-slate-800 text-sm md:text-base mb-3 md:mb-4 flex items-center gap-2">
+                <span className="material-symbols-outlined text-amber-600 text-base md:text-xl">bolt</span> Quick Actions
               </h3>
               <div className="grid grid-cols-1 gap-2">
                 <Link
                   to={`/teacher/attendance/mark/${id}`}
-                  className="flex items-center justify-between p-3 rounded-md hover:bg-surface-container-low transition-colors text-sm font-semibold text-slate-700 border border-transparent hover:border-outline-variant/20"
+                  className="flex items-center justify-between p-2.5 md:p-3 rounded-md hover:bg-surface-container-low transition-colors text-2xs md:text-sm font-semibold text-slate-700 border border-transparent hover:border-outline-variant/20"
                 >
-                  <span className="flex items-center gap-3">
-                    <span className="material-symbols-outlined text-primary">how_to_reg</span>
+                  <span className="flex items-center gap-2 md:gap-3">
+                    <span className="material-symbols-outlined text-primary text-base md:text-xl">how_to_reg</span>
                     Mark Attendance
                   </span>
                   <span className="material-symbols-outlined text-xs">chevron_right</span>
@@ -253,7 +255,7 @@ const ClassPerformanceManagement = () => {
         </section>
 
         {/* Stats Grid */}
-        <section className="grid grid-cols-2 lg:grid-cols-4 gap-6">
+        <section className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6">
           {[
             {
               label: 'Total Students',
@@ -285,22 +287,22 @@ const ClassPerformanceManagement = () => {
             //   subBg: 'bg-red-50',
             // },
           ].map((stat, i) => (
-            <Card key={i} className={`p-6 border transition-all duration-300 ${
+            <Card key={i} className={`p-4 md:p-6 border transition-all duration-300 ${
               darkMode 
                 ? `border-transparent shadow-lg bg-gradient-to-br ${stat.bg} text-white` 
                 : 'bg-surface-container-lowest border-outline-variant/10 shadow-sm text-on-surface'
             }`}>
-              <p className={`text-xs font-bold uppercase tracking-widest mb-2 ${darkMode ? 'text-white/70' : 'text-on-surface-variant'}`}>{stat.label}</p>
+              <p className={`text-3xs md:text-xs font-bold uppercase tracking-widest mb-1 md:mb-2 ${darkMode ? 'text-white/70' : 'text-on-surface-variant'}`}>{stat.label}</p>
               <div className="flex items-end justify-between">
-                <p className={`text-3xl font-display font-extrabold ${darkMode ? 'text-white' : 'text-on-surface'}`}>{stat.value}</p>
+                <p className={`text-xl md:text-3xl font-display font-extrabold ${darkMode ? 'text-white' : 'text-on-surface'}`}>{stat.value}</p>
                 {stat.subIcon && (
-                  <span className={`flex items-center text-xs font-bold mb-1 ${darkMode ? stat.subColor : 'text-green-600'}`}>
-                    <span className="material-symbols-outlined text-sm">{stat.subIcon}</span>
+                  <span className={`flex items-center text-3xs md:text-xs font-bold mb-0.5 md:mb-1 ${darkMode ? stat.subColor : 'text-green-600'}`}>
+                    <span className="material-symbols-outlined text-xs md:text-sm">{stat.subIcon}</span>
                     {stat.sub}
                   </span>
                 )}
                 {stat.sub && !stat.subIcon && (
-                  <span className={`text-xs font-semibold mb-1 ${
+                  <span className={`text-3xs md:text-xs font-semibold mb-0.5 md:mb-1 ${
                     darkMode 
                       ? `${stat.subColor} ${stat.subBg ?? ''} ${stat.subBg ? 'px-2 py-0.5 rounded-full' : ''}` 
                       : 'text-on-surface-variant'
@@ -309,7 +311,7 @@ const ClassPerformanceManagement = () => {
                   </span>
                 )}
                 {stat.bar && (
-                  <div className={`w-16 h-1.5 rounded-full mb-3 overflow-hidden ml-2 ${darkMode ? 'bg-white/20' : 'bg-surface-container-low'}`}>
+                  <div className={`w-12 md:w-16 h-1 md:h-1.5 rounded-full mb-2 md:mb-3 overflow-hidden ml-2 ${darkMode ? 'bg-white/20' : 'bg-surface-container-low'}`}>
                     <div className={`h-full ${darkMode ? 'bg-white' : 'bg-primary'}`} style={{ width: stat.barWidth }} />
                   </div>
                 )}
@@ -319,13 +321,13 @@ const ClassPerformanceManagement = () => {
         </section>
 
         {/* Main Tabs + Table */}
-        <section className="space-y-6">
-          <div className="flex items-center gap-8 border-b border-outline-variant/20 overflow-x-auto pb-1">
+        <section className="space-y-4 md:space-y-6">
+          <div className="flex items-center gap-4 md:gap-8 border-b border-outline-variant/20 overflow-x-auto pb-1">
             {['Students', 'Attendance', 'Grades'].map((tab) => (
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab)}
-                className={`pb-3 px-2 font-display font-bold transition-all whitespace-nowrap outline-none ${
+                className={`pb-2 md:pb-3 px-2 font-display text-2xs md:text-base font-bold transition-all whitespace-nowrap outline-none ${
                   activeTab === tab
                     ? 'text-primary border-b-2 border-primary'
                     : 'text-slate-400 hover:text-slate-600'
@@ -336,23 +338,108 @@ const ClassPerformanceManagement = () => {
             ))}
           </div>
 
-          <div className="grid grid-cols-1 xl:grid-cols-3 gap-8 items-start">
+          <div className="grid grid-cols-1 xl:grid-cols-3 gap-4 md:gap-8 items-start">
             {/* Student Table */}
             <Card className="xl:col-span-2 p-0 overflow-hidden border border-outline-variant/10 shadow-sm" shadow="sm">
-              <div className="p-6 flex justify-between items-center border-b border-surface-container-low">
-                <h3 className="font-display font-bold text-on-surface">Class Roster</h3>
-                <button className="text-primary text-sm font-bold flex items-center gap-1 hover:opacity-80">
-                  <span className="material-symbols-outlined text-sm">filter_list</span> Filter
+              <div className="p-3 md:p-6 flex justify-between items-center border-b border-surface-container-low">
+                <h3 className="font-display font-bold text-on-surface text-sm md:text-base">Class Roster</h3>
+                <button className="text-primary text-3xs md:text-sm font-bold flex items-center gap-1 hover:opacity-80">
+                  <span className="material-symbols-outlined text-xs md:text-sm">filter_list</span> Filter
                 </button>
               </div>
-              <div className="overflow-x-auto max-h-[400px] overflow-y-auto">
+
+              {/* Mobile Card Layout for Grades Tab */}
+              {activeTab === 'Grades' && (
+                <div className="md:hidden p-3 space-y-3 max-h-[400px] overflow-y-auto">
+                  {loading && !payload
+                    ? Array.from({ length: 5 }).map((_, i) => (
+                        <div key={i} className="bg-surface-container-low/30 rounded-lg p-3 animate-pulse">
+                          <div className="h-4 bg-slate-200 rounded w-3/4 mb-2" />
+                          <div className="h-3 bg-slate-200 rounded w-1/2" />
+                        </div>
+                      ))
+                    : (showAllStudents ? students : students.slice(0, 5)).map((student) => {
+                        const sId = student.student?.id || student.student || student.student_id;
+                        const grade = gradesMap[sId];
+                        const score = grade ? parseFloat(grade.marks_obtained) : null;
+                        const avg = parseFloat(avgPerformance);
+
+                        return (
+                          <div key={student.id} className="bg-surface-container-low/20 rounded-lg p-3 space-y-2 border border-outline-variant/10">
+                            {/* Student Name */}
+                            <div className="flex items-center gap-2 mb-2">
+                              <div className="w-7 h-7 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold text-3xs uppercase shrink-0">
+                                {student.student_name?.charAt(0)}
+                              </div>
+                              <span className="font-bold text-on-surface text-sm">{student.student_name}</span>
+                            </div>
+
+                            {/* Grade and Comparison in Two Columns */}
+                            <div className="grid grid-cols-2 gap-3">
+                              {/* Grade Column */}
+                              <div className="space-y-1">
+                                <p className="text-3xs font-semibold text-on-surface-variant uppercase tracking-wide">Grade</p>
+                                <span className={`inline-flex px-2.5 py-1.5 rounded-md text-xs font-bold ${grade ? 'bg-primary/10 text-primary border border-primary/20' : 'bg-surface-container text-on-surface border border-outline-variant/10'}`}>
+                                  {grade ? `${parseFloat(grade.marks_obtained).toFixed(1)} / ${parseFloat(grade.max_marks).toFixed(1)}` : 'N/A'}
+                                </span>
+                              </div>
+
+                              {/* Comparison Column */}
+                              <div className="space-y-1">
+                                <p className="text-3xs font-semibold text-on-surface-variant uppercase tracking-wide">Status</p>
+                                {grade ? (
+                                  score > avg ? (
+                                    <span className="inline-flex px-2.5 py-1.5 rounded-md text-xs font-bold bg-green-100 dark:bg-green-950/40 text-green-700 dark:text-green-300 border border-green-200">
+                                      Above Avg
+                                    </span>
+                                  ) : score < avg ? (
+                                    <span className="inline-flex px-2.5 py-1.5 rounded-md text-xs font-bold bg-red-100 dark:bg-red-950/40 text-red-700 dark:text-red-300 border border-red-200">
+                                      Below Avg
+                                    </span>
+                                  ) : (
+                                    <span className="inline-flex px-2.5 py-1.5 rounded-md text-xs font-bold bg-surface-container text-on-surface border border-outline-variant/20">
+                                      Average
+                                    </span>
+                                  )
+                                ) : (
+                                  <span className="text-xs text-slate-400">—</span>
+                                )}
+                              </div>
+                            </div>
+
+                            {/* Action Button */}
+                            <div className="pt-1 border-t border-outline-variant/10">
+                              {grade ? (
+                                <Link
+                                  to="/teacher/grades"
+                                  className="text-primary hover:underline text-xs font-bold uppercase tracking-wider transition-colors outline-none"
+                                >
+                                  Update Grade →
+                                </Link>
+                              ) : (
+                                <Link
+                                  to="/teacher/grades"
+                                  className="text-primary hover:underline text-xs font-bold uppercase tracking-wider transition-colors outline-none"
+                                >
+                                  Add Grade →
+                                </Link>
+                              )}
+                            </div>
+                          </div>
+                        );
+                      })}
+                </div>
+              )}
+
+              {/* Desktop Table + Mobile for Students/Attendance Tabs */}
+              <div className={`overflow-x-auto max-h-[400px] overflow-y-auto ${activeTab === 'Grades' ? 'hidden md:block' : ''}`}>
                 <table className="w-full text-left border-collapse">
                   <thead className="sticky top-0 z-10 bg-surface-container-lowest outline outline-1 outline-surface-container-low/50">
                     <tr className="bg-surface-container-low/50">
                       {activeTab === 'Students' && ['Student', 'Roll No.', 'Status'].map((h) => (
                         <th
                           key={h}
-                          className={`px-6 py-4 text-xs font-bold text-on-surface-variant uppercase tracking-widest ${h === 'Roll No.' ? 'hidden sm:table-cell' : ''}`}
+                          className={`px-3 md:px-6 py-2 md:py-4 text-3xs md:text-xs font-bold text-on-surface-variant uppercase tracking-widest ${h === 'Roll No.' ? 'hidden sm:table-cell' : ''}`}
                         >
                           {h}
                         </th>
@@ -360,7 +447,7 @@ const ClassPerformanceManagement = () => {
                       {activeTab === 'Attendance' && ['Student', 'Present', 'Total Classes', 'Attendance Rate', 'Status', ''].map((h) => (
                         <th
                           key={h}
-                          className={`px-6 py-4 text-xs font-bold text-on-surface-variant uppercase tracking-widest ${h === 'Present' || h === 'Total Classes' ? 'hidden sm:table-cell' : ''}`}
+                          className={`px-3 md:px-6 py-2 md:py-4 text-3xs md:text-xs font-bold text-on-surface-variant uppercase tracking-widest ${h === 'Present' || h === 'Total Classes' ? 'hidden sm:table-cell' : ''}`}
                         >
                           {h}
                         </th>
@@ -368,7 +455,7 @@ const ClassPerformanceManagement = () => {
                       {activeTab === 'Grades' && ['Student', 'Grade', 'Class Average', 'Comparison', 'Actions'].map((h) => (
                         <th
                           key={h}
-                          className={`px-6 py-4 text-xs font-bold text-on-surface-variant uppercase tracking-widest ${h === 'Class Average' ? 'hidden sm:table-cell' : ''}`}
+                          className={`px-3 md:px-6 py-2 md:py-4 text-3xs md:text-xs font-bold text-on-surface-variant uppercase tracking-widest ${h === 'Class Average' ? 'hidden sm:table-cell' : ''}`}
                         >
                           {h}
                         </th>
@@ -388,21 +475,21 @@ const ClassPerformanceManagement = () => {
 
                           return (
                             <tr key={student.id} className="hover:bg-surface-container-low/30 transition-colors">
-                              <td className="px-6 py-4">
-                                <div className="flex items-center gap-3">
-                                  <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold text-xs uppercase shrink-0">
+                              <td className="px-3 md:px-6 py-2 md:py-4">
+                                <div className="flex items-center gap-2 md:gap-3">
+                                  <div className="w-6 h-6 md:w-8 md:h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold text-3xs md:text-xs uppercase shrink-0">
                                     {student.student_name?.charAt(0)}
                                   </div>
-                                  <span className="font-semibold text-on-surface">{student.student_name}</span>
+                                  <span className="font-semibold text-on-surface text-2xs md:text-base">{student.student_name}</span>
                                 </div>
                               </td>
                               {activeTab === 'Students' && (
                                 <>
-                                  <td className="px-6 py-4 font-mono text-sm text-on-surface-variant hidden sm:table-cell">
+                                  <td className="px-3 md:px-6 py-2 md:py-4 font-mono text-3xs md:text-sm text-on-surface-variant hidden sm:table-cell">
                                     {student.student_enrollment_no || `Roll ${student.roll_number}`}
                                   </td>
-                                  <td className="px-6 py-4">
-                                    <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-bold bg-green-100 dark:bg-green-950/40 text-green-700 dark:text-green-300">
+                                  <td className="px-3 md:px-6 py-2 md:py-4">
+                                    <span className="inline-flex items-center px-2 py-0.5 rounded-full text-3xs md:text-xs font-bold bg-green-100 dark:bg-green-950/40 text-green-700 dark:text-green-300">
                                       Enrolled
                                     </span>
                                   </td>
@@ -410,15 +497,15 @@ const ClassPerformanceManagement = () => {
                               )}
                               {activeTab === 'Attendance' && (
                                 <>
-                                  <td className="px-6 py-4 text-sm text-on-surface hidden sm:table-cell">
+                                  <td className="px-3 md:px-6 py-2 md:py-4 text-2xs md:text-sm text-on-surface hidden sm:table-cell">
                                     {att ? `${att.present} Days` : '0 Days'}
                                   </td>
-                                  <td className="px-6 py-4 text-sm text-on-surface hidden sm:table-cell">
+                                  <td className="px-3 md:px-6 py-2 md:py-4 text-2xs md:text-sm text-on-surface hidden sm:table-cell">
                                     {att ? `${att.total} Days` : '0 Days'}
                                   </td>
-                                  <td className="px-6 py-4">
+                                  <td className="px-3 md:px-6 py-2 md:py-4">
                                     <div className="flex flex-col sm:flex-row sm:items-center gap-2">
-                                      <span className="text-sm font-semibold text-on-surface">
+                                      <span className="text-2xs md:text-sm font-semibold text-on-surface">
                                         {attPercentage !== null ? `${attPercentage}%` : 'N/A'}
                                       </span>
                                       {attPercentage !== null && (
@@ -431,9 +518,9 @@ const ClassPerformanceManagement = () => {
                                       )}
                                     </div>
                                   </td>
-                                  <td className="px-6 py-4">
+                                  <td className="px-3 md:px-6 py-2 md:py-4">
                                     {attPercentage !== null ? (
-                                      <span className={`inline-flex px-2 py-0.5 rounded-full text-xs font-bold ${
+                                      <span className={`inline-flex px-2 py-0.5 rounded-full text-3xs md:text-xs font-bold ${
                                         attPercentage >= 85 ? 'bg-green-100 dark:bg-green-950/40 text-green-700 dark:text-green-300' :
                                         attPercentage >= 60 ? 'bg-orange-100 dark:bg-orange-950/40 text-orange-700 dark:text-orange-300' :
                                         'bg-red-100 dark:bg-red-950/40 text-red-700 dark:text-red-300'
@@ -444,10 +531,10 @@ const ClassPerformanceManagement = () => {
                                       <span className="text-xs text-on-surface-variant">N/A</span>
                                     )}
                                   </td>
-                                  <td className="px-6 py-4 text-right">
+                                  <td className="px-3 md:px-6 py-2 md:py-4 text-right">
                                     <Link
                                       to={`/teacher/attendance/mark/${id}`}
-                                      className="text-primary hover:underline text-xs font-bold uppercase tracking-wider transition-colors outline-none"
+                                      className="text-primary hover:underline text-3xs md:text-xs font-bold uppercase tracking-wider transition-colors outline-none"
                                     >
                                       Update
                                     </Link>
@@ -456,34 +543,34 @@ const ClassPerformanceManagement = () => {
                               )}
                               {activeTab === 'Grades' && (
                                 <>
-                                  <td className="px-6 py-4">
-                                    <span className={`inline-flex px-2 py-1 rounded-md text-xs font-bold ${grade ? 'bg-primary/10 text-primary border border-primary/20' : 'bg-surface-container text-on-surface border border-outline-variant/10'}`}>
+                                  <td className="px-3 md:px-6 py-2 md:py-4">
+                                    <span className={`inline-flex px-2 py-1 rounded-md text-3xs md:text-xs font-bold ${grade ? 'bg-primary/10 text-primary border border-primary/20' : 'bg-surface-container text-on-surface border border-outline-variant/10'}`}>
                                       {grade ? `${parseFloat(grade.marks_obtained).toFixed(1)} / ${parseFloat(grade.max_marks).toFixed(1)}` : 'N/A'}
                                     </span>
                                   </td>
-                                  <td className="px-6 py-4 text-sm text-on-surface hidden sm:table-cell">
+                                  <td className="px-3 md:px-6 py-2 md:py-4 text-2xs md:text-sm text-on-surface hidden sm:table-cell">
                                     {avgPerformance ? `${avgPerformance} / 100` : 'N/A'}
                                   </td>
-                                  <td className="px-6 py-4">
+                                  <td className="px-3 md:px-6 py-2 md:py-4">
                                     {grade ? (
                                       (() => {
                                         const score = parseFloat(grade.marks_obtained);
                                         const avg = parseFloat(avgPerformance);
                                         if (score > avg) {
                                           return (
-                                            <span className="inline-flex px-2 py-0.5 rounded-full text-xs font-bold bg-green-100 dark:bg-green-950/40 text-green-700 dark:text-green-300">
+                                            <span className="inline-flex px-2 py-0.5 rounded-full text-3xs md:text-xs font-bold bg-green-100 dark:bg-green-950/40 text-green-700 dark:text-green-300">
                                               Above Average
                                             </span>
                                           );
                                         } else if (score < avg) {
                                           return (
-                                            <span className="inline-flex px-2 py-0.5 rounded-full text-xs font-bold bg-red-100 dark:bg-red-950/40 text-red-700 dark:text-red-300">
+                                            <span className="inline-flex px-2 py-0.5 rounded-full text-3xs md:text-xs font-bold bg-red-100 dark:bg-red-950/40 text-red-700 dark:text-red-300">
                                               Below Average
                                             </span>
                                           );
                                         } else {
                                           return (
-                                            <span className="inline-flex px-2 py-0.5 rounded-full text-xs font-bold bg-surface-container text-on-surface">
+                                            <span className="inline-flex px-2 py-0.5 rounded-full text-3xs md:text-xs font-bold bg-surface-container text-on-surface">
                                               Average
                                             </span>
                                           );
@@ -493,20 +580,20 @@ const ClassPerformanceManagement = () => {
                                       <span className="text-xs text-slate-400">—</span>
                                     )}
                                   </td>
-                                  <td className="px-6 py-4">
+                                  <td className="px-3 md:px-6 py-2 md:py-4">
                                     {grade ? (
                                       <Link
-                                        to={`/teacher/grades/enter?exam_id=${grade.exam || grade.exam_id}`}
-                                        className="text-primary hover:underline text-xs font-bold uppercase tracking-wider transition-colors outline-none"
+                                        to="/teacher/grades"
+                                        className="text-primary hover:underline text-3xs md:text-xs font-bold uppercase tracking-wider transition-colors outline-none"
                                       >
                                         Update
                                       </Link>
                                     ) : (
                                       <Link
                                         to="/teacher/grades"
-                                        className="text-primary hover:underline text-xs font-bold uppercase tracking-wider transition-colors outline-none"
+                                        className="text-primary hover:underline text-3xs md:text-xs font-bold uppercase tracking-wider transition-colors outline-none"
                                       >
-                                        Update
+                                        Add
                                       </Link>
                                     )}
                                   </td>
@@ -520,10 +607,10 @@ const ClassPerformanceManagement = () => {
               </div>
 
               {totalStudents > 5 && (
-                <div className="p-4 bg-slate-50/50 text-center border-t border-slate-100">
+                <div className="p-3 md:p-4 bg-slate-50/50 text-center border-t border-slate-100">
                   <button 
                     onClick={() => setShowAllStudents(!showAllStudents)}
-                    className="text-xs font-bold text-primary uppercase tracking-widest hover:underline transition-all outline-none"
+                    className="text-3xs md:text-xs font-bold text-primary uppercase tracking-widest hover:underline transition-all outline-none"
                   >
                     {showAllStudents ? 'Show Less' : `View All ${totalStudents} Students`}
                   </button>
@@ -532,7 +619,7 @@ const ClassPerformanceManagement = () => {
             </Card>
 
             {/* Side Panels */}
-            <div className="space-y-6">
+            <div className="space-y-4 md:space-y-6">
               {/* <Card className="p-6 border border-outline-variant/10 shadow-sm">
                 <h3 className="font-display font-bold text-on-surface mb-6">Recent Submissions</h3>
                 <div className="space-y-5">
@@ -566,17 +653,17 @@ const ClassPerformanceManagement = () => {
                 </button>
               </Card> */}
 
-              <div className="bg-primary rounded-lg p-6 text-white overflow-hidden relative group">
-                <h3 className="font-display font-bold text-lg mb-4 relative z-10">Curriculum Progress</h3>
+              <div className="bg-primary rounded-lg p-4 md:p-6 text-white overflow-hidden relative group">
+                <h3 className="font-display font-bold text-base md:text-lg mb-3 md:mb-4 relative z-10">Curriculum Progress</h3>
                 <div className="relative z-10">
                   <div className="flex justify-between items-end mb-2">
-                    <span className="text-4xl font-display font-extrabold">64%</span>
-                    <span className="text-xs font-semibold opacity-80 pb-1">Topic 8 of 12</span>
+                    <span className="text-2xl md:text-4xl font-display font-extrabold">64%</span>
+                    <span className="text-3xs md:text-xs font-semibold opacity-80 pb-0.5 md:pb-1">Topic 8 of 12</span>
                   </div>
-                  <div className="w-full h-2 bg-white/20 rounded-full overflow-hidden">
+                  <div className="w-full h-1.5 md:h-2 bg-white/20 rounded-full overflow-hidden">
                     <div className="bg-white h-full w-[64%]" />
                   </div>
-                  <p className="mt-4 text-xs font-medium leading-relaxed opacity-90">
+                  <p className="mt-3 md:mt-4 text-3xs md:text-xs font-medium leading-relaxed opacity-90">
                     Current: Introduction to Derivatives and the Power Rule. Next: Chain Rule Applications.
                   </p>
                 </div>

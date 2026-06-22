@@ -393,10 +393,16 @@ export const getSavedAIContent = (params = {}) => {
   let endpoint = "/api/v1/academics/saved-ai-content/";
   const query = new URLSearchParams();
   for (const [key, value] of Object.entries(params)) {
-    if (value) query.append(key, value);
+    if (value !== undefined && value !== null) query.append(key, value);
   }
   const qStr = query.toString();
   if (qStr) endpoint += `?${qStr}`;
+  
+  // Don't fetch all pages if limit is specified - respect pagination
+  if (params.limit !== undefined) {
+    return apiCall(endpoint);
+  }
+  
   return fetchAllPages(endpoint);
 };
 

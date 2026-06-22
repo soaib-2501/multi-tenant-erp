@@ -252,24 +252,24 @@ const AIToolWorkspacePresentationOutline = () => {
       <div className="max-w-7xl mx-auto w-full px-0 sm:px-4 md:px-8">
         
         {/* Back Button & Breadcrumb */}
-        <div className="mb-6 flex items-center justify-between">
+        <div className="mb-4 md:mb-6 flex items-center justify-between px-3 sm:px-0">
           <button
             onClick={handleBackNavigation}
-            className="flex items-center gap-2 text-primary font-semibold text-sm mb-6 hover:-translate-x-1 transition-transform w-max font-display outline-none border-none bg-transparent cursor-pointer p-0"
+            className="flex items-center gap-1 md:gap-2 text-primary font-semibold text-3xs md:text-sm mb-4 md:mb-6 hover:-translate-x-1 transition-transform w-max font-display outline-none border-none bg-transparent cursor-pointer p-0"
           >
-            <span className="material-symbols-outlined text-sm">arrow_back</span>
+            <span className="material-symbols-outlined text-2xs md:text-sm">arrow_back</span>
             Back to AI Tools
           </button>
-          <span className="bg-[#ffdcc6] text-[#311400] px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1 font-display">
-            <span className="material-symbols-outlined text-sm">psychology</span>
+          <span className="bg-[#ffdcc6] text-[#311400] px-2 md:px-3 py-0.5 md:py-1 rounded-full text-3xs md:text-xs font-bold flex items-center gap-1 font-display">
+            <span className="material-symbols-outlined text-2xs md:text-sm">psychology</span>
             AI POWERED
           </span>
         </div>
 
         {/* Header Section */}
-        <div className="mb-8 pl-3 md:pl-0">
-          <h2 className="text-3xl font-extrabold font-display tracking-tight text-on-surface mb-2">Presentation Outline</h2>
-          <p className="text-on-surface-variant font-medium font-body text-sm sm:text-base">Develop a compelling, slide-by-slide educational presentation outline with speaker notes.</p>
+        <div className="mb-5 md:mb-8 px-3 sm:px-0 md:pl-0">
+          <h2 className="text-xl md:text-3xl font-extrabold font-display tracking-tight text-on-surface mb-1 md:mb-2">Presentation Outline</h2>
+          <p className="text-on-surface-variant font-medium font-body text-2xs md:text-base">Develop a compelling, slide-by-slide educational presentation outline with speaker notes.</p>
         </div>
 
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-12">
@@ -278,9 +278,9 @@ const AIToolWorkspacePresentationOutline = () => {
           <div className="lg:col-span-5 flex flex-col gap-6">
             
             {/* Main Form Card */}
-            <div className="bg-surface-container-lowest p-6 rounded-2xl shadow-sm border border-outline-variant/10">
-              <h3 className="text-lg font-bold font-display mb-4 flex items-center gap-2 text-on-surface">
-                <span className="material-symbols-outlined text-primary">tune</span>
+            <div className="bg-surface-container-lowest p-4 md:p-6 rounded-xl md:rounded-2xl shadow-sm border border-outline-variant/10">
+              <h3 className="text-base md:text-lg font-bold font-display mb-3 md:mb-4 flex items-center gap-2 text-on-surface">
+                <span className="material-symbols-outlined text-primary text-lg md:text-xl">tune</span>
                 Configuration
               </h3>
               <form className="space-y-4">
@@ -353,12 +353,12 @@ const AIToolWorkspacePresentationOutline = () => {
             </div>
 
             {/* AI Suggestion Panel */}
-            <div className="bg-[#ffdcc6]/30 p-5 rounded-2xl border-l-4 border-[#924700]">
-              <h4 className="text-sm font-bold text-[#924700] flex items-center gap-2 mb-2 font-display">
-                <span className="material-symbols-outlined text-sm">lightbulb</span>
+            <div className="bg-[#ffdcc6]/30 p-3 md:p-5 rounded-lg md:rounded-2xl border-l-4 border-[#924700]">
+              <h4 className="text-3xs md:text-sm font-bold text-[#924700] flex items-center gap-1 md:gap-2 mb-1 md:mb-2 font-display">
+                <span className="material-symbols-outlined text-2xs md:text-sm">lightbulb</span>
                 Intelligent Tip
               </h4>
-              <p className="text-sm text-[#723600] leading-relaxed font-body">
+              <p className="text-3xs md:text-sm text-[#723600] leading-relaxed font-body">
                 Widescreen outlines structure core concept transitions perfectly. Using slide speaker scripts reduces classroom presentation anxiety by <span className="font-bold">45%</span>.
               </p>
             </div>

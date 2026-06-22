@@ -13,7 +13,7 @@ const handleLogout = (navigate) => {
 };
 
 
-const Sidebar = () => {
+const Sidebar = ({ onClose }) => {
   const location = useLocation();
   const navigate = useNavigate();
   const { darkMode } = useTheme();
@@ -26,30 +26,50 @@ const Sidebar = () => {
     .join(" ") || "Loading...";
   const subtitle = teacherProfile?.qualification || profile?.roles?.[0] || "Current User";
 
+  const handleNavClick = (e) => {
+    // Close sidebar when clicking navigation on mobile
+    if (onClose) {
+      // Small delay to allow navigation to start
+      setTimeout(() => onClose(), 100);
+    }
+  };
+
   return (
-    <aside className={`hidden md:flex h-full w-64 flex-col p-4 gap-1.5 border-r overflow-hidden shadow-xl transition-colors duration-300 ${
+    <aside className={`flex h-full w-64 flex-col p-4 gap-1.5 border-r overflow-hidden shadow-xl transition-colors duration-300 ${
       darkMode 
         ? 'bg-gradient-to-br from-slate-800 to-slate-900 border-slate-700' 
         : 'bg-slate-50 border-slate-100'
     }`}>
-      <div className={`flex items-center gap-3 px-3 py-3 mb-2 group cursor-pointer rounded-xl transition-all duration-300 shadow-transparent flex-shrink-0 ${
-        darkMode 
-          ? 'hover:bg-slate-700/50 hover:shadow-slate-900/50' 
-          : 'hover:bg-white hover:shadow-slate-200/50'
-      }`}>
-        <div className={`w-9 h-9 rounded-lg flex items-center justify-center shadow-sm group-hover:scale-105 transition-transform duration-500 ${
-          darkMode ? 'bg-blue-600 text-white' : 'bg-primary-container text-white'
+      <div className="flex items-center justify-between mb-2">
+        <div className={`flex items-center gap-3 px-3 py-3 group cursor-pointer rounded-xl transition-all duration-300 shadow-transparent flex-shrink-0 flex-1 ${
+          darkMode 
+            ? 'hover:bg-slate-700/50 hover:shadow-slate-900/50' 
+            : 'hover:bg-white hover:shadow-slate-200/50'
         }`}>
-          <span className="material-symbols-outlined text-lg">person</span>
+          <div className={`w-9 h-9 rounded-lg flex items-center justify-center shadow-sm group-hover:scale-105 transition-transform duration-500 ${
+            darkMode ? 'bg-blue-600 text-white' : 'bg-primary-container text-white'
+          }`}>
+            <span className="material-symbols-outlined text-lg">person</span>
+          </div>
+          <div>
+            <h3 className={`font-body text-xs font-extrabold tracking-tight transition-colors ${
+              darkMode 
+                ? 'text-white group-hover:text-blue-300' 
+                : 'text-slate-800 group-hover:text-primary'
+            }`}>{fullName}</h3>
+            <p className="text-2xs font-medium text-slate-400">{subtitle}</p>
+          </div>
         </div>
-        <div>
-          <h3 className={`font-body text-xs font-extrabold tracking-tight transition-colors ${
+        <button
+          onClick={handleNavClick}
+          className={`md:hidden p-2 rounded-lg transition-colors ${
             darkMode 
-              ? 'text-white group-hover:text-blue-300' 
-              : 'text-slate-800 group-hover:text-primary'
-          }`}>{fullName}</h3>
-          <p className="text-2xs font-medium text-slate-400">{subtitle}</p>
-        </div>
+              ? 'text-slate-300 hover:bg-slate-700 hover:text-white' 
+              : 'text-slate-500 hover:bg-slate-100 hover:text-slate-700'
+          }`}
+        >
+          <span className="material-symbols-outlined">close</span>
+        </button>
       </div>
       <nav className="flex flex-col gap-0.5 overflow-hidden pr-2 flex-1">
         {navItems.map((item) => {
@@ -67,6 +87,7 @@ const Sidebar = () => {
                     : 'text-slate-500 hover:text-primary hover:bg-white hover:shadow-sm hover:translate-x-1'
               }`}
               to={item.path}
+              onClick={handleNavClick}
             >
               <span className={`material-symbols-outlined text-lg transition-transform duration-300 ${!isActive && 'group-hover:scale-110'}`} style={{ fontVariationSettings: isActive ? "'FILL' 1" : "'FILL' 0" }}>{item.icon}</span>
               <span className="font-body text-sm font-bold tracking-tight">{item.label}</span>
@@ -94,6 +115,7 @@ const Sidebar = () => {
                       : 'text-slate-600 hover:text-blue-600 hover:bg-slate-100'
                 }`}
                 to={item.path}
+                onClick={handleNavClick}
               >
               <span className="material-symbols-outlined text-lg" style={{ fontVariationSettings: isActive ? "'FILL' 1" : "'FILL' 0" }}>{item.icon}</span>
                 <span className="font-body text-xs font-semibold tracking-wide">{item.label}</span>

@@ -31,11 +31,17 @@ return (
 
 {isMenuOpen && (
 
-<div className="fixed inset-0 z-[60] bg-slate-900/60 backdrop-blur-sm">
+<div 
+className="fixed inset-0 z-[60] bg-slate-900/60 backdrop-blur-sm"
+onClick={() => setIsMenuOpen(false)}
+>
 
-<div className="absolute bottom-0 left-0 right-0 bg-white dark:bg-slate-900 rounded-t-3xl p-6 pb-12 shadow-2xl">
+<div 
+className="absolute bottom-0 left-0 right-0 bg-white dark:bg-slate-900 rounded-t-3xl p-6 pb-20 shadow-2xl max-h-[70vh] overflow-y-auto"
+onClick={(e) => e.stopPropagation()}
+>
 
-<div className="flex justify-between items-center mb-8">
+<div className="flex justify-between items-center mb-6 sticky top-0 bg-white dark:bg-slate-900 pb-4 border-b border-gray-100 dark:border-slate-800">
 
 <h3 className="text-lg font-bold text-gray-800 dark:text-white">
 Main Menu
@@ -44,7 +50,7 @@ Main Menu
 
 <button
 onClick={() => setIsMenuOpen(false)}
-className="w-9 h-9 rounded-full bg-gray-100 dark:bg-slate-800 text-gray-700 dark:text-slate-300 flex items-center justify-center"
+className="w-9 h-9 rounded-full bg-gray-100 dark:bg-slate-800 text-gray-700 dark:text-slate-300 flex items-center justify-center hover:bg-gray-200 dark:hover:bg-slate-700 transition-colors"
 >
 
 <span className="material-symbols-outlined">
@@ -57,7 +63,7 @@ close
 
 
 
-<div className="grid grid-cols-3 gap-6">
+<div className="grid grid-cols-3 gap-4">
 
 {allItems.map((item) => {
 
@@ -89,8 +95,8 @@ isActive
 
 
 <span
-className={`text-xs font-semibold text-center ${
-isActive ? "text-blue-600" : "text-gray-500 dark:text-slate-400"
+className={`text-xs font-semibold text-center line-clamp-2 ${
+isActive ? "text-blue-600 dark:text-blue-400" : "text-gray-500 dark:text-slate-400"
 }`}
 >
 
@@ -116,7 +122,7 @@ isActive ? "text-blue-600" : "text-gray-500 dark:text-slate-400"
 
 {/* Bottom Mobile Bar */}
 
-<nav className="md:hidden fixed bottom-0 left-0 right-0 bg-white dark:bg-slate-900 border-t border-slate-100 dark:border-slate-800 flex justify-around items-center py-2 shadow">
+<nav className="md:hidden fixed bottom-0 left-0 right-0 bg-white dark:bg-slate-900 border-t border-slate-100 dark:border-slate-800 flex justify-around items-center py-2 shadow-lg z-50">
 
 {quickLinks.map((item) => {
 

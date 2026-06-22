@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import MainLayout from "../../components/erp/teacher/MainLayout";
 import Card from "../../components/erp/teacher/Card";
 import { getExams, getMyProfile, getTeacherClasses, getSectionEnrollments } from "../../services/api";
@@ -7,6 +7,9 @@ import { useStaleData } from "../../hooks/useStaleData";
 import { RevalidatingBar, SkeletonBlock, SkeletonRow } from "../../components/erp/teacher/LoadingPrimitives";
 
 const GradesAssessmentOverview = () => {
+  const [searchParams] = useSearchParams();
+  const classIdFilter = searchParams.get('class_id');
+
   const { data: payload, loading: examsLoading, revalidating: examsRevalidating } = useStaleData('teacher:exams', async () => {
     const response = await getExams();
     const exams = Array.isArray(response) ? response : response.results || [];
@@ -39,7 +42,20 @@ const GradesAssessmentOverview = () => {
   // Transform API data to match the UI requirements
   useEffect(() => {
     if (rawExams.length > 0) {
-      const transformedData = rawExams.map((exam, index) => {
+      let filteredExams = rawExams;
+      
+      // Filter by class_id if provided
+      if (classIdFilter) {
+        filteredExams = rawExams.filter(exam => {
+          // Match by teacher_assignment_id or related assignment
+          return exam.teacher_assignment === classIdFilter || 
+                 exam.teacher_assignment_id === classIdFilter ||
+                 exam.assignment === classIdFilter ||
+                 exam.assignment_id === classIdFilter;
+        });
+      }
+      
+      const transformedData = filteredExams.map((exam, index) => {
         // Generate some dynamic props from exam data or fallback to defaults
         const isCompleted = exam.status === 'completed' || Math.random() > 0.5; // Simulate status since API may not have it
         const status = isCompleted ? 'Completed' : 'Pending';
@@ -67,8 +83,11 @@ const GradesAssessmentOverview = () => {
         };
       });
       setAssessmentsData(transformedData);
+    } else if (classIdFilter) {
+      // If filtering by class but no exams match, show empty state
+      setAssessmentsData([]);
     }
-  }, [rawExams]);
+  }, [rawExams, classIdFilter]);
 
   const getSubjectIcon = (subjectName) => {
     const name = (subjectName || "").toLowerCase();
@@ -91,13 +110,29 @@ const GradesAssessmentOverview = () => {
         {/* Page Title & Quick Actions */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
           <div>
-            <nav className="flex text-xs text-slate-500 mb-2 gap-2 items-center font-medium">
+            <nav className="flex text-2xs md:text-xs text-slate-500 mb-2 gap-2 items-center font-medium">
               <span>Academic Portal</span>
               <span className="material-symbols-outlined text-2xs">chevron_right</span>
               <span className="text-primary">Grades & Assessment</span>
             </nav>
-            <h1 className="text-4xl font-extrabold text-on-surface tracking-tight leading-tight font-display">Grades & Assessment</h1>
+            <h1 className="text-2xl md:text-4xl font-extrabold text-on-surface tracking-tight leading-tight font-display">
+              Grades & Assessment
+              {classIdFilter && (
+                <span className="block text-sm md:text-base font-normal text-on-surface-variant mt-2">
+                  Filtered for this class
+                </span>
+              )}
+            </h1>
           </div>
+          {classIdFilter && (
+            <Link
+              to="/teacher/grades"
+              className="inline-flex items-center gap-2 px-4 py-2 bg-surface-container-low hover:bg-surface-container rounded-md text-xs font-semibold text-on-surface transition-colors"
+            >
+              <span className="material-symbols-outlined text-sm">close</span>
+              Clear Filter
+            </Link>
+          )}
         </div>
 
         {studentsCountError && (
@@ -168,10 +203,10 @@ const GradesAssessmentOverview = () => {
 
         {/* Table of Exams */}
         <section className="bg-surface-container-lowest rounded-xl shadow-sm overflow-hidden border border-outline-variant/10">
-          <div className="px-6 py-4 border-b border-surface-container flex justify-between items-center bg-surface-container-lowest">
-            <h3 className="text-base font-bold font-display text-on-surface">Recent Assessments</h3>
+          <div className="px-3 md:px-6 py-3 md:py-4 border-b border-surface-container flex justify-between items-center bg-surface-container-lowest">
+            <h3 className="text-sm md:text-base font-bold font-display text-on-surface">Recent Assessments</h3>
             <div className="flex gap-4 items-center">
-              <span className="text-xs text-on-surface-variant hidden sm:inline">Showing {assessmentsData.length} results</span>
+              <span className="text-2xs md:text-xs text-on-surface-variant hidden sm:inline">Showing {assessmentsData.length} results</span>
               <button className="text-primary hover:bg-primary/5 p-1 rounded transition-colors outline-none cursor-pointer border-none bg-transparent">
                 <span className="material-symbols-outlined text-lg block">more_vert</span>
               </button>
@@ -182,11 +217,11 @@ const GradesAssessmentOverview = () => {
             <table className="w-full text-left border-collapse min-w-[700px]">
               <thead>
                 <tr className="bg-surface-container-low/50">
-                  <th className="px-6 py-4 text-2xs font-black text-slate-500 uppercase tracking-widest">Exam Name</th>
-                  <th className="px-6 py-4 text-2xs font-black text-slate-500 uppercase tracking-widest">Subject</th>
-                  <th className="px-6 py-4 text-2xs font-black text-slate-500 uppercase tracking-widest">Avg. Class Score</th>
-                  <th className="px-6 py-4 text-2xs font-black text-slate-500 uppercase tracking-widest">Grading Status</th>
-                  <th className="px-6 py-4 text-2xs font-black text-slate-500 uppercase tracking-widest text-right">Action</th>
+                  <th className="px-3 md:px-6 py-2 md:py-4 text-3xs md:text-2xs font-black text-slate-500 uppercase tracking-wider md:tracking-widest">Exam Name</th>
+                  <th className="px-3 md:px-6 py-2 md:py-4 text-3xs md:text-2xs font-black text-slate-500 uppercase tracking-wider md:tracking-widest">Subject</th>
+                  <th className="px-3 md:px-6 py-2 md:py-4 text-3xs md:text-2xs font-black text-slate-500 uppercase tracking-wider md:tracking-widest">Avg. Score</th>
+                  <th className="px-3 md:px-6 py-2 md:py-4 text-3xs md:text-2xs font-black text-slate-500 uppercase tracking-wider md:tracking-widest">Status</th>
+                  <th className="px-3 md:px-6 py-2 md:py-4 text-3xs md:text-2xs font-black text-slate-500 uppercase tracking-wider md:tracking-widest text-right">Action</th>
                  </tr>
               </thead>
               <tbody className="divide-y divide-surface-container-low">
@@ -194,7 +229,48 @@ const GradesAssessmentOverview = () => {
                   Array.from({ length: 5 }).map((_, index) => <SkeletonRow key={index} cols={5} />)
                 ) : assessmentsData.length === 0 ? (
                   <tr>
-                    <td colSpan="5" className="px-6 py-5 text-center text-slate-500">No assessments found.</td>
+                    <td colSpan="5" className="px-3 md:px-6 py-8 text-center">
+                      <div className="flex flex-col items-center gap-3">
+                        <div className="w-12 h-12 rounded-full bg-slate-100 flex items-center justify-center">
+                          <span className="material-symbols-outlined text-slate-400 text-2xl">assignment</span>
+                        </div>
+                        <div>
+                          <p className="text-slate-700 font-semibold text-sm mb-1">
+                            {classIdFilter ? 'No assessments found for this class' : 'No assessments found'}
+                          </p>
+                          <p className="text-slate-500 text-xs">
+                            {classIdFilter 
+                              ? 'Create an exam for this class to start entering grades.'
+                              : 'Create an exam to get started with assessments.'}
+                          </p>
+                        </div>
+                        {classIdFilter ? (
+                          <div className="flex gap-2 mt-2">
+                            <Link
+                              to="/teacher/exams/create"
+                              className="inline-flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-md text-xs font-semibold hover:bg-primary/90 transition-colors"
+                            >
+                              <span className="material-symbols-outlined text-sm">add</span>
+                              Create Exam
+                            </Link>
+                            <Link
+                              to="/teacher/grades"
+                              className="inline-flex items-center gap-2 px-4 py-2 bg-surface-container-low text-on-surface rounded-md text-xs font-semibold hover:bg-surface-container transition-colors"
+                            >
+                              View All Exams
+                            </Link>
+                          </div>
+                        ) : (
+                          <Link
+                            to="/teacher/exams/create"
+                            className="inline-flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-md text-xs font-semibold hover:bg-primary/90 transition-colors mt-2"
+                          >
+                            <span className="material-symbols-outlined text-sm">add</span>
+                            Create Your First Exam
+                          </Link>
+                        )}
+                      </div>
+                    </td>
                   </tr>
                 ) : assessmentsData.map(assessment => {
                   let badgeColors, dotColor, action;
@@ -237,36 +313,36 @@ const GradesAssessmentOverview = () => {
 
                   return (
                     <tr key={assessment.id} className="hover:bg-blue-50/30 transition-colors group">
-                      <td className="px-6 py-5">
-                        <div className="flex items-center gap-3">
-                          <div className={`w-8 h-8 rounded ${iconBg} flex items-center justify-center ${iconColor}`}>
-                            <span className="material-symbols-outlined text-base block">{assessment.icon}</span>
+                      <td className="px-3 md:px-6 py-3 md:py-5">
+                        <div className="flex items-center gap-2 md:gap-3">
+                          <div className={`w-7 h-7 md:w-8 md:h-8 rounded ${iconBg} flex items-center justify-center ${iconColor}`}>
+                            <span className="material-symbols-outlined text-sm md:text-base block">{assessment.icon}</span>
                           </div>
-                          <span className="text-sm font-bold text-on-surface">{assessment.name}</span>
+                          <span className="text-xs md:text-sm font-bold text-on-surface">{assessment.name}</span>
                         </div>
                       </td>
-                      <td className="px-6 py-5 text-sm text-on-surface-variant font-medium">
+                      <td className="px-3 md:px-6 py-3 md:py-5 text-xs md:text-sm text-on-surface-variant font-medium">
                         {assessment.subject}
                       </td>
-                      <td className="px-6 py-5">
+                      <td className="px-3 md:px-6 py-3 md:py-5">
                         {assessment.score !== null ? (
-                          <div className="flex items-center gap-2">
-                            <div className="w-12 h-1.5 bg-slate-100 rounded-full overflow-hidden hidden sm:block">
+                          <div className="flex items-center gap-1 md:gap-2">
+                            <div className="w-10 md:w-12 h-1 md:h-1.5 bg-slate-100 rounded-full overflow-hidden hidden sm:block">
                               <div className={`h-full ${iconColor.replace('text', 'bg')}`} style={{width: `${assessment.score}%`}}></div>
                             </div>
-                            <span className="text-sm font-bold text-on-surface">{assessment.score}%</span>
+                            <span className="text-xs md:text-sm font-bold text-on-surface">{assessment.score}%</span>
                           </div>
                         ) : (
-                          <span className="text-xs italic text-slate-400">Not calculated</span>
+                          <span className="text-2xs md:text-xs italic text-slate-400">Not calculated</span>
                         )}
                       </td>
-                      <td className="px-6 py-5">
-                        <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full ${badgeColors} text-2xs font-bold uppercase tracking-tight whitespace-nowrap`}>
-                          <span className={`w-1.5 h-1.5 ${dotColor} rounded-full`}></span>
+                      <td className="px-3 md:px-6 py-3 md:py-5">
+                        <span className={`inline-flex items-center gap-1 md:gap-1.5 px-2 md:px-3 py-0.5 md:py-1 rounded-full ${badgeColors} text-3xs md:text-2xs font-bold uppercase tracking-tight whitespace-nowrap`}>
+                          <span className={`w-1 md:w-1.5 h-1 md:h-1.5 ${dotColor} rounded-full`}></span>
                           {assessment.status}
                         </span>
                       </td>
-                      <td className="px-6 py-5 text-right">
+                      <td className="px-3 md:px-6 py-3 md:py-5 text-right">
                         {action}
                       </td>
                     </tr>
@@ -275,68 +351,68 @@ const GradesAssessmentOverview = () => {
               </tbody>
             </table>
           </div>
-          <div className="px-6 py-4 bg-surface-container-lowest flex flex-col sm:flex-row justify-between items-center gap-4 text-xs font-medium text-slate-500 border-t border-surface-container">
+          <div className="px-3 md:px-6 py-3 md:py-4 bg-surface-container-lowest flex flex-col sm:flex-row justify-between items-center gap-4 text-2xs md:text-xs font-medium text-slate-500 border-t border-surface-container">
             <p>Showing {assessmentsData.length} of {assessmentsData.length} assessments</p>
             <div className="flex gap-2">
-              <button className="w-8 h-8 rounded flex items-center justify-center border border-slate-200 hover:bg-surface-container transition-all outline-none cursor-pointer bg-transparent">
-                <span className="material-symbols-outlined text-base block">chevron_left</span>
+              <button className="w-7 h-7 md:w-8 md:h-8 rounded flex items-center justify-center border border-slate-200 hover:bg-surface-container transition-all outline-none cursor-pointer bg-transparent">
+                <span className="material-symbols-outlined text-sm md:text-base block">chevron_left</span>
               </button>
-              <button className="w-8 h-8 rounded flex items-center justify-center bg-primary text-white border-none outline-none cursor-pointer">1</button>
-              <button className="w-8 h-8 rounded flex items-center justify-center border border-slate-200 hover:bg-surface-container transition-all outline-none cursor-pointer bg-transparent">
-                <span className="material-symbols-outlined text-base block">chevron_right</span>
+              <button className="w-7 h-7 md:w-8 md:h-8 rounded flex items-center justify-center bg-primary text-white border-none outline-none cursor-pointer text-xs md:text-sm">1</button>
+              <button className="w-7 h-7 md:w-8 md:h-8 rounded flex items-center justify-center border border-slate-200 hover:bg-surface-container transition-all outline-none cursor-pointer bg-transparent">
+                <span className="material-symbols-outlined text-sm md:text-base block">chevron_right</span>
               </button>
             </div>
           </div>
         </section>
 
         {/* Bottom Stats Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-          <Card className="shadow-lg space-y-3 bg-gradient-to-br from-blue-600 to-blue-700 border-none">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
+          <Card className="shadow-lg space-y-2 md:space-y-3 bg-gradient-to-br from-blue-600 to-blue-700 border-none text-center">
             <div className="flex justify-between items-start">
-              <span className="text-2xs font-bold text-blue-200 uppercase tracking-widest block">Total Students</span>
-              <div className="w-8 h-8 rounded-full bg-white/20 text-white flex items-center justify-center">
-                <span className="material-symbols-outlined text-lg block">groups</span>
+              <span className="text-3xs md:text-2xs font-bold text-blue-200 uppercase tracking-wider md:tracking-widest block">Total Students</span>
+              <div className="w-7 h-7 md:w-8 md:h-8 rounded-full bg-white/20 text-white flex items-center justify-center">
+                <span className="material-symbols-outlined text-base md:text-lg block">groups</span>
               </div>
             </div>
             <div>
               {studentsCountLoading && !studentsCountData ? (
-                <SkeletonBlock className="h-8 w-14 bg-white/25" />
+                <SkeletonBlock className="h-6 md:h-8 w-12 md:w-14 bg-white/25 mx-auto" />
               ) : (
-                <p className="text-2xl font-bold font-display text-white">{totalStudents || '--'}</p>
+                <p className="text-xl md:text-2xl font-bold font-display text-white">{totalStudents || '--'}</p>
               )}
-              <p className="text-2xs text-blue-200 font-bold mt-1">Across all classes</p>
+              <p className="text-3xs md:text-2xs text-blue-200 font-bold mt-1">Across all classes</p>
             </div>
           </Card>
-          <Card className="shadow-lg space-y-3 bg-gradient-to-br from-purple-600 to-purple-700 border-none">
+          <Card className="shadow-lg space-y-2 md:space-y-3 bg-gradient-to-br from-purple-600 to-purple-700 border-none text-center">
             <div className="flex justify-between items-start">
-              <span className="text-2xs font-bold text-purple-200 uppercase tracking-widest block">Completed Assessments</span>
-              <div className="w-8 h-8 rounded-full bg-white/20 text-white flex items-center justify-center">
-                <span className="material-symbols-outlined text-lg block">task_alt</span>
+              <span className="text-3xs md:text-2xs font-bold text-purple-200 uppercase tracking-wider md:tracking-widest block">Completed</span>
+              <div className="w-7 h-7 md:w-8 md:h-8 rounded-full bg-white/20 text-white flex items-center justify-center">
+                <span className="material-symbols-outlined text-base md:text-lg block">task_alt</span>
               </div>
             </div>
             <div>
               {examsLoading && rawExams.length === 0 ? (
-                <SkeletonBlock className="h-8 w-12 bg-white/25" />
+                <SkeletonBlock className="h-6 md:h-8 w-10 md:w-12 bg-white/25 mx-auto" />
               ) : (
-                <p className="text-2xl font-bold font-display text-white">{completedCount}</p>
+                <p className="text-xl md:text-2xl font-bold font-display text-white">{completedCount}</p>
               )}
-              <p className="text-2xs text-purple-200 font-bold mt-1">Graded so far</p>
+              <p className="text-3xs md:text-2xs text-purple-200 font-bold mt-1">Graded so far</p>
             </div>
           </Card>
-          <Card className="shadow-lg space-y-3 sm:col-span-2 md:col-span-1 bg-gradient-to-br from-amber-600 to-amber-700 border-none">
+          <Card className="shadow-lg space-y-2 md:space-y-3 sm:col-span-2 md:col-span-1 bg-gradient-to-br from-amber-600 to-amber-700 border-none text-center">
             <div className="flex justify-between items-start">
-              <span className="text-2xs font-bold text-amber-200 uppercase tracking-widest block">Pending Assessments</span>
-              <div className="w-8 h-8 rounded-full bg-white/20 text-white flex items-center justify-center">
-                <span className="material-symbols-outlined text-lg block">timer</span>
+              <span className="text-3xs md:text-2xs font-bold text-amber-200 uppercase tracking-wider md:tracking-widest block">Pending</span>
+              <div className="w-7 h-7 md:w-8 md:h-8 rounded-full bg-white/20 text-white flex items-center justify-center">
+                <span className="material-symbols-outlined text-base md:text-lg block">timer</span>
               </div>
             </div>
             <div>
               {examsLoading && rawExams.length === 0 ? (
-                <SkeletonBlock className="h-8 w-12 bg-white/25" />
+                <SkeletonBlock className="h-6 md:h-8 w-10 md:w-12 bg-white/25 mx-auto" />
               ) : (
-                <p className="text-2xl font-bold font-display text-white">{pendingCount}</p>
+                <p className="text-xl md:text-2xl font-bold font-display text-white">{pendingCount}</p>
               )}
-              <p className="text-2xs text-amber-200 font-bold mt-1">Need your attention</p>
+              <p className="text-3xs md:text-2xs text-amber-200 font-bold mt-1">Need attention</p>
             </div>
           </Card>
         </div>
