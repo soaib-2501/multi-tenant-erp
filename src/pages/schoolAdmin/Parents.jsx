@@ -25,7 +25,7 @@ function Skeleton({ className = "", style = {} }) {
 // ─────────────────────────────────────────────
 function ParentsSkeleton() {
   return (
-    <div className="flex flex-col gap-4 px-4 md:px-8 pt-4 pb-12 max-w-7xl">
+    <div className="flex flex-col gap-4 px-4 md:px-8 pt-4 pb-12">
       {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4">
         <div>
@@ -264,7 +264,7 @@ export default function Parents() {
   // ── Render ──
   return (
     <SchoolLayout>
-      <div className="flex flex-col gap-4 px-4 md:px-8 pt-4 pb-12 max-w-7xl">
+      <div className="flex flex-col gap-4 px-4 md:px-8 pt-4 pb-12">
 
         {/* Header */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4">

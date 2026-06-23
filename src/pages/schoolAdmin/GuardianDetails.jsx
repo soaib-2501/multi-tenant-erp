@@ -186,7 +186,7 @@ export default function GuardianDetails() {
   if (loading) {
     return (
       <SchoolLayout title="Guardian Details">
-        <div className="max-w-4xl px-4 md:px-8 pt-4 pb-12">
+        <div className="px-4 md:px-8 pt-4 pb-12">
           <div className="flex flex-col gap-6">
             {/* Top bar skeleton */}
             <div className="flex justify-between items-center">
@@ -252,7 +252,7 @@ export default function GuardianDetails() {
 
   return (
     <SchoolLayout title="Guardian Details">
-      <div className="max-w-4xl px-4 md:px-8 pt-4 pb-12 space-y-6">
+      <div className="px-4 md:px-8 pt-4 pb-12 space-y-6">
 
         {/* Toast */}
         {toast && (
@@ -360,7 +360,7 @@ export default function GuardianDetails() {
 
         {/* Identity Header Card */}
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-          <div className={`${isEditing ? "flex-col" : "flex items-center justify-between gap-4"}`}>
+          <div className={`${isEditing ? "flex-col" : "flex items-center justify-between md:gap-4"}`}>
             <div className="flex items-center gap-5">
               <div className="w-16 h-16 shrink-0 rounded-2xl bg-[#e5eeff] text-[#0058be] flex items-center justify-center font-bold text-xl border border-blue-100">
                 {initials}
