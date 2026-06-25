@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import MainLayout from "../../components/erp/teacher/MainLayout";
 import Card from "../../components/erp/teacher/Card";
-import { getMyProfile, getTeacherClasses, getAttendanceRecords } from "../../services/api";
+import { getMyTeacherAssignments, getAttendanceRecords } from "../../services/api";
 import { useStaleData } from "../../hooks/useStaleData";
 import { RevalidatingBar, SkeletonBlock } from "../../components/erp/teacher/LoadingPrimitives";
 
@@ -28,26 +28,39 @@ const AttendanceClassSkeleton = () => (
 const AttendanceOverview = () => {
   const navigate = useNavigate();
 
-  const { data: profileData } = useStaleData("profile:me", getMyProfile);
-  const teacherId = profileData?.profiles?.teacher?.id || profileData?.identity?.id;
-
+  // Single efficient fetch — JWT resolves teacher, no profile/teacherId chain needed
   const { data: assignmentsData, loading: classesLoading, revalidating: classesRevalidating } = useStaleData(
-    `teacher:classes:${teacherId}`,
-    () => getTeacherClasses(teacherId),
-    { skip: !teacherId }
+    'teacher:my-assignments',
+    () => getMyTeacherAssignments({ status: 'current' }),
   );
 
   const classes = assignmentsData?.results || [];
 
+  // Stable cache key for attendance records
+  const classesKey = useMemo(
+    () => classes.map(c => c.id).filter(Boolean).sort().join(','),
+    [classes],
+  );
+
   const { data: attendancePayload, loading: attendanceLoading, revalidating: attendanceRevalidating } = useStaleData(
-    `teacher:attendance-records:${teacherId}`,
+    `teacher:attendance-records:${classesKey || 'empty'}`,
     async () => {
-      if (!teacherId || classes.length === 0) return [];
-      
-      const sectionIds = [...new Set(classes.map(a => a.section || a.section_id))].filter(Boolean);
-      const sectionPromises = sectionIds.map(sectionId => getAttendanceRecords(sectionId));
-      const responses = await Promise.all(sectionPromises);
-      
+      if (classes.length === 0) return [];
+
+      // Deduplicate: one request per unique section+year pair, scoped to academic year
+      const sectionMap = new Map(); // sectionId -> academicYearId
+      classes.forEach(cls => {
+        const sId = cls.section?.id;
+        const ayId = cls.academic_year?.id;
+        if (sId && !sectionMap.has(sId)) sectionMap.set(sId, ayId);
+      });
+
+      const responses = await Promise.all(
+        [...sectionMap.entries()].map(([sId, ayId]) =>
+          getAttendanceRecords(sId, ayId).catch(() => ({ results: [] }))
+        )
+      );
+
       let allAttendance = [];
       responses.forEach(data => {
         const records = Array.isArray(data) ? data : data.results || [];
@@ -55,7 +68,7 @@ const AttendanceOverview = () => {
       });
       return allAttendance;
     },
-    { skip: !teacherId || classesLoading || classes.length === 0, deps: classes }
+    { skip: classesLoading || classes.length === 0, deps: classesKey }
   );
 
   const attendanceRecords = attendancePayload || [];
@@ -66,7 +79,7 @@ const AttendanceOverview = () => {
     month: 'short',
     day: 'numeric'
   });
-  const academicYearName = classes[0]?.academic_year_name || "Current Session";
+  const academicYearName = classes[0]?.academic_year?.name || "Current Session";
 
   // Calculations
   const totalAttendanceRecords = attendanceRecords.length;
@@ -100,7 +113,7 @@ const AttendanceOverview = () => {
   const latePct = totalAttendanceRecords > 0 ? Math.round((lateCount / totalAttendanceRecords) * 100) : 0;
   const leavePct = totalAttendanceRecords > 0 ? Math.round((leaveCount / totalAttendanceRecords) * 100) : 0;
 
-  // Group attendance records by date and calculate percentage for each date for trend
+  // Group attendance records by date for trend chart
   const recordsByDate = {};
   attendanceRecords.forEach(r => {
     if (!r.date) return;
@@ -145,21 +158,6 @@ const AttendanceOverview = () => {
           <h2 className="text-xl md:text-3xl font-extrabold text-on-surface font-display tracking-tight">Attendance Overview</h2>
           <p className="text-xs md:text-base text-on-surface-variant font-medium mt-1">Academic Session: {academicYearName} • {formattedDate}</p>
         </div>
-        {/* Commented out bulk marking and export report
-        <div className="flex space-x-3">
-          <button className="flex items-center justify-center space-x-2 px-5 py-2.5 rounded-xl text-[#0058be] font-semibold bg-[#eff4ff] hover:bg-[#d8e2ff] transition-colors text-sm">
-            <span className="material-symbols-outlined text-xl">file_download</span>
-            <span>Export Report</span>
-          </button>
-          <button 
-            onClick={() => navigate("/teacher/attendance/mark")}
-            className="flex items-center justify-center space-x-2 px-6 py-2.5 rounded-xl text-white font-semibold bg-gradient-to-r from-[#0058be] to-[#2170e4] shadow-md active:scale-95 duration-150 transition-all text-sm"
-          >
-            <span className="material-symbols-outlined text-xl">fact_check</span>
-            <span>Mark Attendance</span>
-          </button>
-        </div>
-        */}
       </div>
 
       {/* Bento Stats Grid */}
@@ -252,8 +250,8 @@ const AttendanceOverview = () => {
                           <span className="material-symbols-outlined text-2xl">{icon}</span>
                         </div>
                         <div className="flex-grow min-w-0">
-                          <h4 className="font-bold text-on-surface text-sm leading-tight">{cls.subject_name}</h4>
-                          <p className="text-2xs text-on-surface-variant">{cls.class_level_name} - {cls.section_name}</p>
+                          <h4 className="font-bold text-on-surface text-sm leading-tight">{cls.subject?.name}</h4>
+                          <p className="text-2xs text-on-surface-variant">{cls.class_level?.name} - {cls.section?.name}</p>
                         </div>
                       </div>
                       <div className="flex gap-2">
@@ -278,8 +276,8 @@ const AttendanceOverview = () => {
                         <span className="material-symbols-outlined text-3xl">{icon}</span>
                       </div>
                       <div className="flex-grow">
-                        <h4 className="font-bold text-on-surface text-lg">{cls.subject_name}</h4>
-                        <p className="text-sm text-on-surface-variant">{cls.class_level_name} - {cls.section_name}</p>
+                        <h4 className="font-bold text-on-surface text-lg">{cls.subject?.name}</h4>
+                        <p className="text-sm text-on-surface-variant">{cls.class_level?.name} - {cls.section?.name}</p>
                       </div>
                       <button
                         onClick={() => navigate(`/teacher/attendance/mark/${cls.id}`)}
@@ -304,23 +302,6 @@ const AttendanceOverview = () => {
 
         {/* Side Insight Section (4 cols) */}
         <div className="lg:col-span-4 space-y-6">
-          {/* AI Intelligence Insight - Commented out
-          <div className="bg-orange-50 p-6 rounded-xl relative overflow-hidden border border-amber-900/10">
-            <div className="absolute top-0 right-0 p-4">
-              <span className="material-symbols-outlined text-amber-900/20 text-4xl">psychology</span>
-            </div>
-            <h4 className="text-[#924700] font-bold text-lg mb-2 flex items-center relative z-10">
-              <span className="material-symbols-outlined mr-2 text-xl">auto_awesome</span>
-              Attendance AI Insight
-            </h4>
-            <p className="text-[#723600] text-sm leading-relaxed mb-4 relative z-10">
-              James Miller has missed 3 consecutive Lab sessions. This correlates with a 15% drop in his last quiz performance.
-            </p>
-            <button className="text-xs font-bold text-[#924700] underline decoration-[#b75b00]/30 underline-offset-4 hover:decoration-[#924700] transition-all relative z-10">
-              Review Intervention Plan
-            </button>
-          </div>
-          */}
 
           {/* Attendance Distribution */}
           <Card className="shadow-lg bg-gradient-to-br from-slate-800 to-slate-900 border-none">

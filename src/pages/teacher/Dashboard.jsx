@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import MainLayout from "../../components/erp/teacher/MainLayout";
 import Card from "../../components/erp/teacher/Card";
 import { useStaleData } from "../../hooks/useStaleData";
 import { useTheme } from "../../context/ThemeContext";
-import { getMyProfile, getTeacherClasses, getSectionEnrollments, getAttendanceRecords, getGrades } from "../../services/api";
+import { getMyProfile, getMyTeacherAssignments, getAttendanceRecords, getGrades } from "../../services/api";
 import { RevalidatingBar, SkeletonBlock } from "../../components/erp/teacher/LoadingPrimitives";
 
 const StatValueSkeleton = ({ darkMode }) => (
@@ -29,9 +29,8 @@ const Dashboard = () => {
   const navigate = useNavigate();
   const { darkMode } = useTheme();
 
+  // Profile only for teacher name — no longer needed for class fetching
   const { data: profile } = useStaleData("profile:me", getMyProfile);
-  const teacherId = profile?.profiles?.teacher?.id || profile?.identity?.id;
-
   const teacherName = profile?.profiles?.teacher?.full_name
     || profile?.profiles?.teacher?.name
     || [profile?.profiles?.teacher?.first_name, profile?.profiles?.teacher?.last_name].filter(Boolean).join(' ')
@@ -39,120 +38,81 @@ const Dashboard = () => {
     || [profile?.identity?.first_name, profile?.identity?.last_name].filter(Boolean).join(' ')
     || 'Teacher';
 
+  // Single efficient fetch — JWT resolves teacher, no teacherId param needed.
+  // Returns nested objects: section: { id, name }, academic_year: { id, name }, etc.
   const { data: assignmentsData, loading, revalidating } = useStaleData(
-    `teacher:classes:${teacherId}`,
-    () => getTeacherClasses(teacherId),
-    { skip: !teacherId }
+    'teacher:my-assignments',
+    () => getMyTeacherAssignments({ status: 'current' }),
   );
 
   const classes = assignmentsData?.results || [];
 
+  // Stable cache key derived from sorted class IDs
+  const metricsKey = useMemo(
+    () => classes.map(c => c.id).filter(Boolean).sort().join(','),
+    [classes],
+  );
+
+  // Stats: deduplicate unique section+year pairs for attendance, unique subjects for grades.
+  // Simplified avg performance: total obtained / total max across all grade records.
   const { data: stats, loading: statsLoading, revalidating: statsRevalidating } = useStaleData(
-    `teacher:stats:${teacherId}`,
+    `teacher:stats:${metricsKey || 'empty'}`,
     async () => {
-      const assignments = await getTeacherClasses(teacherId);
-      const classesList = assignments?.results || [];
+      if (classes.length === 0) return { avgAttendance: 0, avgPerformancePercentage: 0 };
 
-      if (classesList.length === 0) {
-        return { avgAttendance: 0, avgPerformancePercentage: 0 };
-      }
+      // De-dup: one attendance request per unique section+year, one grade request per unique subject
+      const sectionMap = new Map(); // sectionId -> academicYearId
+      const subjectSet = new Set();
 
-      // Fetch all section enrollments, attendance, and grades for all classes in parallel
-      const promises = classesList.map(async (cls) => {
-        const sectionId = typeof cls.section === 'object'
-          ? cls.section?.id
-          : cls.section || cls.section_id;
-        const academicYearId = typeof cls.academic_year === 'object'
-          ? cls.academic_year?.id
-          : cls.academic_year || cls.academic_year_id;
-        const subjectId = typeof cls.subject === 'object'
-          ? cls.subject?.id
-          : cls.subject || cls.subject_id;
-
-        if (!sectionId) return { students: [], attendanceMap: {}, gradesMap: {} };
-
-        try {
-          const [enrollmentsData, attendanceData, gradesData] = await Promise.all([
-            getSectionEnrollments(sectionId, academicYearId),
-            getAttendanceRecords(sectionId, academicYearId),
-            subjectId ? getGrades(subjectId) : Promise.resolve({ results: [] })
-          ]);
-
-          const students = Array.isArray(enrollmentsData)
-            ? enrollmentsData
-            : enrollmentsData.results || [];
-
-          const records = Array.isArray(attendanceData)
-            ? attendanceData
-            : attendanceData.results || [];
-
-          const attendanceMap = {};
-          records.forEach(record => {
-            const sId = record.student_id || record.student;
-            if (!attendanceMap[sId]) attendanceMap[sId] = { present: 0, total: 0 };
-            attendanceMap[sId].total += 1;
-            if (record.status === 'Present' || record.status === 'Late') {
-              attendanceMap[sId].present += 1;
-            }
-          });
-
-          const grades = Array.isArray(gradesData)
-            ? gradesData
-            : gradesData.results || [];
-            
-          const gradesMap = {};
-          grades.forEach(grade => {
-            const sId = grade.student_id || grade.student;
-            if (!gradesMap[sId] || parseFloat(grade.marks_obtained) > parseFloat(gradesMap[sId].marks_obtained)) {
-              gradesMap[sId] = grade;
-            }
-          });
-
-          return { students, attendanceMap, gradesMap };
-        } catch (err) {
-          console.error("Error loading class data for stats:", err);
-          return { students: [], attendanceMap: {}, gradesMap: {} };
-        }
+      classes.forEach(cls => {
+        const sId = cls.section?.id;
+        const ayId = cls.academic_year?.id;
+        const subId = cls.subject?.id;
+        if (sId && !sectionMap.has(sId)) sectionMap.set(sId, ayId);
+        if (subId) subjectSet.add(subId);
       });
 
-      const results = await Promise.all(promises);
+      const [attendanceResults, gradesResults] = await Promise.all([
+        Promise.all(
+          [...sectionMap.entries()].map(([sId, ayId]) =>
+            getAttendanceRecords(sId, ayId).catch(() => ({ results: [] }))
+          )
+        ),
+        Promise.all(
+          [...subjectSet].map(subId =>
+            getGrades(subId).catch(() => ({ results: [] }))
+          )
+        ),
+      ]);
 
-      let overallTotalAttendanceRecords = 0;
-      let overallTotalPresent = 0;
-      let overallTotalObtainedMarks = 0;
-      let overallTotalMaxMarks = 0;
-
-      results.forEach(({ students, attendanceMap, gradesMap }) => {
-        students.forEach(student => {
-          const sId = student.student?.id || student.student || student.student_id;
-          
-          // Attendance
-          const att = attendanceMap[sId];
-          if (att) {
-            overallTotalAttendanceRecords += att.total;
-            overallTotalPresent += att.present;
-          }
-
-          // Grades
-          const grade = gradesMap[sId];
-          if (grade) {
-            overallTotalObtainedMarks += parseFloat(grade.marks_obtained || 0);
-            overallTotalMaxMarks += parseFloat(grade.max_marks || 0);
-          }
+      let totalRecords = 0, totalPresent = 0;
+      attendanceResults.forEach(data => {
+        const records = Array.isArray(data) ? data : data.results || [];
+        totalRecords += records.length;
+        records.forEach(r => {
+          if (r.status === 'Present' || r.status === 'Late') totalPresent++;
         });
       });
 
-      const avgAttendance = overallTotalAttendanceRecords > 0
-        ? ((overallTotalPresent / overallTotalAttendanceRecords) * 100).toFixed(1)
-        : 0;
+      let totalObtained = 0, totalMax = 0;
+      gradesResults.forEach(data => {
+        const grades = Array.isArray(data) ? data : data.results || [];
+        grades.forEach(g => {
+          totalObtained += parseFloat(g.marks_obtained || 0);
+          totalMax += parseFloat(g.max_marks || 0);
+        });
+      });
 
-      const avgPerformancePercentage = overallTotalMaxMarks > 0
-        ? ((overallTotalObtainedMarks / overallTotalMaxMarks) * 100).toFixed(1)
-        : 0;
-
-      return { avgAttendance, avgPerformancePercentage };
+      return {
+        avgAttendance: totalRecords > 0
+          ? ((totalPresent / totalRecords) * 100).toFixed(1)
+          : 0,
+        avgPerformancePercentage: totalMax > 0
+          ? ((totalObtained / totalMax) * 100).toFixed(1)
+          : 0,
+      };
     },
-    { skip: !teacherId }
+    { skip: loading || classes.length === 0, deps: metricsKey },
   );
 
 
@@ -254,8 +214,8 @@ const Dashboard = () => {
                           <span className={`text-base font-black ${darkMode ? 'text-blue-400' : 'text-primary'}`}>{index + 1}</span>
                         </div>
                         <div className="flex-1 min-w-0">
-                          <h5 className={`font-bold text-sm leading-tight ${darkMode ? 'text-white' : 'text-slate-800'}`}>{cls.subject_name}</h5>
-                          <p className={`text-2xs ${darkMode ? 'text-slate-400' : 'text-slate-500'}`}>{cls.class_level_name} - {cls.section_name}</p>
+                          <h5 className={`font-bold text-sm leading-tight ${darkMode ? 'text-white' : 'text-slate-800'}`}>{cls.subject?.name}</h5>
+                          <p className={`text-2xs ${darkMode ? 'text-slate-400' : 'text-slate-500'}`}>{cls.class_level?.name} - {cls.section?.name}</p>
                         </div>
                       </div>
                       <div className="flex gap-2">
@@ -282,8 +242,8 @@ const Dashboard = () => {
                         <span className={`text-lg font-black ${darkMode ? 'text-blue-400' : 'text-primary'}`}>{index + 1}</span>
                       </div>
                       <div className="flex-1">
-                        <h5 className={`font-bold text-base ${darkMode ? 'text-white' : 'text-slate-800'}`}>{cls.subject_name} ({cls.class_level_name} - {cls.section_name})</h5>
-                        <p className={`text-xs ${darkMode ? 'text-slate-400' : 'text-slate-500'}`}>Academic Year: {cls.academic_year_name}</p>
+                        <h5 className={`font-bold text-base ${darkMode ? 'text-white' : 'text-slate-800'}`}>{cls.subject?.name} ({cls.class_level?.name} - {cls.section?.name})</h5>
+                        <p className={`text-xs ${darkMode ? 'text-slate-400' : 'text-slate-500'}`}>Academic Year: {cls.academic_year?.name}</p>
                       </div>
                       <div className="flex gap-3">
                         <button
@@ -316,26 +276,6 @@ const Dashboard = () => {
 
     <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
 
-    {/* Create Assignment */}
-    {/*
-    <Card
-      hoverable
-      className="cursor-pointer flex flex-col items-center justify-center text-center gap-2.5 py-6 group"
-      onClick={() => navigate("/teacher/assignments/create")}
-    >
-      <div className="p-4 rounded-xl bg-primary/10 text-primary group-hover:scale-110 transition">
-        <span className="material-symbols-outlined text-3xl">
-          assignment_add
-        </span>
-      </div>
-
-      <p className="text-sm font-bold text-slate-700 tracking-wide">
-        CREATE ASSIGNMENT
-      </p>
-    </Card>
-    */}
-
-
     {/* Mark Attendance */}
     <Card
       hoverable
@@ -360,6 +300,30 @@ const Dashboard = () => {
       <p className={`text-2xs md:text-xs font-bold tracking-wide leading-tight px-1 ${darkMode ? 'text-white' : 'text-slate-600'}`}>CREATE EXAM</p>
     </Card>
 
+    {/* Assignments */}
+    <Card
+      hoverable
+      className={`cursor-pointer flex flex-col items-center justify-center text-center gap-2 md:gap-2.5 py-4 md:py-6 group border shadow-sm ${darkMode ? 'bg-gradient-to-br from-emerald-600 to-emerald-700 border-transparent shadow-lg' : 'bg-slate-100 border-slate-200'}`}
+      onClick={() => navigate("/teacher/assignments")}
+    >
+      <div className={`p-2 md:p-3 rounded-lg group-hover:scale-105 transition ${darkMode ? 'bg-white/20 text-white' : 'bg-slate-200 text-slate-600'}`}>
+        <span className="material-symbols-outlined text-xl md:text-2xl">assignment</span>
+      </div>
+      <p className={`text-2xs md:text-xs font-bold tracking-wide leading-tight px-1 ${darkMode ? 'text-white' : 'text-slate-600'}`}>ASSIGNMENTS</p>
+    </Card>
+
+    {/* Pending Submissions */}
+    <Card
+      hoverable
+      className={`cursor-pointer flex flex-col items-center justify-center text-center gap-2 md:gap-2.5 py-4 md:py-6 group border shadow-sm ${darkMode ? 'bg-gradient-to-br from-amber-600 to-orange-600 border-transparent shadow-lg' : 'bg-slate-100 border-slate-200'}`}
+      onClick={() => navigate("/teacher/submissions/pending")}
+    >
+      <div className={`p-2 md:p-3 rounded-lg group-hover:scale-105 transition ${darkMode ? 'bg-white/20 text-white' : 'bg-slate-200 text-slate-600'}`}>
+        <span className="material-symbols-outlined text-xl md:text-2xl">pending_actions</span>
+      </div>
+      <p className={`text-2xs md:text-xs font-bold tracking-wide leading-tight px-1 ${darkMode ? 'text-white' : 'text-slate-600'}`}>PENDING GRADING</p>
+    </Card>
+
     {/* Upload Material */}
     <Card
       hoverable
@@ -378,32 +342,6 @@ const Dashboard = () => {
 
         {/* Side Sidebar */}
         <div className="col-span-12 lg:col-span-4 space-y-6">
-          
-          {/*
-          AI Alert Panel (commented out)
-          <div className="bg-gradient-to-br from-primary to-primary-container p-1 rounded-lg shadow-xl overflow-hidden">
-            <div className="bg-white/95 backdrop-blur-md p-6 rounded-[calc(0.5rem-4px)]">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="p-2 bg-primary/10 text-primary rounded-lg flex items-center justify-center">
-                  <span className="material-symbols-outlined">auto_awesome</span>
-                </div>
-                <h4 className="font-display font-bold text-on-surface">AI Insights</h4>
-              </div>
-              <p className="text-on-surface-variant text-sm mb-6 leading-relaxed">
-                <span className="font-bold text-red-600">Critical Alert:</span> 3 students from <span className="font-bold">Grade 10-A</span> show declining quiz performance in the last 14 days.
-              </p>
-              <button
-onClick={() => navigate("/teacher/analytics")}
-className="w-full bg-blue-100 text-blue-700 py-2 rounded-md font-semibold"
->
-
-View Students
-
-
-</button>
-            </div>
-          </div>
-          */}
 
           {/* Recent Activity Feed */}
           <section className="bg-surface-container-low rounded-lg p-5">

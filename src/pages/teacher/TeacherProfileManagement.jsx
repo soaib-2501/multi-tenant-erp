@@ -115,7 +115,7 @@ const TeacherProfileManagement = () => {
 
     try {
       const baseUrl = import.meta.env?.VITE_API_BASE_URL || process.env?.REACT_APP_API_BASE_URL;
-      const token = localStorage.getItem("accessToken");
+      const token = localStorage.getItem("access_token");
       const headers = { 
         "Authorization": `Bearer ${token}`, 
         "Content-Type": "application/json" 

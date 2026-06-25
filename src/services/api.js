@@ -34,6 +34,11 @@ const apiCall = async (endpoint, options = {}) => {
       `[API RESPONSE] Content-Type: ${response.headers.get("content-type")}`,
     );
 
+    if (response.status === 204) {
+      console.log("[API SUCCESS] 204 No Content");
+      return null;
+    }
+
     // Check if response is JSON
     const contentType = response.headers.get("content-type");
     if (!contentType || !contentType.includes("application/json")) {
@@ -140,11 +145,23 @@ export const getTeacherAssignment = (id) =>
   apiCall(`/api/v1/academics/teacher-assignments/${id}/`);
 
 /**
+ * Get current teacher's assignments — resolves teacher from JWT, no teacherId needed.
+ * GET /api/v1/academics/teacher-assignments/me/
+ *
+ * Returns: { count, results: [{ id, academic_year, class_level, section, subject, is_class_teacher, student_count }] }
+ * All nested fields are objects: e.g. section: { id, name }, not raw IDs.
+ */
+export const getMyTeacherAssignments = (params = {}) => {
+  const qs = new URLSearchParams(params).toString();
+  return apiCall(`/api/v1/academics/teacher-assignments/me/${qs ? '?' + qs : ''}`);
+};
+
+/**
  * Get students enrolled in a section
  * GET /api/v1/academics/enrollments/?section=<id>&academic_year=<id>
  */
 export const getSectionEnrollments = (sectionId, academicYearId) => {
-  let endpoint = "/api/v1/academics/enrollments/";
+  let endpoint = "/api/v1/academics/teacher-assignments/my-students/";
   const params = [];
 
   if (sectionId) params.push(`section=${sectionId}`);
@@ -424,5 +441,176 @@ export const updateSavedAIContent = (id, payload) =>
 export const deleteSavedAIContent = (id) =>
   apiCall(`/api/v1/academics/saved-ai-content/${id}/`, {
     method: "DELETE",
+  });
+
+// --- Assignment APIs ---
+
+/**
+ * Get all assignments
+ * GET /api/v1/operations/assignments/
+ * Query params: section, subject, teacher
+ */
+export const getAssignments = (params = {}) => {
+  let endpoint = "/api/v1/operations/assignments/";
+  const query = new URLSearchParams();
+  for (const [key, value] of Object.entries(params)) {
+    if (value !== undefined && value !== null) query.append(key, value);
+  }
+  const qStr = query.toString();
+  if (qStr) endpoint += `?${qStr}`;
+  return fetchAllPages(endpoint);
+};
+
+/**
+ * Get a specific assignment by ID
+ * GET /api/v1/operations/assignments/<id>/
+ */
+export const getAssignment = (id) =>
+  apiCall(`/api/v1/operations/assignments/${id}/`);
+
+/**
+ * Create a new assignment
+ * POST /api/v1/operations/assignments/
+ */
+export const createAssignment = (payload) =>
+  apiCall("/api/v1/operations/assignments/", {
+    method: "POST",
+    body: JSON.stringify(payload),
+  });
+
+/**
+ * Update an assignment
+ * PATCH /api/v1/operations/assignments/<id>/
+ */
+export const updateAssignment = (id, payload) =>
+  apiCall(`/api/v1/operations/assignments/${id}/`, {
+    method: "PATCH",
+    body: JSON.stringify(payload),
+  });
+
+/**
+ * Delete an assignment
+ * DELETE /api/v1/operations/assignments/<id>/
+ */
+export const deleteAssignment = (id) =>
+  apiCall(`/api/v1/operations/assignments/${id}/`, {
+    method: "DELETE",
+  });
+
+// --- Submission APIs ---
+
+/**
+ * Get all submissions
+ * GET /api/v1/operations/submissions/
+ * Query params: page, search
+ */
+export const getSubmissions = (params = {}) => {
+  let endpoint = "/api/v1/operations/submissions/";
+  const query = new URLSearchParams();
+  for (const [key, value] of Object.entries(params)) {
+    if (value !== undefined && value !== null) query.append(key, value);
+  }
+  const qStr = query.toString();
+  if (qStr) endpoint += `?${qStr}`;
+  
+  // Don't fetch all pages if page is specified - respect pagination
+  if (params.page !== undefined) {
+    return apiCall(endpoint);
+  }
+  
+  return fetchAllPages(endpoint);
+};
+
+/**
+ * Get a specific submission by ID
+ * GET /api/v1/operations/submissions/<id>/
+ */
+export const getSubmission = (id) =>
+  apiCall(`/api/v1/operations/submissions/${id}/`);
+
+/**
+ * Get all submissions for a specific assignment
+ * GET /api/v1/operations/submissions/assignment/<assignment_id>/
+ * Returns: { assignment: {}, summary: {}, submissions: [] }
+ */
+export const getSubmissionsByAssignment = (assignmentId, params = {}) => {
+  let endpoint = `/api/v1/operations/submissions/assignment/${assignmentId}/`;
+  const query = new URLSearchParams();
+  for (const [key, value] of Object.entries(params)) {
+    if (value !== undefined && value !== null) query.append(key, value);
+  }
+  const qStr = query.toString();
+  if (qStr) endpoint += `?${qStr}`;
+  
+  // This endpoint returns a structured object, not paginated results
+  return apiCall(endpoint);
+};
+
+/**
+ * Get all pending (ungraded) submissions across teacher's assignments
+ * GET /api/v1/operations/submissions/pending/
+ * Query params: assignment_id (optional)
+ */
+export const getPendingSubmissions = (params = {}) => {
+  let endpoint = "/api/v1/operations/submissions/pending/";
+  const query = new URLSearchParams();
+  for (const [key, value] of Object.entries(params)) {
+    if (value !== undefined && value !== null) query.append(key, value);
+  }
+  const qStr = query.toString();
+  if (qStr) endpoint += `?${qStr}`;
+  return fetchAllPages(endpoint);
+};
+
+/**
+ * Create a new submission
+ * POST /api/v1/operations/submissions/
+ */
+export const createSubmission = (payload) =>
+  apiCall("/api/v1/operations/submissions/", {
+    method: "POST",
+    body: JSON.stringify(payload),
+  });
+
+/**
+ * Delete a submission
+ * DELETE /api/v1/operations/submissions/<id>/
+ */
+export const deleteSubmission = (id) =>
+  apiCall(`/api/v1/operations/submissions/${id}/`, {
+    method: "DELETE",
+  });
+
+/**
+ * Confirm a submission after file upload to R2
+ * POST /api/v1/operations/submissions/confirm/
+ * Body: { file, grade, status, assignment, student }
+ */
+export const confirmSubmission = (payload) =>
+  apiCall("/api/v1/operations/submissions/confirm/", {
+    method: "POST",
+    body: JSON.stringify(payload),
+  });
+
+/**
+ * Grade a submission
+ * PATCH /api/v1/operations/submissions/<id>/grade/
+ * Body: { grade, remarks }
+ */
+export const gradeSubmission = (id, payload) =>
+  apiCall(`/api/v1/operations/submissions/${id}/grade/`, {
+    method: "PATCH",
+    body: JSON.stringify(payload),
+  });
+
+/**
+ * Request upload URL for submission file
+ * POST /api/v1/operations/submissions/request-upload/
+ * Body: { assignment_id, file_name, content_type }
+ */
+export const requestSubmissionUpload = (payload) =>
+  apiCall("/api/v1/operations/submissions/request-upload/", {
+    method: "POST",
+    body: JSON.stringify(payload),
   });
   

@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import MainLayout from "../../components/erp/teacher/MainLayout";
 import Card from "../../components/erp/teacher/Card";
-import { getExams, getMyProfile, getTeacherClasses, getSectionEnrollments } from "../../services/api";
+import { getExams, getMyTeacherAssignments } from "../../services/api";
 import { useStaleData } from "../../hooks/useStaleData";
 import { RevalidatingBar, SkeletonBlock, SkeletonRow } from "../../components/erp/teacher/LoadingPrimitives";
 
@@ -17,29 +17,31 @@ const GradesAssessmentOverview = () => {
   });
 
   const rawExams = useMemo(() => payload?.exams || [], [payload?.exams]);
-  const { data: profile } = useStaleData("profile:me", getMyProfile);
-  const teacherId = profile?.profiles?.teacher?.id || profile?.identity?.id;
 
+  // Use getMyTeacherAssignments + student_count — no enrollment loop needed
   const { data: studentsCountData, loading: studentsCountLoading, revalidating: studentsCountRevalidating, error: studentsCountError } = useStaleData(
-    teacherId ? `teacher:students_count:${teacherId}` : null,
+    'teacher:students_count',
     async () => {
-      const classesRes = await getTeacherClasses(teacherId);
-      const classes = classesRes?.results || [];
-      const sectionIds = [...new Set(classes.map(c => c.section?.id || c.section).filter(Boolean))];
+      const res = await getMyTeacherAssignments({ status: 'current' });
+      const assignments = Array.isArray(res) ? res : res.results || [];
+      // Sum unique sections (avoid double-counting students in same section taught by same teacher)
+      const seenSections = new Set();
       let total = 0;
-      await Promise.all(sectionIds.map(async (sid) => {
-        const enrollRes = await getSectionEnrollments(sid);
-        total += enrollRes?.count || enrollRes?.results?.length || 0;
-      }));
+      assignments.forEach(a => {
+        const sId = a.section?.id;
+        if (sId && !seenSections.has(sId)) {
+          seenSections.add(sId);
+          total += a.student_count ?? 0;
+        }
+      });
       return total;
-    },
-    { skip: !teacherId }
+    }
   );
 
   const totalStudents = studentsCountData || 0;
   const [assessmentsData, setAssessmentsData] = useState([]);
   
-  // Transform API data to match the UI requirements
+  // Transform API data to match UI requirements
   useEffect(() => {
     if (rawExams.length > 0) {
       let filteredExams = rawExams;
@@ -47,7 +49,6 @@ const GradesAssessmentOverview = () => {
       // Filter by class_id if provided
       if (classIdFilter) {
         filteredExams = rawExams.filter(exam => {
-          // Match by teacher_assignment_id or related assignment
           return exam.teacher_assignment === classIdFilter || 
                  exam.teacher_assignment_id === classIdFilter ||
                  exam.assignment === classIdFilter ||
@@ -56,19 +57,14 @@ const GradesAssessmentOverview = () => {
       }
       
       const transformedData = filteredExams.map((exam, index) => {
-        // Generate some dynamic props from exam data or fallback to defaults
-        const isCompleted = exam.status === 'completed' || Math.random() > 0.5; // Simulate status since API may not have it
+        // Use is_published as the authoritative "completed" signal
+        const isCompleted = exam.is_published === true;
         const status = isCompleted ? 'Completed' : 'Pending';
         const statusColor = isCompleted ? 'green' : 'amber';
         const color = index % 3 === 0 ? 'primary' : index % 3 === 1 ? 'purple' : 'amber';
         
-        // Calculate average score if available
-        let avgScore = null;
-        if (exam.average_score) {
-          avgScore = Math.round(exam.average_score);
-        } else if (isCompleted) {
-          avgScore = Math.floor(Math.random() * 30 + 70); // Demo data
-        }
+        // Only show avg score when actually available from backend
+        const avgScore = exam.average_score ? Math.round(exam.average_score) : null;
         
         return {
           id: exam.id,
@@ -84,7 +80,6 @@ const GradesAssessmentOverview = () => {
       });
       setAssessmentsData(transformedData);
     } else if (classIdFilter) {
-      // If filtering by class but no exams match, show empty state
       setAssessmentsData([]);
     }
   }, [rawExams, classIdFilter]);
@@ -143,62 +138,6 @@ const GradesAssessmentOverview = () => {
               <p className="text-sm mt-1">{studentsCountError?.message || "Failed to load student statistics"}</p>
             </div>
           </div>
-        )}
-
-        {/* Bento Layout: Insights & Filters */}
-        {false && (
-        <div className="grid grid-cols-12 gap-6">
-          
-          {/* AI Insight Card (Asymmetric) */}
-          <div className="col-span-12 lg:col-span-7 bg-gradient-to-r from-on-surface to-on-surface-variant rounded-xl p-8 relative overflow-hidden shadow-xl text-white">
-            <div className="relative z-10 space-y-4">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#b75b00] text-2xs font-bold uppercase tracking-widest text-white shadow-sm">
-                <span className="material-symbols-outlined text-sm" style={{fontVariationSettings: "'FILL' 1"}}>auto_awesome</span>
-                AI Performance Insight
-              </div>
-              <h2 className="text-2xl font-bold font-display leading-snug max-w-md">Average class performance is trending upwards.</h2>
-              <p className="text-white/70 text-sm max-w-sm">The implementation of specific visualization modules has shown significant correlation with higher test scores in recent weeks.</p>
-              <button className="text-sm font-bold flex items-center gap-2 hover:gap-3 transition-all outline-none border-none cursor-pointer bg-transparent text-white">
-                View Detailed Analysis
-                <span className="material-symbols-outlined text-lg block">arrow_forward</span>
-              </button>
-            </div>
-            {/* Decorative Element */}
-            <div className="absolute -right-16 -bottom-16 w-64 h-64 bg-primary/20 rounded-full blur-3xl hidden md:block"></div>
-            <div className="absolute right-8 top-1/2 -translate-y-1/2 opacity-10 hidden md:block">
-              <span className="material-symbols-outlined text-[120px]">insights</span>
-            </div>
-          </div>
-
-          {/* Filters Card */}
-          <div className="col-span-12 lg:col-span-5 bg-surface-container-lowest rounded-xl p-6 shadow-sm flex flex-col justify-between border border-outline-variant/10">
-            <div className="space-y-4">
-              <h3 className="text-sm font-bold text-on-surface-variant flex items-center gap-2">
-                <span className="material-symbols-outlined text-lg">filter_list</span>
-                Filter Assessment View
-              </h3>
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-1.5">
-                  <label className="text-2xs font-bold text-slate-400 uppercase tracking-wider block">Subject</label>
-                  <select className="w-full bg-surface-container-low border-none rounded-sm text-xs py-2.5 font-medium focus:ring-primary/20 cursor-pointer outline-none pl-2">
-                    <option>All Subjects</option>
-                  </select>
-                </div>
-                <div className="space-y-1.5">
-                  <label className="text-2xs font-bold text-slate-400 uppercase tracking-wider block">Status</label>
-                  <select className="w-full bg-surface-container-low border-none rounded-sm text-xs py-2.5 font-medium focus:ring-primary/20 cursor-pointer outline-none pl-2">
-                    <option>All</option>
-                    <option>Completed</option>
-                    <option>Pending</option>
-                  </select>
-                </div>
-              </div>
-            </div>
-            <button className="w-full mt-6 py-2 bg-primary/5 text-primary text-xs font-bold rounded-md hover:bg-primary/10 transition-colors outline-none border-none cursor-pointer">
-              Clear All Filters
-            </button>
-          </div>
-        </div>
         )}
 
         {/* Table of Exams */}
@@ -333,7 +272,7 @@ const GradesAssessmentOverview = () => {
                             <span className="text-xs md:text-sm font-bold text-on-surface">{assessment.score}%</span>
                           </div>
                         ) : (
-                          <span className="text-2xs md:text-xs italic text-slate-400">Not calculated</span>
+                          <span className="text-2xs md:text-xs italic text-slate-400">Not graded yet</span>
                         )}
                       </td>
                       <td className="px-3 md:px-6 py-3 md:py-5">
@@ -396,7 +335,7 @@ const GradesAssessmentOverview = () => {
               ) : (
                 <p className="text-xl md:text-2xl font-bold font-display text-white">{completedCount}</p>
               )}
-              <p className="text-3xs md:text-2xs text-purple-200 font-bold mt-1">Graded so far</p>
+              <p className="text-3xs md:text-2xs text-purple-200 font-bold mt-1">Published exams</p>
             </div>
           </Card>
           <Card className="shadow-lg space-y-2 md:space-y-3 sm:col-span-2 md:col-span-1 bg-gradient-to-br from-amber-600 to-amber-700 border-none text-center">
@@ -412,7 +351,7 @@ const GradesAssessmentOverview = () => {
               ) : (
                 <p className="text-xl md:text-2xl font-bold font-display text-white">{pendingCount}</p>
               )}
-              <p className="text-3xs md:text-2xs text-amber-200 font-bold mt-1">Need attention</p>
+              <p className="text-3xs md:text-2xs text-amber-200 font-bold mt-1">Awaiting publication</p>
             </div>
           </Card>
         </div>

@@ -11,11 +11,11 @@ export const navItems = [
     icon: "groups",
   },
 
-  /*{
-label: "Assignments",
-path: "/teacher/assignments",
-icon: "assignment"
-},*/
+  {
+    label: "Assignments",
+    path: "/teacher/assignments",
+    icon: "assignment",
+  },
 
   {
     label: "Attendance",

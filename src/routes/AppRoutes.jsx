@@ -75,6 +75,8 @@ import MyClassesHub from "../pages/teacher/MyClassesHub";
 import AssignmentListPage from "../pages/teacher/AssignmentListPage";
 import AssignmentDetailPage from "../pages/teacher/AssignmentDetailPage";
 import CreateAssignmentPage from "../pages/teacher/CreateAssignmentPage";
+import EditAssignmentPage from "../pages/teacher/EditAssignmentPage";
+import PendingSubmissionsPage from "../pages/teacher/PendingSubmissionsPage";
 import AttendanceOverview from "../pages/teacher/AttendanceOverview";
 import MarkAttendance from "../pages/teacher/MarkAttendance";
 import ClassPerformanceManagement from "../pages/teacher/ClassPerformanceManagement";
@@ -347,6 +349,8 @@ function AppRoutes() {
         <Route path="/teacher/assignments" element={<AssignmentListPage />} />
         <Route path="/teacher/assignments/create" element={<CreateAssignmentPage />} />
         <Route path="/teacher/assignments/:id" element={<AssignmentDetailPage />} />
+        <Route path="/teacher/assignments/:id/edit" element={<EditAssignmentPage />} />
+        <Route path="/teacher/submissions/pending" element={<PendingSubmissionsPage />} />
         <Route path="/teacher/attendance" element={<AttendanceOverview />} />
         <Route path="/teacher/attendance/mark/:id?" element={<MarkAttendance />} />
         <Route path="/teacher/exams" element={<ExamsListPage />} />

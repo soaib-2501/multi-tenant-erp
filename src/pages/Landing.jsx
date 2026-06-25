@@ -15,7 +15,7 @@ export default function Landing() {
 
   useEffect(() => {
     // Check if the user is already logged in
-    const token = localStorage.getItem("accessToken");
+    const token = localStorage.getItem("access_token");
 
     if (token) {
       try {
@@ -35,8 +35,8 @@ export default function Landing() {
       } catch (error) {
         // If token is invalid or expired, just stay on the landing page
         console.error("Invalid token format", error);
-        localStorage.removeItem("accessToken");
-        localStorage.removeItem("refreshToken");
+        localStorage.removeItem("access_token");
+        localStorage.removeItem("refresh_token");
         setIsCheckingAuth(false);
       }
     } else {

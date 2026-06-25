@@ -6,15 +6,13 @@ import Button from "../../components/erp/teacher/Button";
 import Card from "../../components/erp/teacher/Card";
 import Input from "../../components/erp/teacher/Input";
 import Select from "../../components/erp/teacher/Select";
-import { getMyProfile, getTeacherClasses, getSectionEnrollments, getGrades } from "../../services/api";
+import { getMyTeacherAssignments, getGrades } from "../../services/api";
 import { useStaleData } from "../../hooks/useStaleData";
 import { RevalidatingBar, SkeletonCard } from "../../components/erp/teacher/LoadingPrimitives";
 import { useTheme } from "../../context/ThemeContext";
 
 const FILTER_STATE_KEY = 'teacher:classes:filters';
 const DEBUG_PREFIX = '[MyClassesHub]';
-
-const getId = (value) => (typeof value === 'object' ? value?.id : value);
 
 const normalizeText = (value) => String(value || '').trim().toLowerCase();
 
@@ -41,15 +39,6 @@ const getInitialFilters = () => {
   return { search: '', subject: 'all', classLevel: 'all' };
 };
 
-const getCachedProfile = () => {
-  try {
-    const cachedProfile = localStorage.getItem('user_data');
-    return cachedProfile ? JSON.parse(cachedProfile) : null;
-  } catch {
-    return null;
-  }
-};
-
 const MetricSkeleton = () => (
   <div className="h-6 w-14 bg-slate-200 dark:bg-slate-700 rounded animate-pulse" />
 );
@@ -59,185 +48,109 @@ const MyClassesHub = () => {
   const navigate = useNavigate();
   const [filters, setFilters] = useState(getInitialFilters);
 
+  // Single efficient fetch — JWT resolves teacher, no profile/teacherId chain needed.
+  // Raw shape: { count, results: [...] } — same as Dashboard so cache is shared correctly.
+  // Each result includes student_count inline, no enrollment fetch required.
   const {
     data: classesPayload,
     loading,
     revalidating,
     error,
-  } = useStaleData('teacher:classes', async () => {
-    const startedAt = performance.now();
-    console.groupCollapsed(`${DEBUG_PREFIX} loading teacher classes`);
+  } = useStaleData('teacher:my-assignments', () => getMyTeacherAssignments({ status: 'current' }));
 
-    let profileData = getCachedProfile();
-    let teacherId = profileData?.profiles?.teacher?.id;
-
-    console.log('cached profile lookup', {
-      found: Boolean(profileData),
-      teacherId,
-      time: `${Math.round(performance.now() - startedAt)}ms`,
-    });
-
-    if (!teacherId) {
-      const profileStartedAt = performance.now();
-      profileData = await getMyProfile();
-      teacherId = profileData.profiles?.teacher?.id;
-      console.log('profile fetched in', `${Math.round(performance.now() - profileStartedAt)}ms`, profileData);
-    } else {
-      console.log('profile API skipped because teacher id was available in localStorage');
-    }
-
-    console.log('profile resolved in', `${Math.round(performance.now() - startedAt)}ms`, profileData);
-    if (!teacherId) throw new Error('You are not assigned a teacher profile.');
-
-    const classesStartedAt = performance.now();
-    const classesData = await getTeacherClasses(teacherId);
-    const classesArray = Array.isArray(classesData) ? classesData : classesData.results || [];
-    console.log('teacher classes fetched in', `${Math.round(performance.now() - classesStartedAt)}ms`, {
-      teacherId,
-      rawPayload: classesData,
-      count: classesArray.length,
-      classes: classesArray,
-    });
-    console.log('class payload total time', `${Math.round(performance.now() - startedAt)}ms`);
+  const classes = useMemo(() => {
+    const list = Array.isArray(classesPayload)
+      ? classesPayload
+      : classesPayload?.results ?? [];
+    console.groupCollapsed(`${DEBUG_PREFIX} assignments loaded`);
+    console.log('count', list.length, 'classes', list.map(c => ({
+      id: c.id,
+      subject: c.subject?.name,
+      classLevel: c.class_level?.name,
+      section: c.section?.name,
+      sectionId: c.section?.id,
+      studentCount: c.student_count,
+    })));
     console.groupEnd();
-
-    return { profile: profileData, classes: classesArray };
-  });
-
-  const classes = useMemo(() => classesPayload?.classes ?? [], [classesPayload]);
+    return list;
+  }, [classesPayload]);
   const metricsKey = useMemo(
     () => classes.map((cls) => cls.id).filter(Boolean).sort().join(','),
     [classes],
   );
 
+  // Build studentsMap directly from student_count — no enrollment API call needed
+  const studentsMap = useMemo(() => {
+    const map = {};
+    classes.forEach(cls => {
+      const sectionId = cls.section?.id;
+      if (sectionId && !(sectionId in map)) {
+        map[sectionId] = cls.student_count ?? 0;
+      }
+    });
+    return map;
+  }, [classes]);
+
+  // Only fetch grades for performance metric (student counts are already in assignments)
   const {
     data: metricsPayload,
     loading: metricsLoading,
     revalidating: metricsRevalidating,
   } = useStaleData(`teacher:classes:metrics:${metricsKey || 'empty'}`, async () => {
     const metricsStartedAt = performance.now();
-    console.groupCollapsed(`${DEBUG_PREFIX} loading class metrics`);
-    console.log('metric input classes', {
-      count: classes.length,
-      metricsKey,
-      classes: classes.map((cls) => ({
-        id: cls.id,
-        subject: cls.subject_name,
-        classLevel: cls.class_level_name,
-        section: cls.section_name || cls.section?.name,
-        sectionId: getId(cls.section) || cls.section_id,
-        subjectId: getId(cls.subject) || cls.subject_id,
-      })),
-    });
+    console.groupCollapsed(`${DEBUG_PREFIX} loading performance metrics`);
 
+    // Deduplicate grade requests by subject
     const gradesRequestsBySubject = new Map();
     classes.forEach((cls) => {
-      const subjectId = getId(cls.subject) || cls.subject_id;
+      const subjectId = cls.subject?.id;
       if (subjectId && !gradesRequestsBySubject.has(subjectId)) {
         gradesRequestsBySubject.set(subjectId, getGrades(subjectId));
       }
     });
-    console.log('shared grade requests', {
-      uniqueSubjects: gradesRequestsBySubject.size,
-      classCount: classes.length,
-    });
+    console.log('unique subjects for grades', gradesRequestsBySubject.size);
 
     const classMetrics = await Promise.all(
       classes.map(async (cls) => {
-        const classMetricStartedAt = performance.now();
-        const sectionId = getId(cls.section) || cls.section_id;
-        const academicYearId = getId(cls.academic_year) || cls.academic_year_id;
-        const subjectId = getId(cls.subject) || cls.subject_id;
+        const sectionId = cls.section?.id;
+        const subjectId = cls.subject?.id;
 
         if (!sectionId) {
-          console.warn('skipping metrics because section id is missing', cls);
-          return { sectionId: null, count: 0, avgPerformance: 'N/A' };
+          console.warn('skipping metrics — section id missing', cls);
+          return { sectionId: null, avgPerformance: 'N/A' };
         }
 
         try {
-          const enrollmentsStartedAt = performance.now();
-          const [enrollmentsData, gradesData] = await Promise.all([
-            getSectionEnrollments(sectionId, academicYearId),
-            subjectId ? gradesRequestsBySubject.get(subjectId) : Promise.resolve({ results: [] }),
-          ]);
-
-          const students = Array.isArray(enrollmentsData) ? enrollmentsData : enrollmentsData.results || [];
+          const gradesData = subjectId
+            ? await gradesRequestsBySubject.get(subjectId)
+            : { results: [] };
           const grades = Array.isArray(gradesData) ? gradesData : gradesData.results || [];
-          const fetchedAt = performance.now();
-          const gradesMap = {};
 
-          grades.forEach((grade) => {
-            const studentId = grade.student_id || grade.student;
-            const currentMarks = parseFloat(grade.marks_obtained || 0);
-            const previousMarks = parseFloat(gradesMap[studentId]?.marks_obtained || 0);
-
-            if (!gradesMap[studentId] || currentMarks > previousMarks) {
-              gradesMap[studentId] = grade;
-            }
-          });
-
-          const totalMarks = students.reduce((sum, student) => {
-            const studentId = student.student?.id || student.student || student.student_id;
-            const grade = gradesMap[studentId];
-            return sum + (grade ? parseFloat(grade.marks_obtained || 0) : 0);
-          }, 0);
-
-          const avgPerformance = students.length > 0
-            ? (totalMarks / students.length).toFixed(1)
+          const totalObtained = grades.reduce((sum, g) => sum + parseFloat(g.marks_obtained || 0), 0);
+          const totalMax = grades.reduce((sum, g) => sum + parseFloat(g.max_marks || 0), 0);
+          const avgPerformance = totalMax > 0
+            ? ((totalObtained / totalMax) * 100).toFixed(1)
             : 'N/A';
 
-          console.log('class metrics calculated', {
-            assignmentId: cls.id,
-            subject: cls.subject_name,
-            classLevel: cls.class_level_name,
-            section: cls.section_name || cls.section?.name,
-            sectionId,
-            academicYearId,
-            subjectId,
-            students: students.length,
-            grades: grades.length,
-            avgPerformance,
-            fetchTime: `${Math.round(fetchedAt - enrollmentsStartedAt)}ms`,
-            totalTime: `${Math.round(performance.now() - classMetricStartedAt)}ms`,
-          });
-
-          return { sectionId, count: students.length, avgPerformance };
+          return { sectionId, avgPerformance };
         } catch (metricError) {
-          console.error('class metrics failed', {
-            assignmentId: cls.id,
-            subject: cls.subject_name,
-            classLevel: cls.class_level_name,
-            section: cls.section_name || cls.section?.name,
-            sectionId,
-            subjectId,
-            error: metricError,
-            totalTime: `${Math.round(performance.now() - classMetricStartedAt)}ms`,
-          });
-          return { sectionId, count: 0, avgPerformance: 'N/A' };
+          console.error('class metrics failed', { sectionId, subjectId, error: metricError });
+          return { sectionId, avgPerformance: 'N/A' };
         }
       }),
     );
 
-    const studentsMap = {};
     const performanceMap = {};
-
-    classMetrics.forEach(({ sectionId, count, avgPerformance }) => {
-      if (sectionId) {
-        studentsMap[sectionId] = count;
-        performanceMap[sectionId] = avgPerformance;
-      }
+    classMetrics.forEach(({ sectionId, avgPerformance }) => {
+      if (sectionId) performanceMap[sectionId] = avgPerformance;
     });
 
-    console.log('all metrics finished in', `${Math.round(performance.now() - metricsStartedAt)}ms`, {
-      studentsMap,
-      performanceMap,
-    });
+    console.log('metrics done in', `${Math.round(performance.now() - metricsStartedAt)}ms`, { performanceMap });
     console.groupEnd();
 
-    return { studentsMap, performanceMap };
+    return { performanceMap };
   }, { skip: loading || classes.length === 0, ttl: 5 * 60_000, deps: metricsKey });
 
-  const studentsMap = metricsPayload?.studentsMap ?? {};
   const performanceMap = metricsPayload?.performanceMap ?? {};
   const showMetricSkeletons = (metricsLoading || metricsRevalidating) && !metricsPayload;
 
@@ -252,8 +165,8 @@ const MyClassesHub = () => {
     const options = [{ label: 'All Subjects', value: 'all' }];
 
     classes.forEach((cls) => {
-      const subjectName = String(cls.subject_name || cls.subject?.name || 'Subject').trim();
-      const subjectId = String(getId(cls.subject) || cls.subject_id || subjectName).trim();
+      const subjectName = String(cls.subject?.name || 'Subject').trim();
+      const subjectId = String(cls.subject?.id || subjectName).trim();
       if (!subjectId || seen.has(subjectId)) return;
 
       seen.add(subjectId);
@@ -268,7 +181,7 @@ const MyClassesHub = () => {
     const options = [{ label: 'All Classes', value: 'all' }];
 
     classes.forEach((cls) => {
-      const classLabel = getClassLevelLabel(cls.class_level_name || cls.class_level?.name);
+      const classLabel = getClassLevelLabel(cls.class_level?.name);
       const classValue = normalizeText(classLabel);
       if (!classValue || seen.has(classValue)) return;
 
@@ -280,18 +193,17 @@ const MyClassesHub = () => {
   }, [classes]);
 
   const filteredClasses = useMemo(() => {
-    const startedAt = performance.now();
     const query = normalizeText(filters.search);
 
-    const results = classes.filter((cls) => {
-      const subjectName = String(cls.subject_name || cls.subject?.name || '').trim();
-      const subjectId = String(getId(cls.subject) || cls.subject_id || subjectName).trim();
-      const classLabel = getClassLevelLabel(cls.class_level_name || cls.class_level?.name);
+    return classes.filter((cls) => {
+      const subjectName = String(cls.subject?.name || '').trim();
+      const subjectId = String(cls.subject?.id || subjectName).trim();
+      const classLabel = getClassLevelLabel(cls.class_level?.name);
       const searchable = [
         subjectName,
         classLabel,
-        cls.class_level_name,
-        cls.academic_year_name,
+        cls.class_level?.name,
+        cls.academic_year?.name,
       ].map(normalizeText);
 
       const matchesSubject = filters.subject === 'all' || subjectId === filters.subject;
@@ -300,46 +212,7 @@ const MyClassesHub = () => {
 
       return matchesSubject && matchesClass && matchesSearch;
     });
-
-    console.log(`${DEBUG_PREFIX} filtered classes`, {
-      filters,
-      sourceCount: classes.length,
-      resultCount: results.length,
-      time: `${Math.round((performance.now() - startedAt) * 100) / 100}ms`,
-      results: results.map((cls) => ({
-        id: cls.id,
-        subject: cls.subject_name,
-        classLevel: cls.class_level_name,
-        section: cls.section_name || cls.section?.name,
-      })),
-    });
-
-    return results;
   }, [classes, filters]);
-
-  useEffect(() => {
-    console.log(`${DEBUG_PREFIX} render state`, {
-      loading,
-      revalidating,
-      metricsLoading,
-      metricsRevalidating,
-      hasClassesPayload: Boolean(classesPayload),
-      classesCount: classes.length,
-      filteredClassesCount: filteredClasses.length,
-      hasMetricsPayload: Boolean(metricsPayload),
-      showMetricSkeletons,
-    });
-  }, [
-    loading,
-    revalidating,
-    metricsLoading,
-    metricsRevalidating,
-    classesPayload,
-    classes.length,
-    filteredClasses.length,
-    metricsPayload,
-    showMetricSkeletons,
-  ]);
 
   useEffect(() => {
     if (!loading && classes.length > 0) {
@@ -348,11 +221,10 @@ const MyClassesHub = () => {
         note: 'This card is currently hardcoded UI copy. No AI insight API request is being made here.',
         selectedClass: {
           id: insightClass?.id,
-          subject: insightClass?.subject_name,
-          classLevel: insightClass?.class_level_name,
-          section: insightClass?.section_name || insightClass?.section?.name,
+          subject: insightClass?.subject?.name,
+          classLevel: insightClass?.class_level?.name,
+          section: insightClass?.section?.name,
         },
-        displayedInsight: 'Based on historical trends, the upcoming module typically sees a 12% drop in student engagement. We recommend adjusting the lesson plan.',
       });
     }
   }, [loading, classes]);
@@ -439,16 +311,16 @@ const MyClassesHub = () => {
           Array.from({ length: 3 }).map((_, i) => <SkeletonCard key={i} />)
         ) : filteredClasses.length > 0 ? (
           filteredClasses.map((cls) => {
-            const sectionId = getId(cls.section) || cls.section_id;
+            const sectionId = cls.section?.id;
             const studentCount = studentsMap[sectionId] ?? 0;
             const avgPerformance = performanceMap[sectionId] ?? 'N/A';
-            const subjectName = cls.subject_name || 'Subject';
-            const levelClean = getClassLevelLabel(cls.class_level_name);
-            const sectionName = cls.section_name || cls.section?.name;
+            const subjectName = cls.subject?.name || 'Subject';
+            const levelClean = getClassLevelLabel(cls.class_level?.name);
+            const sectionName = cls.section?.name;
             const className = `${subjectName} ${levelClean}${sectionName ? `-${sectionName}` : ''}`;
             const description = cls.is_class_teacher
-              ? `Class Teacher - ${cls.academic_year_name}`
-              : `${cls.academic_year_name}`;
+              ? `Class Teacher - ${cls.academic_year?.name}`
+              : `${cls.academic_year?.name}`;
             const aes = getSubjectAesthetics(subjectName);
 
             return (
@@ -555,8 +427,8 @@ const MyClassesHub = () => {
 
             <div className="mb-4">
               <h2 className="text-base md:text-lg font-bold mb-1">
-                {classes[0]?.subject_name} ({getClassLevelLabel(classes[0]?.class_level_name)}
-                {classes[0]?.section_name || classes[0]?.section?.name ? `-${classes[0]?.section_name || classes[0]?.section?.name}` : ''})
+                {classes[0]?.subject?.name} ({getClassLevelLabel(classes[0]?.class_level?.name)}
+                {classes[0]?.section?.name ? `-${classes[0]?.section?.name}` : ''})
               </h2>
               <p className="text-blue-200 text-xs font-medium">Predictive Engagement Model</p>
             </div>
