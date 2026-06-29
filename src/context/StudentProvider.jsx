@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect, useCallback } from "react";
+import React, { createContext, useContext, useState, useEffect, useCallback, useMemo } from "react";
 import {
   getStudentProfile,
   getStudentDashboardData,
@@ -9,16 +9,15 @@ import {
   getSubmissions,
   getAttendanceRecords,
 } from "../services/studentAPIs";
-console.log("API BASE:", process.env.REACT_APP_API_BASE_URL);
+
 const StudentContext = createContext();
 
-// Labels used only for debug logging — must match the order of Promise.allSettled calls below.
 const LOAD_LABELS = [
   "profile",
-  "dashboard",      // → { dashboardRaw, attendanceSummary, grades, reportCard }
+  "dashboard",
   "enrollment",
   "parents",
-  "academic",       // → { years, subs }
+  "academic",
   "assignments",
   "submissions",
   "attendanceRecords",
@@ -26,44 +25,24 @@ const LOAD_LABELS = [
 
 export const StudentProvider = ({ children }) => {
   const [contextData, setContextData] = useState({
-    // Student's own profile from /profiles/students/me/
     profile: null,
-
-    // Combined dashboard payload — shape:
-    // {
-    //   dashboardRaw:      object | null   (raw /profiles/students/dashboard/ response)
-    //   attendanceSummary: object | null   ({ total_days, present, absent, late, half_day, attendance_percentage })
-    //   grades:            { results: [] } (from /operations/grades/me/)
-    //   reportCard:        object | null   ({ overall_percentage, exams: [...] })
-    // }
     dashboard: null,
-
-    // Current enrollment from /academics/enrollments/me/
-    // Fields include: class_level_name, section, academic_year, etc.
     enrollment: null,
-
     parents: [],
-
-    // { years: AcademicYear[], subs: Subject[], classLevel, section, academicYear }
-    // (classLevel/section/academicYear come bundled with the subjects
-    // response itself — see getStudentSubjects in studentAPIs.js)
     academic: { years: [], subs: [] },
-
     assignments: [],
     submissions: [],
-
-    // Array of daily attendance records from /operations/attendance/me/
-    // Each record: { date, status, ... }
     attendanceRecords: [],
   });
 
   const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState(null);
 
-  const refreshSubmissions = async () => {
+  // ✅ FIX 1: useCallback so this function reference is stable across renders
+  const refreshSubmissions = useCallback(async () => {
     const subs = await getSubmissions();
     setContextData((prev) => ({ ...prev, submissions: subs }));
-  };
+  }, []); // no deps needed — setContextData is stable
 
   const loadAllData = useCallback(async () => {
     setLoading(true);
@@ -71,14 +50,14 @@ export const StudentProvider = ({ children }) => {
 
     try {
       const results = await Promise.allSettled([
-        getStudentProfile(),          // 0 — profile
-        getStudentDashboardData(),    // 1 — dashboard bundle
-        getStudentEnrollment(),       // 2 — enrollment
-        getStudentParents(),          // 3 — parents
-        getAcademicYear(),            // 4 — academic years + subjects
-        getAssignments(),             // 5 — assignments
-        getSubmissions(),             // 6 — submissions
-        getAttendanceRecords(),       // 7 — attendance records (last 30 days)
+        getStudentProfile(),
+        getStudentDashboardData(),
+        getStudentEnrollment(),
+        getStudentParents(),
+        getAcademicYear(),
+        getAssignments(),
+        getSubmissions(),
+        getAttendanceRecords(),
       ]);
 
       results.forEach((r, i) => {
@@ -98,11 +77,11 @@ export const StudentProvider = ({ children }) => {
         attendanceRecordsResult,
       ] = results;
 
-      const profile     = profileResult.status     === "fulfilled" ? profileResult.value     : null;
-      const dashboard   = dashboardResult.status   === "fulfilled" ? dashboardResult.value   : null;
-      const enrollment  = enrollmentResult.status  === "fulfilled" ? enrollmentResult.value  : null;
-      const parents     = parentsResult.status     === "fulfilled" ? parentsResult.value     : [];
-      const academic    = academicResult.status    === "fulfilled" ? academicResult.value    : { years: [], subs: [] };
+      const profile = profileResult.status === "fulfilled" ? profileResult.value : null;
+      const dashboard = dashboardResult.status === "fulfilled" ? dashboardResult.value : null;
+      const enrollment = enrollmentResult.status === "fulfilled" ? enrollmentResult.value : null;
+      const parents = parentsResult.status === "fulfilled" ? parentsResult.value : [];
+      const academic = academicResult.status === "fulfilled" ? academicResult.value : { years: [], subs: [] };
       const assignments = assignmentsResult.status === "fulfilled" ? assignmentsResult.value : [];
       const submissions = submissionsResult.status === "fulfilled" ? submissionsResult.value : [];
       const attendanceRecords =
@@ -136,16 +115,20 @@ export const StudentProvider = ({ children }) => {
     loadAllData();
   }, [loadAllData]);
 
+  // ✅ FIX 2: useMemo so the context value object is only recreated
+  // when the actual data changes — not on every render cycle.
+  // This stops Sidebar and other consumers from re-rendering unnecessarily,
+  // which was causing the repeated profile-picture fetches.
+  const contextValue = useMemo(() => ({
+    ...contextData,
+    loading,
+    error: loadError,
+    reload: loadAllData,
+    refreshSubmissions,
+  }), [contextData, loading, loadError, loadAllData, refreshSubmissions]);
+
   return (
-    <StudentContext.Provider
-      value={{
-        ...contextData,
-        loading,
-        error: loadError,
-        reload: loadAllData,
-        refreshSubmissions,
-      }}
-    >
+    <StudentContext.Provider value={contextValue}>
       {children}
     </StudentContext.Provider>
   );

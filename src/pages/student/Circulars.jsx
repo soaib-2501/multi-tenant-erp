@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import MainLayout from "../../layouts/MainLayout";
 
 /* ─── Mock data — replace with API call later ───────────────────────────── */
@@ -35,7 +35,7 @@ const MOCK_CIRCULARS = [
     body: "Effective July 1, 2026, school timings will change to 7:45 AM – 2:15 PM for all classes. The first bell will ring at 7:40 AM. Parents are requested to adjust drop-off timings accordingly. Late arrivals after 8:00 AM will be marked as late.",
     attachments: [
       { name: "Revised_Timetable_July.pdf", size: "98 KB" },
-      { name: "Parent_Notice_Timings.pdf",  size: "54 KB" },
+      { name: "Parent_Notice_Timings.pdf", size: "54 KB" },
     ],
   },
   {
@@ -95,18 +95,18 @@ const MOCK_CIRCULARS = [
 const CATEGORIES = ["All", "Examination", "Event", "Academic", "General", "Fees", "Holiday"];
 
 const PRIORITY_META = {
-  urgent:    { label: "Urgent",    bg: "bg-red-100",    text: "text-red-700",    dot: "bg-red-500"    },
-  important: { label: "Important", bg: "bg-amber-100",  text: "text-amber-700",  dot: "bg-amber-500"  },
-  normal:    { label: "Notice",    bg: "bg-blue-100",   text: "text-blue-700",   dot: "bg-blue-400"   },
+  urgent: { label: "Urgent", bg: "bg-red-100", text: "text-red-700", dot: "bg-red-500" },
+  important: { label: "Important", bg: "bg-amber-100", text: "text-amber-700", dot: "bg-amber-500" },
+  normal: { label: "Notice", bg: "bg-blue-100", text: "text-blue-700", dot: "bg-blue-400" },
 };
 
 const CATEGORY_ICONS = {
-  Examination: { icon: "assignment",        bg: "bg-purple-50",  text: "text-purple-600" },
-  Event:       { icon: "event",             bg: "bg-green-50",   text: "text-green-600"  },
-  Academic:    { icon: "science",           bg: "bg-blue-50",    text: "text-blue-600"   },
-  General:     { icon: "campaign",          bg: "bg-orange-50",  text: "text-orange-600" },
-  Fees:        { icon: "account_balance",   bg: "bg-red-50",     text: "text-red-600"    },
-  Holiday:     { icon: "celebration",       bg: "bg-teal-50",    text: "text-teal-600"   },
+  Examination: { icon: "assignment", bg: "bg-purple-50", text: "text-purple-600" },
+  Event: { icon: "event", bg: "bg-green-50", text: "text-green-600" },
+  Academic: { icon: "science", bg: "bg-blue-50", text: "text-blue-600" },
+  General: { icon: "campaign", bg: "bg-orange-50", text: "text-orange-600" },
+  Fees: { icon: "account_balance", bg: "bg-red-50", text: "text-red-600" },
+  Holiday: { icon: "celebration", bg: "bg-teal-50", text: "text-teal-600" },
 };
 
 function formatDate(dateStr) {
@@ -158,7 +158,7 @@ function CircularsSkeleton() {
 /* ─── Detail Modal ───────────────────────────────────────────────────────── */
 function CircularModal({ circular, onClose }) {
   const priority = PRIORITY_META[circular.priority];
-  const catMeta  = CATEGORY_ICONS[circular.category] || CATEGORY_ICONS.General;
+  const catMeta = CATEGORY_ICONS[circular.category] || CATEGORY_ICONS.General;
 
   return (
     <div
@@ -250,7 +250,7 @@ function CircularModal({ circular, onClose }) {
 /* ─── Circular Card ──────────────────────────────────────────────────────── */
 function CircularCard({ circular, onClick }) {
   const priority = PRIORITY_META[circular.priority];
-  const catMeta  = CATEGORY_ICONS[circular.category] || CATEGORY_ICONS.General;
+  const catMeta = CATEGORY_ICONS[circular.category] || CATEGORY_ICONS.General;
 
   return (
     <div
@@ -311,14 +311,29 @@ function CircularCard({ circular, onClick }) {
 
 /* ─── Main Page ──────────────────────────────────────────────────────────── */
 export default function Circulars() {
-  const [loading]          = useState(false); // set true when wiring real API
+  const [loading, setLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState("All");
-  const [searchQuery,      setSearchQuery]      = useState("");
-  const [activeCircular,   setActiveCircular]   = useState(null);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [activeCircular, setActiveCircular] = useState(null);
+  const [tabLoading, setTabLoading] = useState(false);
+
+  // Simulate initial data load from API
+  useEffect(() => {
+    const timer = setTimeout(() => setLoading(false), 1500);
+    return () => clearTimeout(timer);
+  }, []);
+
+  // Simulate tab switch loading
+  useEffect(() => {
+    if (tabLoading) {
+      const timer = setTimeout(() => setTabLoading(false), 600);
+      return () => clearTimeout(timer);
+    }
+  }, [tabLoading]);
 
   const filtered = useMemo(() => {
     return MOCK_CIRCULARS.filter(c => {
-      const matchCat    = selectedCategory === "All" || c.category === selectedCategory;
+      const matchCat = selectedCategory === "All" || c.category === selectedCategory;
       const matchSearch = !searchQuery ||
         c.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
         c.body.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -329,6 +344,13 @@ export default function Circulars() {
 
   const urgentCount = MOCK_CIRCULARS.filter(c => c.priority === "urgent").length;
 
+  // Handle category change with skeleton
+  const handleCategoryChange = (cat) => {
+    setSelectedCategory(cat);
+    setTabLoading(true);
+  };
+
+  // Show initial page skeleton
   if (loading) return <CircularsSkeleton />;
 
   return (
@@ -383,7 +405,7 @@ export default function Circulars() {
           {CATEGORIES.map(cat => (
             <button
               key={cat}
-              onClick={() => setSelectedCategory(cat)}
+              onClick={() => handleCategoryChange(cat)}
               className={`flex-shrink-0 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all
                 ${selectedCategory === cat
                   ? "bg-primary text-white shadow-sm"
@@ -399,7 +421,24 @@ export default function Circulars() {
         </div>
 
         {/* ── Circular List ── */}
-        {filtered.length === 0 ? (
+        {tabLoading ? (
+          // Skeleton while switching category tabs
+          <div className="space-y-3">
+            <Skeleton className="w-36 h-4" />
+            {[1, 2, 3].map(i => (
+              <div key={i} className="bg-white rounded-xl p-5 shadow-sm space-y-3">
+                <div className="flex gap-3 items-start">
+                  <Skeleton className="w-10 h-10 rounded-lg flex-shrink-0" />
+                  <div className="flex-1 space-y-2">
+                    <Skeleton className="w-3/4 h-4" />
+                    <Skeleton className="w-1/2 h-3" />
+                  </div>
+                  <Skeleton className="w-20 h-6 rounded-full" />
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : filtered.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-20 gap-3 text-center">
             <span className="material-symbols-outlined text-5xl text-on-surface-variant opacity-30">campaign</span>
             <p className="text-sm text-on-surface-variant">No circulars found matching your search.</p>

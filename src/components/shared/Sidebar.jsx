@@ -5,15 +5,16 @@ import { useStudent } from '../../context/StudentProvider';
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
 const navItems = [
-  { icon: 'dashboard',              label: 'Dashboard',            path: '/student'              },
-  { icon: 'menu_book',              label: 'My Subjects',          path: '/student/subjects'     },
-  { icon: 'assignment',             label: 'Assignments',          path: '/student/assignments'  },
-  { icon: 'description',            label: 'Grades & Report Card', path: '/student/grades'       },
-  { icon: 'event_available',        label: 'Attendance',           path: '/student/attendance'   },
-  { icon: 'psychology',             label: 'AI Tutor',             path: '/student/ai-tutor'     },
-  { icon: 'campaign',               label: 'Circulars',            path: '/student/circulars'    }, // ← ADD THIS
-  { icon: 'account_balance_wallet', label: 'Fees',                 path: '/student/fees'         },
-  { icon: 'support_agent',          label: 'Help Desk',            path: '/student/help'         },
+  { icon: 'dashboard',              label: 'Dashboard',            path: '/student'            },
+  { icon: 'menu_book',              label: 'My Subjects',          path: '/student/subjects'   },
+  { icon: 'assignment',             label: 'Assignments',          path: '/student/assignments'},
+  { icon: 'description',            label: 'Grades & Report Card', path: '/student/grades'     },
+  { icon: 'event_available',        label: 'Attendance',           path: '/student/attendance' },
+  { icon: 'psychology',             label: 'AI Tutor',             path: '/student/ai-tutor'   },
+  { icon: 'account_balance_wallet', label: 'Fees',                 path: '/student/fees'       },
+  { icon: 'support_agent',          label: 'Help Desk',            path: '/student/help'       },
+  { icon: 'gavel',                  label: 'Grievance',            path: '/student/grievance' },
+  { icon: 'campaign',               label: 'Circulars',            path: '/student/circulars'    },
 ];
 
 const bottomItems = [
