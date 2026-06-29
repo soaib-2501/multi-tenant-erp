@@ -154,9 +154,9 @@ export default function Attendance() {
               ))}
             </select>
           </div>
-          <button className="bg-surface-container-high text-primary px-6 py-2.5 rounded-md font-semibold text-sm hover:bg-blue-200 transition-colors w-full sm:w-auto">
+          {/* <button className="bg-surface-container-high text-primary px-6 py-2.5 rounded-md font-semibold text-sm hover:bg-blue-200 transition-colors w-full sm:w-auto">
             Apply Filters
-          </button>
+          </button> */}
         </section>
 
         {/* MAIN LAYOUT: Equal height cards and calendar */}

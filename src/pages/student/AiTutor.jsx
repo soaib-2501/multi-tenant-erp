@@ -3,7 +3,7 @@ import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
 import 'katex/dist/katex.min.css';
 import remarkGfm from 'remark-gfm';
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import MainLayout from '../../layouts/MainLayout';
 
 const API_BASE = (import.meta.env.VITE_API_URL || 'http://localhost:8000') + '/api/v1';
@@ -11,14 +11,12 @@ const API_BASE = (import.meta.env.VITE_API_URL || 'http://localhost:8000') + '/a
 function getToken() {
   return localStorage.getItem('access_token') || '';
 }
-
 function authHeaders() {
   return {
     'Content-Type': 'application/json',
     Authorization: `Bearer ${getToken()}`,
   };
 }
-
 function timeAgo(dateStr) {
   const diff = Date.now() - new Date(dateStr).getTime();
   const m = Math.floor(diff / 60000);
@@ -28,17 +26,46 @@ function timeAgo(dateStr) {
   if (h < 24) return `${h}h ago`;
   return `${Math.floor(h / 24)}d ago`;
 }
-
 function truncateText(text, maxLength = 60) {
   if (!text) return '';
   return text.length > maxLength ? text.substring(0, maxLength) + '...' : text;
 }
 
-// Skeleton Components
+/* ─── Multilingual voice support — 22 Indian languages + English (India) ──
+   Same language set as the standalone voice tool. Used for BOTH speech
+   recognition (mic input) and speech synthesis (Listen button), via the
+   single `voiceLang` selector in the chat header. ── */
+const LANGUAGES = [
+  { value: 'en-IN',  label: '🇮🇳 English (India)' },
+  { value: 'hi-IN',  label: 'हिंदी — Hindi' },
+  { value: 'bn-IN',  label: 'বাংলা — Bengali' },
+  { value: 'ta-IN',  label: 'தமிழ் — Tamil' },
+  { value: 'te-IN',  label: 'తెలుగు — Telugu' },
+  { value: 'mr-IN',  label: 'मराठी — Marathi' },
+  { value: 'gu-IN',  label: 'ગુજરાતી — Gujarati' },
+  { value: 'kn-IN',  label: 'ಕನ್ನಡ — Kannada' },
+  { value: 'ml-IN',  label: 'മലയാളം — Malayalam' },
+  { value: 'pa-IN',  label: 'ਪੰਜਾਬੀ — Punjabi' },
+  { value: 'or-IN',  label: 'ଓଡ଼ିଆ — Odia' },
+  { value: 'ur-IN',  label: 'اردو — Urdu' },
+  { value: 'as-IN',  label: 'অসমীয়া — Assamese' },
+  { value: 'sa-IN',  label: 'संस्कृतम् — Sanskrit' },
+  { value: 'mai-IN', label: 'मैथिली — Maithili' },
+  { value: 'kok-IN', label: 'कोंकणी — Konkani' },
+  { value: 'ks-IN',  label: 'کٲشُر — Kashmiri' },
+  { value: 'mni-IN', label: 'মৈতৈলোন্ — Manipuri' },
+  { value: 'ne-IN',  label: 'नेपाली — Nepali' },
+  { value: 'sd-IN',  label: 'سنڌي — Sindhi' },
+  { value: 'brx-IN', label: 'बड़ो — Bodo' },
+  { value: 'doi-IN', label: 'डोगरी — Dogri' },
+  { value: 'sat-IN', label: 'ᱥᱟᱱᱛᱟᱲᱤ — Santali' },
+];
+const VOICE_LANG_STORAGE_KEY = 'aiTutorVoiceLang';
+
+/* ─── Skeletons ─────────────────────────────────────────────────────────── */
 function Skeleton({ className = "" }) {
   return <div className={`animate-pulse bg-gray-200 rounded-md ${className}`} />;
 }
-
 function AiTutorSkeleton() {
   return (
     <MainLayout title="Student Portal">
@@ -79,17 +106,124 @@ function AiTutorSkeleton() {
   );
 }
 
+/* ─── Speech hook — now multilingual ─────────────────────────────────────
+   `lang` (e.g. 'hi-IN', 'ta-IN') is passed in PER CALL (to toggleListen and
+   speak), not fixed at hook-creation time. This lets the user switch
+   languages between recordings/messages without recreating the
+   SpeechRecognition instance. ── */
+function useSpeech({ onResult }) {
+  const [listening, setListening]   = useState(false);
+  const [speaking,  setSpeaking]    = useState(false);
+  const [supported, setSupported]   = useState(true);
+  const recogRef  = useRef(null);
+  const synthRef  = useRef(window.speechSynthesis);
+  const voicesRef = useRef([]);
+
+  useEffect(() => {
+    const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SR) { setSupported(false); return; }
+    const rec = new SR();
+    rec.continuous      = false;
+    rec.interimResults  = false;
+    rec.onstart  = () => setListening(true);
+    rec.onend    = () => setListening(false);
+    rec.onerror  = () => setListening(false);
+    rec.onresult = (e) => {
+      const transcript = e.results[0][0].transcript;
+      onResult(transcript);
+    };
+    recogRef.current = rec;
+  }, [onResult]);
+
+  // Load available system/browser voices for TTS voice-matching.
+  // Chrome loads voices asynchronously, so we also listen for the
+  // 'voiceschanged' event (same pattern as the standalone voice tool).
+  useEffect(() => {
+    if (!synthRef.current) return;
+    const loadVoices = () => { voicesRef.current = synthRef.current.getVoices(); };
+    loadVoices();
+    synthRef.current.onvoiceschanged = loadVoices;
+    return () => {
+      if (synthRef.current) synthRef.current.onvoiceschanged = null;
+    };
+  }, []);
+
+  // Picks the best available voice for a given language code, falling
+  // back from exact match → language-prefix match → base-language match.
+  // Returns null if nothing matches (browser will use its own default).
+  const pickVoiceForLang = useCallback((lang) => {
+    const voices = voicesRef.current.length ? voicesRef.current : (synthRef.current?.getVoices() || []);
+    const base = lang.split('-')[0];
+    return (
+      voices.find(v => v.lang === lang) ||
+      voices.find(v => v.lang.startsWith(`${base}-`)) ||
+      voices.find(v => v.lang === base) ||
+      null
+    );
+  }, []);
+
+  const toggleListen = useCallback((lang = 'en-US') => {
+    if (!recogRef.current) return;
+    if (listening) {
+      recogRef.current.stop();
+    } else {
+      recogRef.current.lang = lang;
+      try {
+        recogRef.current.start();
+      } catch {
+        // start() throws if called while already running — safe to ignore
+      }
+    }
+  }, [listening]);
+
+  const speak = useCallback((text, lang = 'en-US') => {
+    if (!synthRef.current) return;
+    // Strip markdown symbols before speaking
+    const clean = text
+      .replace(/```[\s\S]*?```/g, 'code block')
+      .replace(/`[^`]+`/g, '')
+      .replace(/[#*_~>\-]/g, '')
+      .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
+      .replace(/\n+/g, ' ')
+      .trim();
+
+    if (synthRef.current.speaking) {
+      synthRef.current.cancel();
+      setSpeaking(false);
+      return;
+    }
+    const utter     = new SpeechSynthesisUtterance(clean);
+    utter.lang      = lang;
+    const matchedVoice = pickVoiceForLang(lang);
+    if (matchedVoice) utter.voice = matchedVoice;
+    utter.rate      = 1;
+    utter.pitch     = 1;
+    utter.volume    = 1;
+    utter.onstart   = () => setSpeaking(true);
+    utter.onend     = () => setSpeaking(false);
+    utter.onerror   = () => setSpeaking(false);
+    synthRef.current.speak(utter);
+  }, [pickVoiceForLang]);
+
+  const stopSpeaking = useCallback(() => {
+    synthRef.current?.cancel();
+    setSpeaking(false);
+  }, []);
+
+  return { listening, speaking, supported, toggleListen, speak, stopSpeaking };
+}
+
+/* ─── Modals ─────────────────────────────────────────────────────────────── */
 function NewConvModal({ onClose, onCreate }) {
-  const [title, setTitle] = useState('');
-  const [subject, setSubject] = useState('');
+  const [title, setTitle]           = useState('');
+  const [subject, setSubject]       = useState('');
   const [classLevel, setClassLevel] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
+  const [loading, setLoading]       = useState(false);
+  const [error, setError]           = useState('');
 
   async function handleSubmit() {
     if (!title.trim()) { setError('Title is required'); return; }
-    setLoading(true);
-    setError('');
+    setLoading(true); setError('');
     try {
       const res = await fetch(`${API_BASE}/tutor/conversations/`, {
         method: 'POST',
@@ -98,13 +232,9 @@ function NewConvModal({ onClose, onCreate }) {
       });
       if (res.status === 401) { window.location.href = '/login'; return; }
       if (!res.ok) { const d = await res.json(); setError(d.detail || 'Failed to create'); return; }
-      const conv = await res.json();
-      onCreate(conv);
-    } catch {
-      setError('Network error. Please try again.');
-    } finally {
-      setLoading(false);
-    }
+      onCreate(await res.json());
+    } catch { setError('Network error. Please try again.'); }
+    finally { setLoading(false); }
   }
 
   return (
@@ -120,43 +250,26 @@ function NewConvModal({ onClose, onCreate }) {
         <div className="space-y-3">
           <div>
             <label className="text-xs font-semibold text-on-surface-variant block mb-1">Session Title *</label>
-            <input
-              autoFocus
-              value={title}
-              onChange={e => setTitle(e.target.value)}
+            <input autoFocus value={title} onChange={e => setTitle(e.target.value)}
               onKeyDown={e => e.key === 'Enter' && handleSubmit()}
               placeholder="e.g. Quantum Mechanics Help"
-              className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30"
-            />
+              className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30" />
           </div>
           <div>
             <label className="text-xs font-semibold text-on-surface-variant block mb-1">Subject</label>
-            <input
-              value={subject}
-              onChange={e => setSubject(e.target.value)}
-              placeholder="e.g. Physics"
-              className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30"
-            />
+            <input value={subject} onChange={e => setSubject(e.target.value)} placeholder="e.g. Physics"
+              className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30" />
           </div>
           <div>
             <label className="text-xs font-semibold text-on-surface-variant block mb-1">Class Level</label>
-            <input
-              value={classLevel}
-              onChange={e => setClassLevel(e.target.value)}
-              placeholder="e.g. Grade 10"
-              className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30"
-            />
+            <input value={classLevel} onChange={e => setClassLevel(e.target.value)} placeholder="e.g. Grade 10"
+              className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30" />
           </div>
         </div>
         <div className="flex gap-3 mt-5">
-          <button onClick={onClose} className="flex-1 py-2 rounded-lg border text-sm font-medium hover:bg-surface-container-low">
-            Cancel
-          </button>
-          <button
-            onClick={handleSubmit}
-            disabled={loading}
-            className="flex-1 py-2 rounded-lg bg-gradient-to-br from-primary to-primary-container text-white text-sm font-semibold shadow-md disabled:opacity-60"
-          >
+          <button onClick={onClose} className="flex-1 py-2 rounded-lg border text-sm font-medium hover:bg-surface-container-low">Cancel</button>
+          <button onClick={handleSubmit} disabled={loading}
+            className="flex-1 py-2 rounded-lg bg-gradient-to-br from-primary to-primary-container text-white text-sm font-semibold shadow-md disabled:opacity-60">
             {loading ? 'Creating…' : 'Start Session'}
           </button>
         </div>
@@ -180,9 +293,9 @@ function ConfirmDialog({ message, onConfirm, onCancel }) {
 }
 
 function TrashView({ onBack }) {
-  const [items, setItems] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [confirm, setConfirm] = useState(null);
+  const [items, setItems]           = useState([]);
+  const [loading, setLoading]       = useState(true);
+  const [confirm, setConfirm]       = useState(null);
   const [emptyingAll, setEmptyingAll] = useState(false);
 
   async function load() {
@@ -192,29 +305,23 @@ function TrashView({ onBack }) {
       if (res.status === 401) { window.location.href = '/login'; return; }
       const data = await res.json();
       setItems(data.results || data);
-    } catch { }
-    finally { setLoading(false); }
+    } catch {} finally { setLoading(false); }
   }
-
   useEffect(() => { load(); }, []);
 
   async function restore(id) {
     await fetch(`${API_BASE}/tutor/conversations/${id}/restore/`, { method: 'POST', headers: authHeaders() });
     setItems(prev => prev.filter(i => i.id !== id));
   }
-
   async function permDelete(id) {
     await fetch(`${API_BASE}/tutor/conversations/${id}/permanent-delete/`, { method: 'DELETE', headers: authHeaders() });
     setItems(prev => prev.filter(i => i.id !== id));
     setConfirm(null);
   }
-
   async function emptyTrash() {
     setEmptyingAll(true);
     await fetch(`${API_BASE}/tutor/conversations/empty-trash/`, { method: 'DELETE', headers: authHeaders() });
-    setItems([]);
-    setConfirm(null);
-    setEmptyingAll(false);
+    setItems([]); setConfirm(null); setEmptyingAll(false);
   }
 
   return (
@@ -222,8 +329,8 @@ function TrashView({ onBack }) {
       {confirm && (
         <ConfirmDialog
           message={confirm.type === 'all'
-            ? `Empty Trash? This will permanently delete all ${items.length} conversations and cannot be undone.`
-            : "This will permanently delete this conversation and cannot be undone."}
+            ? `Empty Trash? This will permanently delete all ${items.length} conversations.`
+            : 'This will permanently delete this conversation.'}
           onConfirm={() => confirm.type === 'all' ? emptyTrash() : permDelete(confirm.id)}
           onCancel={() => setConfirm(null)}
         />
@@ -273,23 +380,132 @@ function TrashView({ onBack }) {
   );
 }
 
+/* ─── Language Selector — drives both mic recognition language and
+   AI-response speech language. Compact native <select> so it works
+   correctly on mobile without a custom dropdown. ── */
+function LanguageSelector({ value, onChange }) {
+  return (
+    <div className="flex items-center gap-1 flex-shrink-0">
+      <span className="material-symbols-outlined text-base text-gray-400 hidden sm:inline">translate</span>
+      <select
+        value={value}
+        onChange={e => onChange(e.target.value)}
+        title="Voice language (mic input + Listen playback)"
+        className="text-2xs sm:text-xs font-medium bg-gray-50 border rounded-lg px-1.5 sm:px-2 py-1
+                   max-w-[88px] sm:max-w-[150px] focus:outline-none focus:ring-2 focus:ring-primary/30
+                   text-gray-700"
+      >
+        {LANGUAGES.map(l => (
+          <option key={l.value} value={l.value}>{l.label}</option>
+        ))}
+      </select>
+    </div>
+  );
+}
+
+/* ─── Mic Button ─────────────────────────────────────────────────────────── */
+function MicButton({ listening, onClick, disabled, langLabel }) {
+  return (
+    <button
+      onClick={onClick}
+      disabled={disabled}
+      title={listening ? 'Stop listening' : `Speak in ${langLabel || 'selected language'}`}
+      className={`w-8 h-8 rounded-xl flex items-center justify-center shadow-md transition-all disabled:opacity-40 flex-shrink-0
+        ${listening
+          ? 'bg-red-500 text-white animate-pulse'
+          : 'bg-primary text-white hover:bg-primary/90'
+        }`}
+    >
+      <span className="material-symbols-outlined text-base">
+        {listening ? 'stop_circle' : 'mic'}
+      </span>
+    </button>
+  );
+}
+
+/* ─── Speak Button (per-message) ─────────────────────────────────────────── */
+function SpeakButton({ text, onSpeak, speaking, activeText }) {
+  const isThisActive = speaking && activeText === text;
+  return (
+    <button
+      onClick={() => onSpeak(text)}
+      title={isThisActive ? 'Stop speaking' : 'Listen to this response'}
+      className={`flex items-center gap-1 px-2 py-1 rounded-lg text-xs font-semibold transition-all flex-shrink-0 border
+        ${isThisActive
+          ? 'bg-orange-100 text-orange-600 border-orange-300'
+          : 'bg-blue-50 text-blue-600 border-blue-200 hover:bg-blue-100'
+        }`}
+    >
+      <span className="material-symbols-outlined text-base leading-none"
+        style={{ fontVariationSettings: "'FILL' 1" }}>
+        {isThisActive ? 'stop_circle' : 'volume_up'}
+      </span>
+      <span>{isThisActive ? 'Stop' : 'Listen'}</span>
+    </button>
+  );
+}
+
+/* ─── Main Component ─────────────────────────────────────────────────────── */
 export default function AiTutor() {
-  const [conversations, setConversations] = useState([]);
-  const [activeConv, setActiveConv] = useState(null);
-  const [loadingConvs, setLoadingConvs] = useState(true);
-  const [loadingChat, setLoadingChat] = useState(false);
-  const [isTyping, setIsTyping] = useState(false);
-  const [inputMsg, setInputMsg] = useState('');
-  const [showNewModal, setShowNewModal] = useState(false);
-  const [showTrash, setShowTrash] = useState(false);
-  const [toast, setToast] = useState(null);
-  const [retryBanner, setRetryBanner] = useState(false);
-  const [confirmDelete, setConfirmDelete] = useState(null);
+  const [conversations, setConversations]       = useState([]);
+  const [activeConv, setActiveConv]             = useState(null);
+  const [loadingConvs, setLoadingConvs]         = useState(true);
+  const [loadingChat, setLoadingChat]           = useState(false);
+  const [isTyping, setIsTyping]                 = useState(false);
+  const [inputMsg, setInputMsg]                 = useState('');
+  const [showNewModal, setShowNewModal]         = useState(false);
+  const [showTrash, setShowTrash]               = useState(false);
+  const [toast, setToast]                       = useState(null);
+  const [retryBanner, setRetryBanner]           = useState(false);
+  const [confirmDelete, setConfirmDelete]       = useState(null);
   const [showMobileDrawer, setShowMobileDrawer] = useState(false);
-  // ── NEW: desktop sidebar collapsed state ──
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  // tracks which message text is being spoken (for per-message highlight)
+  const [speakingText, setSpeakingText]         = useState(null);
+
+  // ── Multilingual voice language — persisted across sessions ──
+  const [voiceLang, setVoiceLang] = useState(
+    () => localStorage.getItem(VOICE_LANG_STORAGE_KEY) || 'en-IN'
+  );
+  useEffect(() => {
+    localStorage.setItem(VOICE_LANG_STORAGE_KEY, voiceLang);
+  }, [voiceLang]);
+  const voiceLangLabel = useMemo(
+    () => LANGUAGES.find(l => l.value === voiceLang)?.label || voiceLang,
+    [voiceLang]
+  );
+
   const messagesEndRef = useRef(null);
-  const toastTimerRef = useRef(null);
+  const toastTimerRef  = useRef(null);
+  const inputRef       = useRef(null);
+
+  /* ── Speech: mic inserts into input, speaker reads AI messages ── */
+  const handleSpeechResult = useCallback((transcript) => {
+    setInputMsg(prev => (prev ? `${prev} ${transcript}` : transcript));
+    // Focus input after mic result
+    setTimeout(() => inputRef.current?.focus(), 100);
+  }, []);
+
+  const { listening, speaking, supported: speechSupported, toggleListen, speak, stopSpeaking } = useSpeech({
+    onResult: handleSpeechResult,
+  });
+
+  // Wrap speak so we track which message is active, using the
+  // currently-selected voice language for output.
+  const handleSpeak = useCallback((text) => {
+    if (speaking && speakingText === text) {
+      stopSpeaking();
+      setSpeakingText(null);
+    } else {
+      setSpeakingText(text);
+      speak(text, voiceLang);
+    }
+  }, [speaking, speakingText, speak, stopSpeaking, voiceLang]);
+
+  // Clear speakingText when TTS ends naturally
+  useEffect(() => {
+    if (!speaking) setSpeakingText(null);
+  }, [speaking]);
 
   const loadConversations = useCallback(async () => {
     setLoadingConvs(true);
@@ -298,8 +514,7 @@ export default function AiTutor() {
       if (res.status === 401) { window.location.href = '/login'; return; }
       const data = await res.json();
       setConversations(Array.isArray(data) ? data : (data.results || []));
-    } catch { }
-    finally { setLoadingConvs(false); }
+    } catch {} finally { setLoadingConvs(false); }
   }, []);
 
   useEffect(() => { loadConversations(); }, [loadConversations]);
@@ -312,14 +527,13 @@ export default function AiTutor() {
     setLoadingChat(true);
     setRetryBanner(false);
     setShowMobileDrawer(false);
+    stopSpeaking();
     try {
       const res = await fetch(`${API_BASE}/tutor/conversations/${id}/`, { headers: authHeaders() });
       if (res.status === 401) { window.location.href = '/login'; return; }
       if (res.status === 404) { loadConversations(); return; }
-      const data = await res.json();
-      setActiveConv(data);
-    } catch { }
-    finally { setLoadingChat(false); }
+      setActiveConv(await res.json());
+    } catch {} finally { setLoadingChat(false); }
   }
 
   async function sendMessage() {
@@ -327,6 +541,7 @@ export default function AiTutor() {
     const text = inputMsg.trim();
     setInputMsg('');
     setRetryBanner(false);
+    stopSpeaking();
     const tempUserMsg = { id: `temp-${Date.now()}`, role: 'user', content: text, created_at: new Date().toISOString() };
     setActiveConv(prev => ({ ...prev, messages: [...(prev.messages || []), tempUserMsg] }));
     setIsTyping(true);
@@ -396,6 +611,7 @@ export default function AiTutor() {
         />
       )}
 
+      {/* Toast */}
       {toast && (
         <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 flex items-center gap-3 bg-gray-900 text-white text-xs px-4 py-2 rounded-xl shadow-xl max-w-[90vw]">
           <span className="truncate">{toast.msg}</span>
@@ -408,7 +624,7 @@ export default function AiTutor() {
 
       <div className="p-2 md:p-3 h-[calc(100vh-80px)] flex flex-col gap-2 overflow-hidden">
 
-        {/* ── Header ── */}
+        {/* Header */}
         <div className="flex justify-between items-center flex-wrap gap-2">
           <div className="min-w-0">
             <h2 className="text-base md:text-lg font-bold text-on-surface truncate">AI Intelligent Tutor</h2>
@@ -428,15 +644,15 @@ export default function AiTutor() {
           </div>
         </div>
 
-        {/* ── Main Content ── */}
+        {/* Main */}
         <div className="flex-1 flex gap-2 overflow-hidden">
 
-          {/* ── Mobile Drawer backdrop ── */}
+          {/* Mobile Drawer backdrop */}
           {showMobileDrawer && (
             <div className="fixed inset-0 bg-black/50 z-40 lg:hidden" onClick={() => setShowMobileDrawer(false)} />
           )}
 
-          {/* ── Mobile Drawer ── */}
+          {/* Mobile Drawer */}
           <div className={`fixed top-0 left-0 h-full w-72 max-w-[85vw] bg-white z-50 transform transition-transform duration-300 ease-in-out lg:hidden shadow-xl ${
             showMobileDrawer ? 'translate-x-0' : '-translate-x-full'
           }`}>
@@ -472,76 +688,43 @@ export default function AiTutor() {
             </div>
           </div>
 
-          {/* ══════════════════════════════════════════════════
-              Desktop Sidebar — collapsible
-              Expanded : w-64  shows full panel
-              Collapsed: w-12  shows only icons strip
-          ══════════════════════════════════════════════════ */}
+          {/* Desktop Sidebar */}
           <div className={`hidden lg:flex flex-col bg-white rounded-xl border shadow-sm overflow-hidden transition-all duration-300 ease-in-out flex-shrink-0 ${
             sidebarCollapsed ? 'w-12' : 'w-64 xl:w-72'
           }`}>
-
-            {/* Sidebar header — toggle button always visible */}
             <div className={`flex items-center border-b bg-gray-50/50 flex-shrink-0 ${sidebarCollapsed ? 'justify-center px-0 py-2' : 'px-3 py-2 justify-between'}`}>
-              {!sidebarCollapsed && (
-                <p className="text-xs font-bold text-gray-500 uppercase tracking-wider">Sessions</p>
-              )}
-              <button
-                onClick={() => setSidebarCollapsed(prev => !prev)}
+              {!sidebarCollapsed && <p className="text-xs font-bold text-gray-500 uppercase tracking-wider">Sessions</p>}
+              <button onClick={() => setSidebarCollapsed(prev => !prev)}
                 title={sidebarCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
-                className="p-1 rounded-lg hover:bg-gray-200 text-gray-500 transition-colors"
-              >
+                className="p-1 rounded-lg hover:bg-gray-200 text-gray-500 transition-colors">
                 <span className="material-symbols-outlined text-lg">
                   {sidebarCollapsed ? 'chevron_right' : 'chevron_left'}
                 </span>
               </button>
             </div>
 
-            {/* Collapsed state — icon-only strip */}
             {sidebarCollapsed ? (
               <div className="flex-1 flex flex-col items-center py-3 gap-2 overflow-y-auto">
-                {/* New session icon */}
-                <button
-                  onClick={() => setShowNewModal(true)}
-                  title="New Session"
-                  className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-primary/10 text-primary transition-colors flex-shrink-0"
-                >
+                <button onClick={() => setShowNewModal(true)} title="New Session"
+                  className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-primary/10 text-primary transition-colors flex-shrink-0">
                   <span className="material-symbols-outlined text-lg">add_comment</span>
                 </button>
-
-                {/* Divider */}
                 <div className="w-6 border-t border-gray-200 flex-shrink-0" />
-
-                {/* Each conversation as a colored dot/icon */}
-                {conversations.map((conv, idx) => (
-                  <button
-                    key={conv.id}
-                    onClick={() => openConversation(conv.id)}
-                    title={conv.title}
+                {conversations.map(conv => (
+                  <button key={conv.id} onClick={() => openConversation(conv.id)} title={conv.title}
                     className={`w-8 h-8 flex items-center justify-center rounded-lg transition-colors text-xs font-bold flex-shrink-0 ${
-                      activeConv?.id === conv.id
-                        ? 'bg-primary text-white'
-                        : 'bg-gray-100 text-gray-600 hover:bg-primary/10 hover:text-primary'
-                    }`}
-                  >
+                      activeConv?.id === conv.id ? 'bg-primary text-white' : 'bg-gray-100 text-gray-600 hover:bg-primary/10 hover:text-primary'
+                    }`}>
                     {conv.title.charAt(0).toUpperCase()}
                   </button>
                 ))}
-
-                {/* Spacer */}
                 <div className="flex-1" />
-
-                {/* Trash icon */}
-                <button
-                  onClick={() => setShowTrash(true)}
-                  title="Recently Deleted"
-                  className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-red-50 text-gray-400 hover:text-red-500 transition-colors mb-1 flex-shrink-0"
-                >
+                <button onClick={() => setShowTrash(true)} title="Recently Deleted"
+                  className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-red-50 text-gray-400 hover:text-red-500 transition-colors mb-1 flex-shrink-0">
                   <span className="material-symbols-outlined text-lg">delete</span>
                 </button>
               </div>
             ) : (
-              /* Expanded state — full list */
               <>
                 <div className="flex-1 overflow-y-auto">
                   {conversations.length === 0 ? (
@@ -552,20 +735,13 @@ export default function AiTutor() {
                     </div>
                   ) : (
                     conversations.map(conv => (
-                      <div
-                        key={conv.id}
-                        onClick={() => openConversation(conv.id)}
+                      <div key={conv.id} onClick={() => openConversation(conv.id)}
                         className={`px-3 py-2 cursor-pointer border-b hover:bg-gray-50 transition-colors ${
                           activeConv?.id === conv.id ? 'bg-primary/5 border-l-2 border-l-primary' : ''
-                        }`}
-                      >
+                        }`}>
                         <p className="text-sm font-semibold truncate">{conv.title}</p>
                         <div className="flex items-center gap-2 mt-0.5">
-                          {conv.subject && (
-                            <span className="text-3xs font-bold bg-primary/10 text-primary px-1.5 py-0.5 rounded-full">
-                              {conv.subject}
-                            </span>
-                          )}
+                          {conv.subject && <span className="text-3xs font-bold bg-primary/10 text-primary px-1.5 py-0.5 rounded-full">{conv.subject}</span>}
                           <span className="text-3xs text-gray-400">{timeAgo(conv.updated_at)}</span>
                         </div>
                         {conv.last_message_preview && (
@@ -576,10 +752,8 @@ export default function AiTutor() {
                   )}
                 </div>
                 <div className="p-2 border-t flex-shrink-0">
-                  <button
-                    onClick={() => setShowTrash(true)}
-                    className="w-full flex items-center gap-2 px-2 py-1.5 text-xs text-gray-500 hover:bg-gray-100 rounded-lg"
-                  >
+                  <button onClick={() => setShowTrash(true)}
+                    className="w-full flex items-center gap-2 px-2 py-1.5 text-xs text-gray-500 hover:bg-gray-100 rounded-lg">
                     <span className="material-symbols-outlined text-sm">delete</span>
                     Recently Deleted
                   </button>
@@ -588,13 +762,12 @@ export default function AiTutor() {
             )}
           </div>
 
-          {/* ── Chat Window ── */}
+          {/* Chat Window */}
           <div className="flex-1 h-full flex flex-col bg-white rounded-xl border shadow-sm overflow-hidden min-w-0">
 
             {/* Chat Header */}
             <div className="px-4 py-2 border-b flex items-center justify-between bg-gray-50/30 flex-shrink-0 gap-2">
               <div className="flex items-center gap-2 min-w-0">
-                {/* Mobile: hamburger */}
                 <button onClick={() => setShowMobileDrawer(true)} className="lg:hidden p-1 rounded-lg hover:bg-gray-100 flex-shrink-0">
                   <span className="material-symbols-outlined text-lg">menu</span>
                 </button>
@@ -612,13 +785,19 @@ export default function AiTutor() {
                   <span className="text-sm text-gray-400 truncate">Select a session to start</span>
                 )}
               </div>
+
+              {/* Header right — language selector + speaking indicator */}
               <div className="flex items-center gap-2 flex-shrink-0">
-                <button className="w-7 h-7 rounded-full border flex items-center justify-center text-gray-500 hover:border-primary hover:text-primary">
-                  <span className="material-symbols-outlined text-sm">hearing</span>
-                </button>
-                <button className="w-7 h-7 rounded-full bg-gray-700 text-white flex items-center justify-center hover:scale-105 transition-transform">
-                  <span className="material-symbols-outlined text-sm">mic</span>
-                </button>
+                <LanguageSelector value={voiceLang} onChange={setVoiceLang} />
+                {speaking && (
+                  <div className="hidden sm:flex items-center gap-1.5 bg-orange-50 border border-orange-200 px-2 py-1 rounded-full">
+                    <span className="w-1.5 h-1.5 rounded-full bg-orange-400 animate-pulse flex-shrink-0" />
+                    <span className="text-2xs font-semibold text-orange-600">Speaking</span>
+                    <button onClick={stopSpeaking} className="text-orange-400 hover:text-orange-600 ml-1">
+                      <span className="material-symbols-outlined text-sm">stop</span>
+                    </button>
+                  </div>
+                )}
               </div>
             </div>
 
@@ -635,6 +814,7 @@ export default function AiTutor() {
               ) : (
                 (activeConv.messages || []).filter(m => m.role !== 'system').map(msg => (
                   msg.role === 'user' ? (
+                    /* User message */
                     <div key={msg.id} className="flex justify-end">
                       <div className="max-w-[85%] sm:max-w-[75%] bg-primary/10 text-on-surface p-3 rounded-2xl rounded-tr-none shadow-sm">
                         <p className="text-sm leading-relaxed whitespace-pre-wrap break-words">{msg.content}</p>
@@ -644,8 +824,9 @@ export default function AiTutor() {
                       </div>
                     </div>
                   ) : (
+                    /* AI message — with TTS speak button */
                     <div key={msg.id} className="flex justify-start gap-2">
-                      <div className="w-7 h-7 rounded-full bg-secondary flex items-center justify-center text-white shrink-0">
+                      <div className="w-7 h-7 rounded-full bg-secondary flex items-center justify-center text-white shrink-0 mt-1">
                         <span className="material-symbols-outlined text-sm">smart_toy</span>
                       </div>
                       <div className="max-w-[85%] sm:max-w-[80%] bg-white border p-3 rounded-2xl rounded-tl-none shadow-sm overflow-hidden">
@@ -654,9 +835,18 @@ export default function AiTutor() {
                             {msg.content}
                           </ReactMarkdown>
                         </div>
-                        <span className="text-3xs mt-2 block opacity-40">
-                          AI Generated · {new Date(msg.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                        </span>
+                        <div className="mt-2 pt-2 border-t border-gray-100 flex items-center justify-between gap-2">
+                          <span className="text-3xs text-gray-400">
+                            AI Generated · {new Date(msg.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                          </span>
+                          {/* TTS listen button — visible blue pill */}
+                          <SpeakButton
+                            text={msg.content}
+                            onSpeak={handleSpeak}
+                            speaking={speaking}
+                            activeText={speakingText}
+                          />
+                        </div>
                       </div>
                     </div>
                   )
@@ -691,15 +881,43 @@ export default function AiTutor() {
 
             {/* Input Bar */}
             <div className="p-3 bg-white border-t flex-shrink-0">
+              {/* Listening indicator */}
+              {listening && (
+                <div className="flex items-center gap-2 mb-2 px-1">
+                  <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse flex-shrink-0" />
+                  <span className="text-2xs text-red-500 font-semibold">Listening in {voiceLangLabel}… speak your question</span>
+                </div>
+              )}
+
               <div className="flex items-center gap-2">
                 <input
+                  ref={inputRef}
                   value={inputMsg}
                   onChange={e => setInputMsg(e.target.value)}
                   onKeyDown={e => e.key === 'Enter' && !e.shiftKey && sendMessage()}
                   disabled={!activeConv || isTyping}
-                  placeholder={activeConv ? `Ask about ${activeConv.subject || 'your subject'}...` : 'Select a session first'}
-                  className="flex-1 min-w-0 bg-gray-50 border rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 disabled:opacity-50"
+                  placeholder={
+                    listening
+                      ? 'Listening…'
+                      : activeConv
+                        ? `Ask about ${activeConv.subject || 'your subject'}...`
+                        : 'Select a session first'
+                  }
+                  className={`flex-1 min-w-0 bg-gray-50 border rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 disabled:opacity-50 transition-all
+                    ${listening ? 'border-red-300 bg-red-50/30' : ''}`}
                 />
+
+                {/* Mic button — hidden if Speech API not supported */}
+                {speechSupported && (
+                  <MicButton
+                    listening={listening}
+                    onClick={() => toggleListen(voiceLang)}
+                    disabled={!activeConv || isTyping}
+                    langLabel={voiceLangLabel}
+                  />
+                )}
+
+                {/* Send button */}
                 <button
                   onClick={sendMessage}
                   disabled={!activeConv || !inputMsg.trim() || isTyping}
@@ -708,10 +926,11 @@ export default function AiTutor() {
                   <span className="material-symbols-outlined text-base">send</span>
                 </button>
               </div>
-              <p className="text-3xs text-gray-400 italic text-center mt-1.5">AI Tutor can make mistakes. Verify important information.</p>
+              <p className="text-3xs text-gray-400 italic text-center mt-1.5">
+                AI Tutor can make mistakes. Verify important information.
+              </p>
             </div>
           </div>
-
         </div>
       </div>
     </MainLayout>

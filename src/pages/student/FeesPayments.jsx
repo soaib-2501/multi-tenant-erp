@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useStudent } from '../../context/StudentProvider';
 import MainLayout from '../../layouts/MainLayout';
 
 // ── Static data (replace with real API data later) ──
@@ -7,6 +8,8 @@ const feeBreakdown = [
   { id: 2, name: "Library Membership", desc: "Annual Access & Resource Fund", amount: 350.00, due: "Oct 15, 2024", icon: "local_library", bg: "bg-secondary-fixed text-secondary" },
   { id: 3, name: "Science Lab Fee", desc: "Laboratory Equipment & Materials", amount: 300.00, due: "Oct 15, 2024", icon: "science", bg: "bg-tertiary-fixed text-tertiary" },
 ];
+
+
 
 const transactionHistory = [
   { id: 1, name: "Registration Fee", method: "Paid via Credit Card", date: "Aug 12, 2024", txn: "TXN-9021", amount: 500.00, status: "paid" },
@@ -18,8 +21,6 @@ const transactionHistory = [
 ];
 
 const outstandingBalance = feeBreakdown.reduce((sum, f) => sum + f.amount, 0);
-const studentName = "Alex Johnson";
-const studentId = "STU-2024-0451";
 
 function FullLedgerModal({ onClose }) {
   return (
@@ -67,10 +68,33 @@ function FullLedgerModal({ onClose }) {
 }
 
 export default function FeesPayments() {
+   const { profile, dashboard } = useStudent();
   const [showLedger, setShowLedger] = useState(false);
   const [downloading, setDownloading] = useState(false);
-
+// const { dashboard, profile } = useStudent();
+// console.log('dashboard:', dashboard);
+// console.log('profile:', profile);
   // ── Generate and print/download invoice ──
+  const firstName = profile?.first_name 
+  || dashboard?.dashboardRaw?.student?.name?.split(' ')[0] 
+  || 'Student';
+
+const studentName = dashboard?.dashboardRaw?.student?.name || 'Student';
+const studentId = dashboard?.dashboardRaw?.student?.enrollment_number || 'N/A';
+
+const hasPending = transactionHistory.some(t => t.status === 'pending');
+const pendingCount = transactionHistory.filter(t => t.status === 'pending').length;
+const nearestDue = feeBreakdown.map(f => f.due).sort()[0];
+
+    const getInsight = () => {
+  if (outstandingBalance === 0)
+    return { icon: 'check_circle', text: `${firstName}, all fees are cleared! You're in good financial standing.` };
+  if (hasPending)
+    return { icon: 'pending', text: `${firstName}, you have ${pendingCount} pending transaction${pendingCount > 1 ? 's' : ''} awaiting settlement. Follow up with the finance office.` };
+  return { icon: 'lightbulb', text: `${firstName}, your next payment of $${outstandingBalance.toFixed(2)} is due by ${nearestDue}. Pay early to avoid late fees.` };
+};
+const insight = getInsight();
+
   const downloadInvoice = () => {
     setDownloading(true);
     const printWindow = window.open('', '_blank');
@@ -242,12 +266,10 @@ export default function FeesPayments() {
             {/* Insight — shrink-0 */}
             <section className="bg-tertiary text-on-tertiary rounded-xl p-4 shadow-lg shadow-tertiary/10 shrink-0">
               <div className="flex items-center gap-2 mb-2">
-                <span className="material-symbols-outlined text-lg">lightbulb</span>
-                <h4 className="font-bold text-xs tracking-tight">Financial Insight</h4>
-              </div>
-              <p className="text-xs leading-relaxed opacity-90">
-                {studentName.split(' ')[0]}, you&apos;re eligible for a <strong>5% Early Bird discount</strong> if you clear the remaining tuition balance by September 30th.
-              </p>
+               <span className="material-symbols-outlined text-lg">{insight.icon}</span>
+<h4 className="font-bold text-xs tracking-tight">Financial Insight</h4>
+</div>
+<p className="text-xs leading-relaxed opacity-90">{insight.text}</p>
             </section>
 
             {/* Recent History — flex-1, internal scroll */}

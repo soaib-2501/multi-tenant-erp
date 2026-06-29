@@ -9,7 +9,7 @@ import {
   getSubmissions,
   getAttendanceRecords,
 } from "../services/studentAPIs";
-
+console.log("API BASE:", process.env.REACT_APP_API_BASE_URL);
 const StudentContext = createContext();
 
 // Labels used only for debug logging — must match the order of Promise.allSettled calls below.

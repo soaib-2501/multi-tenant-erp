@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from 'react-router-dom';
 import MainLayout from "../../layouts/MainLayout";
 import { useStudent } from "../../context/StudentProvider";
 
@@ -68,8 +69,9 @@ function getPerformanceMeta(percentage) {
 }
 
 export default function Subjects() {
-  const { academic, dashboard, loading } = useStudent();
-
+  const { academic, dashboard, loading, assignments } = useStudent();
+const navigate = useNavigate();
+console.log('assignments:', assignments.map(a => ({ title: a.title, due: a.due_date, future: new Date(a.due_date) >= new Date() })));
   if (loading) return <SubjectsSkeleton />;
 
   // `/profiles/students/me/subjects/` is already scoped to this student's
@@ -244,37 +246,49 @@ export default function Subjects() {
             </div>
 
             <div className="relative z-10 mt-6">
-              <button className="bg-white/20 backdrop-blur-md text-white px-6 py-3 rounded-md text-sm font-bold hover:bg-white/30 transition-all">
-                View Detailed Analysis
-              </button>
+              <button
+  onClick={() => navigate('/student/grades')}
+  className="bg-white/20 backdrop-blur-md text-white px-6 py-3 rounded-md text-sm font-bold hover:bg-white/30 transition-all"
+>
+  View Detailed Analysis
+</button>
             </div>
             <div className="absolute -right-12 -bottom-12 w-64 h-64 bg-white/10 rounded-full blur-3xl" />
           </div>
 
           {/* Upcoming tasks */}
-          <div className="bg-surface-container-low p-6 rounded-lg border-l-4 border-tertiary">
-            <h4 className="text-xs font-bold text-tertiary uppercase tracking-widest mb-4">Upcoming Subject Tasks</h4>
-            <ul className="space-y-4">
-              <li className="flex gap-4">
-                <div className="bg-white w-10 h-10 rounded flex-shrink-0 flex items-center justify-center text-tertiary shadow-sm">
-                  <span className="material-symbols-outlined text-xl">lab_profile</span>
-                </div>
-                <div>
-                  <p className="text-xs font-bold text-on-surface">Physics Lab Report</p>
-                  <p className="text-2xs text-outline">Due in 2 days</p>
-                </div>
-              </li>
-              <li className="flex gap-4">
-                <div className="bg-white w-10 h-10 rounded flex-shrink-0 flex items-center justify-center text-secondary shadow-sm">
-                  <span className="material-symbols-outlined text-xl">history_edu</span>
-                </div>
-                <div>
-                  <p className="text-xs font-bold text-on-surface">Chem Quiz 4 Prep</p>
-                  <p className="text-2xs text-outline">Due tomorrow</p>
-                </div>
-              </li>
-            </ul>
-          </div>
+<div className="bg-surface-container-low p-6 rounded-lg border-l-4 border-tertiary">
+  <h4 className="text-xs font-bold text-tertiary uppercase tracking-widest mb-4">Upcoming Subject Tasks</h4>
+  
+  {assignments.length === 0 ? (
+    <p className="text-xs text-on-surface-variant text-center py-4">No upcoming tasks.</p>
+  ) : (
+    <ul className="space-y-4">
+      {assignments
+        .filter(a => a.due_date && new Date(a.due_date) >= new Date())
+        .sort((a, b) => new Date(a.due_date) - new Date(b.due_date))
+        .slice(0, 3)
+        .map(a => {
+          const dueDate = new Date(a.due_date);
+          const diffDays = Math.ceil((dueDate - new Date()) / (1000 * 60 * 60 * 24));
+          const dueLabel = diffDays === 0 ? 'Due today'
+            : diffDays === 1 ? 'Due tomorrow'
+            : `Due in ${diffDays} days`;
+          return (
+            <li key={a.id} className="flex gap-4">
+              <div className="bg-white w-10 h-10 rounded flex-shrink-0 flex items-center justify-center text-tertiary shadow-sm">
+                <span className="material-symbols-outlined text-xl">assignment</span>
+              </div>
+              <div>
+                <p className="text-xs font-bold text-on-surface">{a.title}</p>
+                <p className="text-2xs text-outline">{dueLabel}</p>
+              </div>
+            </li>
+          );
+        })}
+    </ul>
+  )}
+</div>
 
         </div>
       </div>

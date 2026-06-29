@@ -69,6 +69,7 @@ import Settings from "../pages/student/Settings";
 import Recommendations from "../pages/student/Recommendations";
 import AiTutor from "../pages/student/AiTutor";
 import GradesCard from "../pages/student/GradesCard";
+import Circulars from "../pages/student/Circulars";
 import { StudentProvider } from '../context/StudentProvider';
 
 /* TEACHER PAGES */
@@ -343,6 +344,14 @@ function AppRoutes() {
           element={
             <StudentProvider>
               <GradesCard />
+            </StudentProvider>
+          }
+        />
+        <Route
+          path="/student/circulars"
+          element={
+            <StudentProvider>
+              <Circulars />
             </StudentProvider>
           }
         />
