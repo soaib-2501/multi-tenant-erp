@@ -1,5 +1,3 @@
-// src/components/erp/parent/Sidebar.jsx
-
 import React from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 
@@ -51,7 +49,8 @@ export default function Sidebar({ isExpanded, isMobile, onToggle, onClose }) {
     { to: "/parent/attendance",     end: false, icon: "calendar_today", label: "Attendance"      },
     { to: "/parent/assignments",    end: false, icon: "assignment",     label: "Assignments"     },
     { to: "/parent/grades",         end: false, icon: "assessment",     label: "Grades & Report" },
-    { to: "/parent/insights",       end: false, icon: "psychology",     label: "AI Insights"     },
+    { to: "/parent/circulars",      end: false, icon: "campaign",       label: "Circulars"       },
+    { to: "/parent/ai-insights",    end: false, icon: "psychology",     label: "AI Insights"     },
   ];
 
   const navClass = ({ isActive }) =>

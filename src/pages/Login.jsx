@@ -11,24 +11,6 @@ export default function Login() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  // Prototype demo login routing
-  const handleRoleLogin = (role) => {
-    // Clear any existing stale cache on demo role switch
-    clearCacheAndInitProfile(null);
-
-    if (role === "Global Admin") {
-      navigate("/global-admin");
-    } else if (role === "School Admin") {
-      navigate("/school-admin");
-    } else if (role === "Teacher") {
-      navigate("/teacher/dashboard");
-    } else if (role === "Student") {
-      navigate("/student");
-    } else if (role === "Parent") {
-      navigate("/parent");
-    }
-  };
-
   // Real backend API login
   const handleLoginSubmit = async (e) => {
     e.preventDefault();
@@ -264,52 +246,6 @@ export default function Login() {
                   {loading ? "Logging in..." : "Login"}
                 </button>
               </form>
-
-              {/* ROLE BUTTONS (Kept for prototype/demo purposes) */}
-              <div className="mt-10 pt-6 border-t text-center">
-                <p className="text-xs tracking-widest text-gray-400 mb-4">
-                  SELECT ROLE (FOR PROTOTYPE DEMO)
-                </p>
-
-                <div className="grid grid-cols-2 gap-2">
-                  <button
-                    onClick={() => handleRoleLogin("Global Admin")}
-                    type="button"
-                    className="bg-surface-container-high text-primary text-sm py-2 rounded-md hover:bg-gray-100 transition-colors"
-                  >
-                    Login as Global Admin
-                  </button>
-                  <button
-                    onClick={() => handleRoleLogin("School Admin")}
-                    type="button"
-                    className="bg-surface-container-high text-primary text-sm py-2 rounded-md hover:bg-gray-100 transition-colors"
-                  >
-                    Login as School Admin
-                  </button>
-                  <button
-                    onClick={() => handleRoleLogin("Teacher")}
-                    type="button"
-                    className="bg-surface-container-high text-primary text-sm py-2 rounded-md hover:bg-gray-100 transition-colors"
-                  >
-                    Login as Teacher
-                  </button>
-                  <button
-                    onClick={() => handleRoleLogin("Student")}
-                    type="button"
-                    className="bg-surface-container-high text-primary text-sm py-2 rounded-md hover:bg-gray-100 transition-colors"
-                  >
-                    Login as Student
-                  </button>
-                  <button
-                    onClick={() => handleRoleLogin("Parent")}
-                    type="button"
-                    className="bg-surface-container-high text-primary text-sm py-2 rounded-md col-span-2 hover:bg-gray-100 transition-colors"
-                  >
-                    Login as Parent
-                  </button>
-                </div>
-              </div>
-
             </div>
           </div>
         </div>

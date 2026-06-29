@@ -1,5 +1,3 @@
-// src/components/erp/parent/Navbar.jsx
-
 import React, { useState, useRef, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useParent } from "../../../context/ParentProvider";
@@ -11,7 +9,8 @@ const PAGE_NAMES = {
   "/parent/attendance":     "Attendance",
   "/parent/assignments":    "Assignments",
   "/parent/grades":         "Grades & Report",
-  "/parent/insights":       "AI Insights",
+  "/parent/circulars":      "Circulars",
+  "/parent/ai-insights":    "AI Insights",
   "/parent/settings":       "Settings",
   "/parent/notifications":  "Notifications",
 };
@@ -19,7 +18,7 @@ const PAGE_NAMES = {
 const Navbar = ({ onOpenSidebar, onToggleSidebar, isMobile }) => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { students, activeChild, switchChild, loading } = useParent();
+  const { children, activeChildId, switchChild, loading } = useParent();
 
   const [childMenuOpen, setChildMenuOpen] = useState(false);
   const [showIDCard,    setShowIDCard]    = useState(false);
@@ -54,6 +53,9 @@ const Navbar = ({ onOpenSidebar, onToggleSidebar, isMobile }) => {
     PAGE_NAMES[location.pathname] ||
     Object.entries(PAGE_NAMES).find(([key]) => location.pathname.startsWith(key + "/"))?.[1] ||
     "Parent Portal";
+
+  // Find active child using the context's data shape (student = ID, student_name = display)
+  const activeChild = children?.find((c) => c.student === activeChildId);
 
   return (
     <>
@@ -91,7 +93,7 @@ const Navbar = ({ onOpenSidebar, onToggleSidebar, isMobile }) => {
         {/* Right */}
         <div className="flex items-center gap-2 sm:gap-3 lg:gap-4 flex-shrink-0">
 
-          {/* ── ID Card button — child switcher se PEHLE ── */}
+          {/* ID Card button */}
           <button
             type="button"
             onClick={() => setShowIDCard(true)}
@@ -111,7 +113,7 @@ const Navbar = ({ onOpenSidebar, onToggleSidebar, isMobile }) => {
           </button>
 
           {/* Child switcher */}
-          {!loading && students.length > 0 && (
+          {!loading && children?.length > 0 && (
             <div className="relative" ref={menuRef}>
               <button
                 type="button"
@@ -126,7 +128,7 @@ const Navbar = ({ onOpenSidebar, onToggleSidebar, isMobile }) => {
                   face
                 </span>
                 <span className="text-xs sm:text-sm font-semibold text-slate-700 dark:text-slate-200 truncate">
-                  {activeChild?.name || "Select child"}
+                  {activeChild?.student_name || "Select child"}
                 </span>
                 <span
                   className={`material-symbols-outlined text-slate-400 text-base transition-transform flex-shrink-0 ${
@@ -139,23 +141,23 @@ const Navbar = ({ onOpenSidebar, onToggleSidebar, isMobile }) => {
 
               {childMenuOpen && (
                 <div className="absolute right-0 mt-2 w-56 bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-slate-100 dark:border-slate-700 py-1.5 z-40">
-                  {students.map((s) => (
+                  {children.map((s) => (
                     <button
-                      key={s.id}
+                      key={s.student}
                       onClick={() => {
-                        switchChild(s.id);
+                        switchChild(s.student);
                         setChildMenuOpen(false);
                       }}
                       className={`w-full flex items-center justify-between gap-2 px-3 py-2 text-left text-sm
                                  hover:bg-blue-50 dark:hover:bg-slate-700 transition-colors
                                  ${
-                                   s.id === activeChild?.id
+                                   s.student === activeChildId
                                      ? "text-blue-700 dark:text-blue-300 font-semibold bg-blue-50/60 dark:bg-slate-700/60"
                                      : "text-slate-700 dark:text-slate-200"
                                  }`}
                     >
-                      <span className="truncate">{s.name}</span>
-                      {s.id === activeChild?.id && (
+                      <span className="truncate">{s.student_name}</span>
+                      {s.student === activeChildId && (
                         <span className="material-symbols-outlined text-blue-600 dark:text-blue-300 text-base flex-shrink-0">
                           check
                         </span>
@@ -167,7 +169,7 @@ const Navbar = ({ onOpenSidebar, onToggleSidebar, isMobile }) => {
             </div>
           )}
 
-          {/* Parent name */}
+          {/* Parent name — desktop only */}
           <div className="hidden lg:flex items-center gap-4">
             <button
               type="button"
