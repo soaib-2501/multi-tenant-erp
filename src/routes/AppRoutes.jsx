@@ -70,6 +70,7 @@ import Recommendations from "../pages/student/Recommendations";
 import AiTutor from "../pages/student/AiTutor";
 import GradesCard from "../pages/student/GradesCard";
 import { StudentProvider } from '../context/StudentProvider';
+import StudentTimetable from '../pages/student/StudentTimetable';
 
 /* TEACHER PAGES */
 import MyClassesHub from "../pages/teacher/MyClassesHub";
@@ -346,6 +347,14 @@ function AppRoutes() {
             </StudentProvider>
           }
         />
+         <Route
+  path="/student/timetable"
+  element={
+    <StudentProvider>
+      <StudentTimetable />
+    </StudentProvider>
+  }
+/>
 
         {/* ================= TEACHER ================= */}
         <Route path="/teacher" element={<Navigate to="/teacher/dashboard" />} />
