@@ -118,6 +118,7 @@ import ParentPortalSettings from "../pages/parent/ParentPortalSettings";
 import ParentGrievance from "../pages/parent/ParentGrievance";
 import ParentCirculars from "../pages/parent/ParentCirculars";
 import TrackStudent from "../pages/parent/TrackStudent";
+import ParentLeavePortal from "../pages/parent/ParentLeavePortal"; // 👈 NEW
 
 /* Redirect logged-in users to their dashboard when visiting "/" */
 function RootRedirect() {
@@ -429,7 +430,8 @@ function AppRoutes() {
         <Route path="/parent/settings" element={<ParentProvider><ParentPortalSettings /></ParentProvider>} />
         <Route path="/parent/grievance" element={<ParentProvider><ParentGrievance /></ParentProvider>} />
         <Route path="/parent/circulars" element={<ParentProvider><ParentCirculars /></ParentProvider>} />
-        <Route path="/parent/track-student" element={<ParentProvider><TrackStudent /></ParentProvider>} />  {/* 👈 NEW */}
+        <Route path="/parent/track-student" element={<ParentProvider><TrackStudent /></ParentProvider>} />
+        <Route path="/parent/leave" element={<ParentProvider><ParentLeavePortal /></ParentProvider>} />  {/* 👈 NEW */}
       </Routes>
     </BrowserRouter>
   );

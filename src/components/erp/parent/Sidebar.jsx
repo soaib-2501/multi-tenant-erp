@@ -49,6 +49,8 @@ export default function Sidebar({ isExpanded, isMobile, onToggle, onClose }) {
     { to: "/parent/attendance", end: false, icon: "calendar_today", label: "Attendance" },
     { to: "/parent/assignments", end: false, icon: "assignment", label: "Assignments" },
     { to: "/parent/grades", end: false, icon: "assessment", label: "Grades & Report" },
+    { to: "/parent/circulars", end: false, icon: "campaign", label: "Circulars" },
+    { to: "/parent/leave", end: false, icon: "event_busy", label: "Leave Portal" }, // 👈 NEW
     { to: "/parent/ai-insights", end: false, icon: "psychology", label: "AI Insights" },
     { to: "/parent/grievance", end: false, icon: "gavel", label: "Grievance" },
     { to: "/parent/track-student", end: false, icon: "location_on", label: "Track Student" },
@@ -56,7 +58,8 @@ export default function Sidebar({ isExpanded, isMobile, onToggle, onClose }) {
 
   const navClass = ({ isActive }) =>
     `flex items-center rounded-xl transition-all duration-200 font-semibold text-sm flex-shrink-0
-     ${isExpanded ? "gap-3 px-3 py-2.5" : "justify-center px-2 py-2.5"}
+     py-[clamp(0.3rem,1vh,0.625rem)]
+     ${isExpanded ? "gap-3 px-3" : "justify-center px-2"}
      ${isActive
       ? "bg-white dark:bg-slate-700 text-blue-700 dark:text-blue-300 shadow-sm"
       : "text-slate-600 dark:text-slate-300 hover:bg-slate-200/50 dark:hover:bg-slate-700/50 hover:text-blue-600 dark:hover:text-blue-300"
@@ -83,10 +86,10 @@ export default function Sidebar({ isExpanded, isMobile, onToggle, onClose }) {
           }
         `}
       >
-        <div className="flex flex-col h-full px-3 py-3">
+        <div className="flex flex-col h-full px-3 py-[clamp(0.5rem,1.5vh,0.75rem)] min-h-0">
 
           {/* ── Logo + toggle ── */}
-          <div className={`flex items-center mb-4 px-1 flex-shrink-0 ${isExpanded ? "gap-3" : "justify-center"}`}>
+          <div className={`flex items-center mb-[clamp(0.4rem,1.5vh,1rem)] px-1 flex-shrink-0 ${isExpanded ? "gap-3" : "justify-center"}`}>
             {isMobile ? (
               <button
                 onClick={onClose}
@@ -114,8 +117,9 @@ export default function Sidebar({ isExpanded, isMobile, onToggle, onClose }) {
           </div>
 
           {/* ── Profile card ── */}
-          <div className={`flex items-center mb-4 rounded-xl bg-white dark:bg-slate-800 shadow-sm flex-shrink-0
-                           ${isExpanded ? "gap-3 px-3 py-3" : "justify-center p-2"}`}>
+          <div className={`flex items-center mb-[clamp(0.4rem,1.5vh,1rem)] rounded-xl bg-white dark:bg-slate-800 shadow-sm flex-shrink-0
+                           py-[clamp(0.3rem,1vh,0.75rem)]
+                           ${isExpanded ? "gap-3 px-3" : "justify-center p-2"}`}>
             <img
               src={
                 avatarUrl ||
@@ -133,7 +137,7 @@ export default function Sidebar({ isExpanded, isMobile, onToggle, onClose }) {
           </div>
 
           {/* ── Nav ── */}
-          <nav className="flex flex-col flex-1 gap-0.5 overflow-y-auto overflow-x-hidden scrollbar-none">
+          <nav className="flex flex-col flex-1 justify-between gap-[clamp(0.05rem,0.5vh,0.25rem)] overflow-hidden min-h-0">
             {navItems.map(({ to, end, icon, label }) => (
               <NavLink key={label} to={to} end={end} onClick={onClose} title={!isExpanded ? label : undefined} className={navClass}>
                 <span className="material-symbols-outlined flex-shrink-0 text-[20px]">{icon}</span>
@@ -144,10 +148,10 @@ export default function Sidebar({ isExpanded, isMobile, onToggle, onClose }) {
             ))}
           </nav>
 
-          <div className="my-2 border-t border-slate-200 dark:border-slate-700/60 flex-shrink-0" />
+          <div className="my-[clamp(0.2rem,0.8vh,0.5rem)] border-t border-slate-200 dark:border-slate-700/60 flex-shrink-0" />
 
           {/* ── Bottom ── */}
-          <div className="flex flex-col gap-0.5 flex-shrink-0">
+          <div className="flex flex-col gap-[clamp(0.05rem,0.5vh,0.25rem)] flex-shrink-0">
             <NavLink to="/parent/settings" onClick={onClose} title={!isExpanded ? "Settings" : undefined} className={navClass}>
               <span className="material-symbols-outlined flex-shrink-0 text-[20px]">settings</span>
               <span className={`whitespace-nowrap overflow-hidden transition-all duration-300 ${isExpanded ? "w-auto opacity-100" : "w-0 opacity-0"}`}>
@@ -159,10 +163,11 @@ export default function Sidebar({ isExpanded, isMobile, onToggle, onClose }) {
               onClick={handleLogout}
               title={!isExpanded ? "Log Out" : undefined}
               className={`flex items-center rounded-xl transition-all font-semibold text-sm flex-shrink-0
+                         py-[clamp(0.3rem,1vh,0.625rem)]
                          text-red-500 dark:text-red-400
                          hover:bg-red-50 dark:hover:bg-red-950/30 hover:text-red-600
                          w-full text-left
-                         ${isExpanded ? "gap-3 px-3 py-2.5" : "justify-center px-2 py-2.5"}`}
+                         ${isExpanded ? "gap-3 px-3" : "justify-center px-2"}`}
             >
               <span className="material-symbols-outlined flex-shrink-0 text-[20px]">logout</span>
               <span className={`whitespace-nowrap overflow-hidden transition-all duration-300 ${isExpanded ? "w-auto opacity-100" : "w-0 opacity-0"}`}>
