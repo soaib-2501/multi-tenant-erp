@@ -6,16 +6,17 @@ export default function SchoolSidebar() {
   const currentPath = location.pathname;
 
   const menu = [
-    { name: "Dashboard", icon: "dashboard", path: "/school-admin" },
-    { name: "Academic Years", icon: "calendar_today", path: "/school-admin/academic-years" },
-    { name: "Roles & Permissions", icon: "security", path: "/school-admin/roles" },
-    { name: "Students", icon: "school", path: "/school-admin/students" },
-    { name: "Teachers", icon: "person_4", path: "/school-admin/teachers" },
-    { name: "Parents", icon: "group", path: "/school-admin/parents" },
-    { name: "Parent-Student Mapping", icon: "diversity_1", path: "/school-admin/mapping" },
-    { name: "Teacher Assignment", icon: "assignment_ind", path: "/school-admin/teacher-assignment" },
+    { name: "Dashboard",             icon: "dashboard",       path: "/school-admin" },
+    { name: "Academic Years",        icon: "calendar_today",  path: "/school-admin/academic-years" },
+    { name: "Roles & Permissions",   icon: "security",        path: "/school-admin/roles" },
+    { name: "Students",              icon: "school",          path: "/school-admin/students" },
+    { name: "Teachers",              icon: "person_4",        path: "/school-admin/teachers" },
+    { name: "Parents",               icon: "group",           path: "/school-admin/parents" },
+    { name: "Parent-Student Mapping",icon: "diversity_1",     path: "/school-admin/mapping" },
+    { name: "Teacher Assignment",    icon: "assignment_ind",  path: "/school-admin/teacher-assignment" },
+    { name: "Grievance",             icon: "gavel",           path: "/school-admin/grievances" }, // ← ADDED
     { name: "Leave Management", icon: "event_busy", path: "/school-admin/leave-management" },
-    { name: "Settings", icon: "settings", path: "/school-admin/settings" },
+    { name: "Settings",              icon: "settings",        path: "/school-admin/settings" },
   ];
 
   const handleLogout = () => {
@@ -50,7 +51,7 @@ export default function SchoolSidebar() {
       {/* ── Nav ── */}
       <nav className="flex-1 px-2 space-y-0.5 overflow-y-auto">
         {menu.map((item) => {
-          const active = currentPath === item.path;
+          const active = currentPath === item.path || currentPath.startsWith(item.path + "/");
           return (
             <button
               key={item.path}

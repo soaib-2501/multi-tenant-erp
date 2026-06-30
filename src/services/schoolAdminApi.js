@@ -183,10 +183,10 @@ export const updateSettings = async (data) => {
 
 export const getStudents = async (page = 1, search = "", status = "ALL", classId = "") => {
     const params = new URLSearchParams({ page });
-    if (search)   params.append("search", search);
-    if (classId)  params.append("class_level", classId);  
+    if (search) params.append("search", search);
+    if (classId) params.append("class_level", classId);
     // status filter: backend uses is_archived boolean
-    if (status === "ACTIVE")   params.append("is_archived", "false");
+    if (status === "ACTIVE") params.append("is_archived", "false");
     if (status === "ARCHIVED") params.append("is_archived", "true");
     const response = await apiClient.get(`/school-admin/students/?${params.toString()}`);
     return response.data;
@@ -251,6 +251,68 @@ export const getRoles = async (page = 1, search = "") => {
         params.append("name", search);    // for filterset_fields = ['name'] backends
     }
     const response = await apiClient.get(`/accounts/roles/?${params.toString()}`);
+    return response.data;
+};
+
+// ── Grievance (Parent/Student) ──
+export const getGrievances = async () => {
+    const response = await apiClient.get('/school-admin/grievances/me/');
+    return response.data;
+};
+
+export const getGrievanceStats = async () => {
+    const response = await apiClient.get('/school-admin/grievances/me/stats/');
+    return response.data;
+};
+
+export const getCategories = async () => {
+    const response = await apiClient.get('/school-admin/grievances/categories/');
+    return response.data;
+};
+
+export const getPriorities = async () => {
+    const response = await apiClient.get('/school-admin/grievances/priorities/');
+    return response.data;
+};
+
+export const createGrievance = async (data) => {
+    const response = await apiClient.post('/school-admin/grievances/', data);
+    return response.data;
+};
+
+export const closeGrievance = async (id) => {
+    const response = await apiClient.post(`/school-admin/grievances/${id}/close/`);
+    return response.data;
+};
+
+// ── Grievance (Admin) ──
+export const getAdminGrievances = async () => {
+    const response = await apiClient.get('/school-admin/grievances/');
+    return response.data;
+};
+
+export const getAdminGrievanceStats = async () => {
+    const response = await apiClient.get('/school-admin/grievances/admin/stats/');
+    return response.data;
+};
+
+export const updateGrievance = async (id, data) => {
+    const response = await apiClient.patch(`/school-admin/grievances/${id}/`, data);
+    return response.data;
+};
+
+export const resolveGrievance = async (id, data = {}) => {
+    const response = await apiClient.post(`/school-admin/grievances/${id}/resolve/`, data);
+    return response.data;
+};
+
+export const rejectGrievance = async (id, data = {}) => {
+    const response = await apiClient.post(`/school-admin/grievances/${id}/reject/`, data);
+    return response.data;
+};
+
+export const getGrievanceById = async (id) => {
+    const response = await apiClient.get(`/school-admin/grievances/${id}/`);
     return response.data;
 };
 
@@ -335,7 +397,7 @@ export const schoolAdminApi = {
     getParentDetails,
     updateStudent,
     getStudentById,
-    getTeacherById,  
+    getTeacherById,
     updateTeacher,
     getMappingById,
     getTeacherAssignmentById,
@@ -347,6 +409,22 @@ export const schoolAdminApi = {
     getSectionsByClass,
     deleteClassLevelById,
     deleteSectionById,
+
+    // ── Grievance (Parent/Student) ──
+    getGrievances,
+    getGrievanceStats,
+    getCategories,
+    getPriorities,
+    createGrievance,
+    closeGrievance,
+
+    // ── Grievance (Admin) ──
+    getAdminGrievances,
+    getAdminGrievanceStats,
+    updateGrievance,
+    resolveGrievance,
+    rejectGrievance,
+    getGrievanceById,
     // leave management
     getLeaveRequests,
     getLeaveRequestById,

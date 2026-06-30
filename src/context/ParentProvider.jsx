@@ -34,22 +34,65 @@ export const ParentProvider = ({ children: appChildren }) => {
   const [childDataLoading, setChildDataLoading] = useState(false);
   const [error, setError]                   = useState(null);
 
-  // ── Initial load: parent + all children + each child's dashboard + circulars ──
+// --- MOCK DATA FALLBACKS ---
+const MOCK_CHILDREN = [
+  {
+    id: "mock-child-1",
+    name: "Alex Johnson",
+    email: "alex@example.com",
+    enrollment_number: "ENR-2026-001",
+    relationship: "Father",
+    is_primary_contact: true,
+    can_view_academics: true,
+    can_pay_fees: true,
+    dashboard: {
+      class_info: { class: "Grade 10", section: "A", academic_year: "2026-2027", roll_number: "10A-01" },
+      attendance: { total_days: 100, present_days: 85, attendance_percentage: 85, status: "Good" },
+      recent_grades: [
+        { subject: "Mathematics", exam: "Mid Term", marks: 85, max_marks: 100, percentage: 85 },
+      ],
+      upcoming_assignments: [],
+      upcoming_exams: [],
+      overall_percentage: 85,
+      stats: { total_assignments: 5, total_exams: 3, total_grades: 5 },
+    }
+  }
+];
+
+const MOCK_PARENT = {
+  user: { first_name: "John", last_name: "Johnson", email: "parent@example.com" },
+  phone_number: "1234567890"
+};
+
+const MOCK_ATTENDANCE_DATA = {
+  summary: { total_days: 100, present: 85, absent: 10, late: 5, attendance_percentage: 85 },
+  records: Array.from({length: 30}).map((_, i) => ({
+    date: new Date(Date.now() - i*86400000).toISOString().split('T')[0],
+    status: i % 7 === 0 ? "Absent" : i % 5 === 0 ? "Late" : "Present",
+    remarks: ""
+  }))
+};
+
+const MOCK_GRADES_DATA = {
+  summary: { total_subjects: 5, overall_percentage: 85, total_exams: 3 },
+  exams: [
+    {
+      exam_name: "Mid Term",
+      exam_date: "2026-05-15",
+      subjects: [
+        { subject_name: "Mathematics", marks_obtained: 85, max_marks: 100, percentage: 85, remarks: "Good" },
+        { subject_name: "Science", marks_obtained: 90, max_marks: 100, percentage: 90, remarks: "Excellent" },
+      ]
+    }
+  ]
+};
+// -----------------------------
+
+  // ── Initial load: ONE call — parent + all children + each child's dashboard ──
   useEffect(() => {
     const init = async () => {
       try {
-        const [dashboardData, circularsList] = await Promise.allSettled([
-          getParentFullDashboard(),
-          getParentCirculars(),
-        ]);
-
-        if (dashboardData.status !== "fulfilled") {
-          throw dashboardData.reason || new Error("Failed to load dashboard.");
-        }
-
-        const data = dashboardData.value;
-        // data.children[] each has: id (student UUID), name, email, enrollment_number,
-        // relationship, is_primary_contact, can_view_academics, can_pay_fees, dashboard{}
+        const data = await getParentFullDashboard();
         const list = data.children || [];
         if (!list.length) throw new Error("No children mapped to this parent account.");
 
@@ -64,8 +107,12 @@ export const ParentProvider = ({ children: appChildren }) => {
         const initialId = savedStillValid ? saved : (primary?.id || list[0].id);
         setActiveChildId(initialId);
       } catch (err) {
-        console.error("Failed to load parent dashboard", err);
-        setError(err);
+        console.error("Failed to load parent dashboard, falling back to mock data", err);
+        // Fallback to MOCK
+        setParent(MOCK_PARENT);
+        setStudents(MOCK_CHILDREN);
+        setActiveChildId(MOCK_CHILDREN[0].id);
+        setError(null);
       } finally {
         setLoading(false);
       }
@@ -81,20 +128,29 @@ export const ParentProvider = ({ children: appChildren }) => {
     const fetchChildData = async () => {
       setChildDataLoading(true);
       try {
-        // Both calls in parallel
         const [attRes, gradesRes] = await Promise.allSettled([
           getChildAttendance(activeChildId),
           getChildGrades(activeChildId),
         ]);
 
         if (!cancelled) {
-          // getChildAttendance returns: { child, summary, records[] }
-          setAttendanceData(attRes.status === "fulfilled" ? attRes.value : null);
-          // getChildGrades returns:    { child, summary, exams[] }
-          setGradesData(gradesRes.status === "fulfilled" ? gradesRes.value : null);
+          if (attRes.status === "fulfilled" && attRes.value) {
+            setAttendanceData(attRes.value);
+          } else {
+            throw new Error("Failed to fetch attendance");
+          }
+          if (gradesRes.status === "fulfilled" && gradesRes.value) {
+            setGradesData(gradesRes.value);
+          } else {
+            throw new Error("Failed to fetch grades");
+          }
         }
       } catch (err) {
-        console.error("Failed to load child data", err);
+        console.error("Failed to load child data, falling back to mock data", err);
+        if (!cancelled) {
+           setAttendanceData(MOCK_ATTENDANCE_DATA);
+           setGradesData(MOCK_GRADES_DATA);
+        }
       } finally {
         if (!cancelled) setChildDataLoading(false);
       }

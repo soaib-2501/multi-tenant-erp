@@ -74,6 +74,14 @@ export const getChildGrades = async (childId) => {
   return response.data;
 };
 
+/* ---------- Timetable ---------- */
+
+// Day-wise timetable for one child (based on their class/section assignment).
+export const getChildTimetable = async (childId) => {
+  const response = await api.get(`/profiles/parents/me/children/${childId}/timetable/`);
+  return response.data;
+};
+
 /* ---------- Assignments & submissions ---------- */
 /* NOTE: these need can_view_academics = true on the parent-student mapping,
    otherwise the API returns 403. We catch that and return a flag instead of
