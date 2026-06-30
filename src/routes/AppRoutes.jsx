@@ -220,6 +220,8 @@ function AppRoutes() {
           <Route path="create-subject" element={<CreateSubject />} />
           <Route path="create-section" element={<CreateSection />} />
           <Route path="class-levels" element={<ClassLevels />} />
+          <Route path="grievances" element={<GrievanceManagement />} />
+          <Route path="circulars" element={<CircularsPage />} />
         </Route>
 
         {/* ================= STUDENT ================= */}
