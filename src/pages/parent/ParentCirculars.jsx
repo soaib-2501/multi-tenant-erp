@@ -1,6 +1,7 @@
 import React, { useState, useMemo } from "react";
 import DashboardLayout from "../../components/erp/parent/DashboardLayout";
 import { useParent } from "../../context/ParentProvider";
+import { schoolAdminApi } from "../../services/schoolAdminApi";
 
 const AUDIENCE_ICONS = {
   Student: { icon: "school", bg: "bg-blue-50", text: "text-blue-600" },
@@ -57,7 +58,7 @@ function CircularsSkeleton() {
 }
 
 /* ─── Detail Modal ───────────────────────────────────────────────────────── */
-function CircularModal({ circular, onClose }) {
+function CircularModal({ circular, onClose, loading }) {
   const audMeta = AUDIENCE_ICONS[circular.target_audience_display] || AUDIENCE_ICONS.All;
 
   return (
@@ -104,9 +105,20 @@ function CircularModal({ circular, onClose }) {
             )}
           </div>
 
-          <p className="text-sm text-slate-700 leading-relaxed whitespace-pre-line break-words">
-            {circular.content}
-          </p>
+          {/* Content — shows skeleton while loading */}
+          {loading ? (
+            <div className="space-y-2 animate-pulse">
+              <Skeleton className="w-full h-3" />
+              <Skeleton className="w-5/6 h-3" />
+              <Skeleton className="w-4/6 h-3" />
+              <Skeleton className="w-full h-3 mt-2" />
+              <Skeleton className="w-3/4 h-3" />
+            </div>
+          ) : (
+            <p className="text-sm text-slate-700 leading-relaxed whitespace-pre-line break-words">
+              {circular.content || "No content provided."}
+            </p>
+          )}
 
           {circular.attachment_name && (
             <div>
@@ -175,11 +187,8 @@ function CircularCard({ circular, onClick }) {
             </span>
           </div>
 
-          <p className="text-xs text-slate-500 leading-relaxed line-clamp-2 mb-3 break-words">
-            {circular.content}
-          </p>
-
-          <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5">
+          {/* Card preview — content not in list response */}
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5 mt-2">
             {circular.created_by_name && (
               <span className="flex items-center gap-1 text-2xs text-slate-500">
                 <span className="material-symbols-outlined text-sm">person</span>
@@ -212,15 +221,30 @@ export default function Circulars() {
   const { circulars, loading } = useParent();
   const [searchQuery, setSearchQuery] = useState("");
   const [activeCircular, setActiveCircular] = useState(null);
+  const [modalLoading, setModalLoading] = useState(false);
 
   const allCirculars = useMemo(() => circulars || [], [circulars]);
+
+  // Fetch full detail (including content) when opening a circular,
+  // since the list endpoint omits the content field.
+  const openCircular = async (circular) => {
+    setActiveCircular({ ...circular, content: null }); // open modal immediately with metadata
+    setModalLoading(true);
+    try {
+      const full = await schoolAdminApi.getCircularById(circular.id);
+      setActiveCircular(full);
+    } catch (err) {
+      console.error("Failed to load circular detail:", err);
+    } finally {
+      setModalLoading(false);
+    }
+  };
 
   const filtered = useMemo(() => {
     return allCirculars.filter((c) => {
       const matchSearch =
         !searchQuery ||
         c.title?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        c.content?.toLowerCase().includes(searchQuery.toLowerCase()) ||
         c.created_by_name?.toLowerCase().includes(searchQuery.toLowerCase());
       return matchSearch;
     });
@@ -294,7 +318,7 @@ export default function Circulars() {
               <CircularCard
                 key={circular.id}
                 circular={circular}
-                onClick={() => setActiveCircular(circular)}
+                onClick={() => openCircular(circular)}
               />
             ))}
           </div>
@@ -302,7 +326,11 @@ export default function Circulars() {
       </div>
 
       {activeCircular && (
-        <CircularModal circular={activeCircular} onClose={() => setActiveCircular(null)} />
+        <CircularModal
+          circular={activeCircular}
+          loading={modalLoading}
+          onClose={() => setActiveCircular(null)}
+        />
       )}
     </DashboardLayout>
   );
