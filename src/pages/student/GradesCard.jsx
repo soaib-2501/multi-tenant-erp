@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import MainLayout from "../../layouts/MainLayout";
 import { useStudent } from "../../context/StudentProvider";
 
@@ -146,7 +145,6 @@ function FeedbackModal({ grade, gradeDetails, iconDetails, onClose }) {
 }
 
 export default function GradeCard() {
-  const navigate = useNavigate();
   const { dashboard, academic, profile, loading } = useStudent();
   const [selectedSubject, setSelectedSubject] = useState("all");
   const [selectedExam, setSelectedExam] = useState("all");
@@ -357,22 +355,13 @@ export default function GradeCard() {
                 <p className="text-sm opacity-75 mt-1">Overall Percentage</p>
               </div>
               <div className="flex gap-4 mt-8">
-                <button className="bg-white/20 hover:bg-white/30 backdrop-blur-md px-6 py-2.5 rounded-md text-sm font-semibold transition-all">
-                  View Analytics
-                </button>
                 <button
-  onClick={() => navigate('/student/grades')}
-  className="bg-white/20 hover:bg-white/30 backdrop-blur-md px-6 py-2.5 rounded-md text-sm font-semibold transition-all"
->
-  View Analytics
-</button>
-<button
-  onClick={downloadCSVReport}
-  className="bg-white/20 backdrop-blur-md text-white px-6 py-2.5 rounded-md text-sm font-bold hover:bg-white/30 transition-all flex items-center gap-2"
->
-  <span className="material-symbols-outlined text-lg">table_chart</span>
-  Export CSV
-</button>
+                  onClick={downloadCSVReport}
+                  className="bg-white/20 backdrop-blur-md text-white px-6 py-2.5 rounded-md text-sm font-bold hover:bg-white/30 transition-all flex items-center gap-2"
+                >
+                  <span className="material-symbols-outlined text-lg">table_chart</span>
+                  Export CSV
+                </button>
               </div>
             </div>
             <div className="absolute -right-12 -bottom-12 w-64 h-64 bg-white/10 rounded-full blur-3xl" />

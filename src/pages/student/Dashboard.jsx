@@ -558,7 +558,7 @@ export default function Dashboard() {
                     <span className="text-sm font-bold text-on-surface">ID Card</span>
                   </button>
                   <Link
-                    to="/student/help-desk"
+                    to="/student/help"
                     className="flex flex-col items-center justify-center p-4 bg-surface-container-lowest rounded-lg custom-shadow hover:bg-blue-50 transition-colors group"
                   >
                     <span className="material-symbols-outlined text-primary mb-2 group-hover:scale-110 transition-transform">support_agent</span>

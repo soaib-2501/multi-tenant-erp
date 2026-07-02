@@ -125,12 +125,13 @@ export const StudentProvider = ({ children }) => {
         ? submissionsResult.value
         : [];
 
-      // ✅ FIX: Extract the `records` array, not the whole object
-      const attendanceData = attendanceRecordsResult.status === "fulfilled" && attendanceRecordsResult.value
+      // ✅ FIX: getAttendanceRecords() already returns a plain array
+      // (response.data.results || []) — it is NOT an object with a
+      // `.records` key. Only fall back to MOCK_ATTENDANCE.records when
+      // the call actually failed.
+      const attendanceRecords = attendanceRecordsResult.status === "fulfilled" && attendanceRecordsResult.value
         ? attendanceRecordsResult.value
-        : MOCK_ATTENDANCE;
-
-      const attendanceRecords = attendanceData.records || [];
+        : MOCK_ATTENDANCE.records;
 
       const circulars = circularsResult.status === "fulfilled" && circularsResult.value
         ? circularsResult.value
